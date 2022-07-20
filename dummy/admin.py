@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from import_export.admin import ImportExportModelAdmin
-from .models import DummyTable
+from .models import DummyTable, DummyFileUpload
 
 admin.site.register(DummyTable)
+admin.site.register(DummyFileUpload)
