@@ -1,3 +1,4 @@
+from __future__ import division
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, authenticate, logout
 
@@ -5,6 +6,8 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.views import View
 
 from account.forms import AccountAuthenticationForm, RegistrationForm
+
+from division.models import Division
 
 class DashboardView(LoginRequiredMixin,View):
     def get(self, request, *args, **kwargs):
@@ -15,6 +18,9 @@ def dashboard_view(request,*args,**kwargs):
 
 def login_view(request,*args,**kwargs):
     context = {}
+
+    division = Division.objects.all()
+    context["divisions"] = division
 
     user = request.user
     if user.is_authenticated: 
@@ -44,11 +50,11 @@ def login_view(request,*args,**kwargs):
     if request.POST and 'regis' in request.POST:
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            form.save()
+            account = form.save()
             email = form.cleaned_data.get('email').lower()
-            raw_password = form.cleaned_data.get('pwd1')
+            #raw_password = form.cleaned_data.get('pwd1')
             
-            account = authenticate(email=email, password=raw_password)
+            #account = authenticate(email=email, password=raw_password)
             login(request, account)
             
             destination = kwargs.get("next")
@@ -56,6 +62,7 @@ def login_view(request,*args,**kwargs):
                 return redirect(destination)
             return redirect('home')
         else:
+            print(form.error_messages)
             context['registration_form'] = form
     else:
         form = RegistrationForm()

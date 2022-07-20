@@ -16,7 +16,7 @@
 		section {
 		  position: relative;
 		  min-height: 100vh;
-		  background-color: #f8dd30;
+		  background-color: #12bac9;
 		  display: flex;
 		  justify-content: center;
 		  align-items: center;
@@ -81,7 +81,8 @@
 		  color: #555;
 		}
 
-		section .container .user .formBx form input {
+		section .container .user .formBx form input,
+        section .container .user .formBx form select{
 		  position: relative;
 		  width: 100%;
 		  padding: 10px;
@@ -183,7 +184,7 @@
   <section>
     <div class="container">
       <div class="user signinBx">
-        <div class="imgBx"><img src="https://raw.githubusercontent.com/WoojinFive/CSS_Playground/master/Responsive%20Login%20and%20Registration%20Form/img1.jpg" alt="" /></div>
+        <div class="imgBx"><img src="https://ppid.semarangkota.go.id/wp-content/uploads/2022/03/logo-pln.jpg" alt="" /></div>
         <div class="formBx">
           <form action="" method="post"> {% csrf_token %}
             <h2>Sign In</h2>
@@ -203,10 +204,15 @@
             <h2>Create an account</h2>
             <input type="text" name="name" placeholder="Name"/>
             <input type="email" name="email" placeholder="Email Address"/>
-            <input type="text" name="division" placeholder="Division" />
+            <select name="division" id="division">
+                <option value="" disabled selected>Bidang</option>
+                {% for division in divisions %}
+                    <option value="{{ division.name }}">{{ division.name }}</option>
+                {% endfor %}
+            </select>
             <input type="text" name="role" placeholder="Role" />
-            <input type="password" name="pwd1" placeholder="Create Password" />
-            <input type="password" name="pwd2" placeholder="Confirm Password" />
+            <input type="password" name="password1" placeholder="Create Password" />
+            <input type="password" name="password2" placeholder="Confirm Password" />
             <input type="submit" name="regis" value="Sign Up" />
             <p class="signup">
               Already have an account ?
@@ -227,7 +233,7 @@
         </div>
         {% endif %} -->
         <div class="imgBx">
-            <img src="https://raw.githubusercontent.com/WoojinFive/CSS_Playground/master/Responsive%20Login%20and%20Registration%20Form/img2.jpg" alt="" />
+            <img src="https://upload.wikimedia.org/wikipedia/commons/9/97/Logo_PLN.png" alt="" />
         </div>
       </div>
     </div>
