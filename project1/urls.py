@@ -17,6 +17,9 @@ from django.contrib import admin
 from django.conf.urls import include
 from django.urls import path
 
+from django.conf.urls.static import static
+from django.conf import settings
+
 from account.views import login_view, DashboardView, logout_view
 
 urlpatterns = [
@@ -26,4 +29,7 @@ urlpatterns = [
     path('logout/', logout_view, name="logout"),
 
     path('dummy/', include('dummy.urls', namespace='dummy')),
+    path('document/', include('document.urls', namespace='document')),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        
+        
+        <div class="row" id="div-1">
+            
+        </div>
+        <div class="row" id="div-2">
+            
+        </div>
+        <div class="row d-none" id="div-3">
+            <div class="col-12">
+                <button id="to-unhide" class="btn btn-primary mb-3 w-100" >Search <span><i class="fa-solid fa-magnifying-glass"></i></span></button>
+            </div>
+        </div>
+        <!-- DataTales Example -->
+        <div class="mb-4 shadow card">
+            <div class="py-3 card-header">
+                <h6 class="m-0 font-weight-bold text-primary">List SKAI Terbit dan Penambahan AI/AKI</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Dokumen</th>
+                                <th>Nomor Dokumen</th>
+                                <th>Tanggal Terbit</th>
+                                <th>Perihal</th>
+                                <th>Tahun</th>
+                                <th>File</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>No</th>
+                                <th>Dokumen</th>
+                                <th>Nomor Dokumen</th>
+                                <th>Tanggal Terbit</th>
+                                <th>Perihal</th>
+                                <th>Tahun</th>
+                                <th>File</th>
+                            </tr>
+                        </tfoot>
+                        <tbody>
+                            {% for doc in doc_skai %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{doc}}</td>
+                                <td>{{doc.document.document_number}}</td>
+                                <td style="vertical-align: middle; text-align: center;">{{doc.document.published_date}}</td>
+                                <td>{{doc.document.regarding}}</td>
+                                {% if doc.year %}
+                                    <td style="vertical-align: middle; text-align: center;">{{doc.year}}</td>
+                                {% else %}
+                                    <td style="vertical-align: middle; text-align: center;">{{doc.revision_on.year}}</td>
+                                {% endif %}
+                                <td style="vertical-align: middle; text-align: center;"><span><a href="{% url 'document:pdf-viewer' doc.document.pk %}"><i class="fa-solid fa-file-pdf"></i></a></span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    $('#to-hide').click(function() {
+        $('#div-1').addClass("d-none");
+        $('#div-2').addClass("d-none");
+        $('#div-3').removeClass("d-none");
+    });
+
+    $('#to-unhide').click(function() {
+        $('#div-1').removeClass("d-none");
+        $('#div-2').removeClass("d-none");
+        $('#div-3').addClass("d-none");
+    });
+</script>
+
+{% endblock script %}
