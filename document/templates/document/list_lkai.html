@@ -1,0 +1,808 @@
+<!--COPY FROM MACRO VIEW-->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+<style>
+    td {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .active-td {
+        background: #0a0b61 !important;
+        color: aliceblue;
+    }
+    /* table#dataTableLKAI td:nth-child(3), table#dataTableLKAI th:nth-child(3){
+        display: none;
+    } */
+
+</style>
+{% endblock style%}
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="container-fluid">
+    
+        <div class="row" id="div-1">
+        </div>
+        <div class="row d-none" id="div-2">
+            <div class="col-12">
+                <button id="to-unexpand" class="btn btn-primary mb-3 w-100" >Downsize Table  <span><i class="fa-solid fa-minimize"></i></span></button>
+            </div>
+        </div>
+        <div class="row" id="div-3">
+            <div class="col-12">
+                <button id="to-expand" class="btn btn-primary mb-3 w-100" >Expand Table  <span><i class="fa-solid fa-up-right-and-down-left-from-center"></i></span></button>
+            </div>
+        </div>
+        <!-- DataTales Example -->
+        <div class="mb-4 shadow card">
+            <div class="py-3 card-header">
+                <h6 class="m-0 font-weight-bold text-primary">LKAI Macro untuk SKAI 2022</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTableLKAI" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th rowspan="3">No</th>
+                                <th rowspan="3">No PRK</th>
+                                <th rowspan="3" class="to-hide d-none bg-warning">No Program</th>
+                                <th rowspan="3">No RUPTL</th>
+                                <th rowspan="3">Cluster</th>
+                                <th rowspan="3">Fungsi</th>
+                                <th rowspan="3" class="to-hide d-none bg-warning">Sub Fungsi</th>
+                                <th rowspan="3">Program Utama/Proyek</th>
+                                <th rowspan="3" class="to-hide d-none bg-warning">Score</th>
+                                <th rowspan="3">Jenis Program</th>
+                                <th colspan="2" id="th-kegiatan">Uraian Kegiatan</th>
+                                <th colspan="4">Anggaran/Kontrak</th>
+                                <th rowspan="3">Realisasi Pembayaran s/d 2020</th>
+                                <th rowspan="3">Prediksi Pembayaran 2021</th>
+                                <th rowspan="3">AI Tahun 2022</th>
+                                <th rowspan="3">AKI Tahun 2022</th>
+                                <th rowspan="3" class="to-hide d-none bg-warning">AKI Tahun 2023</th>
+                                <th rowspan="3" class="to-hide d-none bg-warning">AKI Tahun 2024</th>
+                                <th rowspan="3" class="to-hide d-none bg-warning">AKI Tahun 2025</th>
+                                <th rowspan="3" class="to-hide d-none bg-warning">AKI Tahun 2026</th>
+                                <th rowspan="3" class="to-hide d-none bg-warning">AKI Setelah Tahun 2023</th>
+                                <th rowspan="3">Sumber Dana</th>
+
+                                <th rowspan="3" class="idr2">Rencana Terkontrak</th>
+                                <th rowspan="3" class="idr2">Rencana COD (dd/mm/yy)</th>
+                                <th colspan="24">Progress Fisik dan Rencana Disburse Tahun 2022</th>
+                            </tr>
+                            <tr>
+                                <th rowspan="2" class="to-hide d-none bg-warning">No Aktivitas</th>
+                                <th rowspan="2">Uraian</th>
+                                <th rowspan="2">Target Fisik</th>
+                                <th rowspan="2" class="to-hide d-none bg-warning">Satuan</th>
+                                <th rowspan="2">Nilai Anggaran</th>
+                                <th rowspan="2">Status</th>
+                                <th rowspan="2">Jenis Kontrak</th>
+                                <th rowspan="2">Nomor Kontrak</th>
+
+                                <th colspan="2">Januari</th>
+                                <th colspan="2">Februari</th>
+                                <th colspan="2">Maret</th>
+                                <th colspan="2">April</th>
+                                <th colspan="2">Mei</th>
+                                <th colspan="2">Juni</th>
+                                <th colspan="2">Juli</th>
+                                <th colspan="2">Agustus</th>
+                                <th colspan="2">September</th>
+                                <th colspan="2">Oktober</th>
+                                <th colspan="2">November</th>
+                                <th colspan="2">December</th>
+                            </tr>
+                            <tr>
+                                <th>Progress Fisik (%)</th>
+                                <th>Rencana Disburse</th>
+                                <th>Progress Fisik (%)</th>
+                                <th>Rencana Disburse</th>
+                                <th>Progress Fisik (%)</th>
+                                <th>Rencana Disburse</th>
+                                <th>Progress Fisik (%)</th>
+                                <th>Rencana Disburse</th>
+                                <th>Progress Fisik (%)</th>
+                                <th>Rencana Disburse</th>
+                                <th>Progress Fisik (%)</th>
+                                <th>Rencana Disburse</th>
+                                <th>Progress Fisik (%)</th>
+                                <th>Rencana Disburse</th>
+                                <th>Progress Fisik (%)</th>
+                                <th>Rencana Disburse</th>
+                                <th>Progress Fisik (%)</th>
+                                <th>Rencana Disburse</th>
+                                <th>Progress Fisik (%)</th>
+                                <th>Rencana Disburse</th>
+                                <th>Progress Fisik (%)</th>
+                                <th>Rencana Disburse</th>
+                                <th>Progress Fisik (%)</th>
+                                <th>Rencana Disburse</th>
+                            </tr>
+                        </thead>
+                        <tbody id="macro-table">
+                            <tr>
+                                <td>1</td>
+                                <td>2019.USLS.1.003</td>
+                                <td class="to-hide d-none">1</td>
+                                <td>R-11-K-003-SN</td>
+                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
+                                <td>Pembangkit</td>
+                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
+                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
+                                <td class="to-hide d-none">10,01</td>
+                                <td>Pekerjaan Utama</td>
+                                <td class="to-hide d-none">3</td>
+                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
+                                <td></td>
+                                <td class="to-hide d-none"></td>
+                                <td>100</td>
+                                <td>Lanjutan</td>
+                                <td>Unit</td>
+                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td>APLN</td>
+
+                                <td></td>
+                                <td>31/12/21</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>2019.USLS.1.003</td>
+                                <td class="to-hide d-none">1</td>
+                                <td>R-11-K-003-SN</td>
+                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
+                                <td>Pembangkit</td>
+                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
+                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
+                                <td class="to-hide d-none">10,01</td>
+                                <td>Pekerjaan Utama</td>
+                                <td class="to-hide d-none">3</td>
+                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
+                                <td></td>
+                                <td class="to-hide d-none"></td>
+                                <td>100</td>
+                                <td>Lanjutan</td>
+                                <td>Unit</td>
+                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td>APLN</td>
+
+                                <td></td>
+                                <td>31/12/21</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>2019.USLS.1.003</td>
+                                <td class="to-hide d-none">1</td>
+                                <td>R-11-K-003-SN</td>
+                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
+                                <td>Pembangkit</td>
+                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
+                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
+                                <td class="to-hide d-none">10,01</td>
+                                <td>Pekerjaan Utama</td>
+                                <td class="to-hide d-none">3</td>
+                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
+                                <td></td>
+                                <td class="to-hide d-none"></td>
+                                <td>100</td>
+                                <td>Lanjutan</td>
+                                <td>Unit</td>
+                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td>APLN</td>
+
+                                <td></td>
+                                <td>31/12/21</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>2019.USLS.1.003</td>
+                                <td class="to-hide d-none">1</td>
+                                <td>R-11-K-003-SN</td>
+                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
+                                <td>Pembangkit</td>
+                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
+                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
+                                <td class="to-hide d-none">10,01</td>
+                                <td>Pekerjaan Utama</td>
+                                <td class="to-hide d-none">3</td>
+                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
+                                <td></td>
+                                <td class="to-hide d-none"></td>
+                                <td>100</td>
+                                <td>Lanjutan</td>
+                                <td>Unit</td>
+                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td>APLN</td>
+
+                                <td></td>
+                                <td>31/12/21</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>2019.USLS.1.003</td>
+                                <td class="to-hide d-none">1</td>
+                                <td>R-11-K-003-SN</td>
+                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
+                                <td>Pembangkit</td>
+                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
+                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
+                                <td class="to-hide d-none">10,01</td>
+                                <td>Pekerjaan Utama</td>
+                                <td class="to-hide d-none">3</td>
+                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
+                                <td></td>
+                                <td class="to-hide d-none"></td>
+                                <td>100</td>
+                                <td>Lanjutan</td>
+                                <td>Unit</td>
+                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td>APLN</td>
+
+                                <td></td>
+                                <td>31/12/21</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td>2019.USLS.1.003</td>
+                                <td class="to-hide d-none">1</td>
+                                <td>R-11-K-003-SN</td>
+                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
+                                <td>Pembangkit</td>
+                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
+                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
+                                <td class="to-hide d-none">10,01</td>
+                                <td>Pekerjaan Utama</td>
+                                <td class="to-hide d-none">3</td>
+                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
+                                <td></td>
+                                <td class="to-hide d-none"></td>
+                                <td>100</td>
+                                <td>Lanjutan</td>
+                                <td>Unit</td>
+                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td>APLN</td>
+
+                                <td></td>
+                                <td>31/12/21</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>2019.USLS.1.003</td>
+                                <td class="to-hide d-none">1</td>
+                                <td>R-11-K-003-SN</td>
+                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
+                                <td>Pembangkit</td>
+                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
+                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
+                                <td class="to-hide d-none">10,01</td>
+                                <td>Pekerjaan Utama</td>
+                                <td class="to-hide d-none">3</td>
+                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
+                                <td></td>
+                                <td class="to-hide d-none"></td>
+                                <td>100</td>
+                                <td>Lanjutan</td>
+                                <td>Unit</td>
+                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td>APLN</td>
+
+                                <td></td>
+                                <td>31/12/21</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td>2019.USLS.1.003</td>
+                                <td class="to-hide d-none">1</td>
+                                <td>R-11-K-003-SN</td>
+                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
+                                <td>Pembangkit</td>
+                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
+                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
+                                <td class="to-hide d-none">10,01</td>
+                                <td>Pekerjaan Utama</td>
+                                <td class="to-hide d-none">3</td>
+                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
+                                <td></td>
+                                <td class="to-hide d-none"></td>
+                                <td>100</td>
+                                <td>Lanjutan</td>
+                                <td>Unit</td>
+                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td>APLN</td>
+
+                                <td></td>
+                                <td>31/12/21</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td>2019.USLS.1.003</td>
+                                <td class="to-hide d-none">1</td>
+                                <td>R-11-K-003-SN</td>
+                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
+                                <td>Pembangkit</td>
+                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
+                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
+                                <td class="to-hide d-none">10,01</td>
+                                <td>Pekerjaan Utama</td>
+                                <td class="to-hide d-none">3</td>
+                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
+                                <td></td>
+                                <td class="to-hide d-none"></td>
+                                <td>100</td>
+                                <td>Lanjutan</td>
+                                <td>Unit</td>
+                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td>APLN</td>
+
+                                <td></td>
+                                <td>31/12/21</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>10</td>
+                                <td>2019.USLS.1.003</td>
+                                <td class="to-hide d-none">1</td>
+                                <td>R-11-K-003-SN</td>
+                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
+                                <td>Pembangkit</td>
+                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
+                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
+                                <td class="to-hide d-none">10,01</td>
+                                <td>Pekerjaan Utama</td>
+                                <td class="to-hide d-none">3</td>
+                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
+                                <td></td>
+                                <td class="to-hide d-none"></td>
+                                <td>100</td>
+                                <td>Lanjutan</td>
+                                <td>Unit</td>
+                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td>APLN</td>
+
+                                <td></td>
+                                <td>31/12/21</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                            <tr>
+                                <td>11</td>
+                                <td>2019.USLS.1.003</td>
+                                <td class="to-hide d-none">1</td>
+                                <td>R-11-K-003-SN</td>
+                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
+                                <td>Pembangkit</td>
+                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
+                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
+                                <td class="to-hide d-none">10,01</td>
+                                <td>Pekerjaan Utama</td>
+                                <td class="to-hide d-none">3</td>
+                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
+                                <td></td>
+                                <td class="to-hide d-none"></td>
+                                <td>100</td>
+                                <td>Lanjutan</td>
+                                <td>Unit</td>
+                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td class="to-hide d-none">0</td>
+                                <td>APLN</td>
+
+                                <td></td>
+                                <td>31/12/21</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                                <td>0</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    // $(document).ready(function () {
+    //     $('#dataTableLKAI').DataTable({
+    //         // scrollY: '500px',
+    //         // scrollCollapse: true,
+    //         paging: true,
+    //     });
+    // });
+
+    //on clicking the row
+    $("tbody tr").on("click", function() {
+        //loop through all td elements in the row
+        $(this).find("td").each(function(i) {
+            //toggle between adding/removing the 'active' class
+            $(this).toggleClass('active-td');
+        });
+    });
+
+    $('#to-expand').click(function() {
+        elements = document.getElementsByClassName("to-hide");
+        $('#div-2').removeClass("d-none");
+        $('#div-3').addClass("d-none");
+        document.getElementById("th-kegiatan").colSpan = "4"; 
+
+        for(var i = 0; i < elements.length; i++) {
+            elements[i].classList.remove("d-none");
+        }
+    });
+
+    $('#to-unexpand').click(function() {
+        elements = document.getElementsByClassName("to-hide");
+        $('#div-2').addClass("d-none");
+        $('#div-3').removeClass("d-none");
+        document.getElementById("th-kegiatan").colSpan = "2";
+
+        for(var i = 0; i < elements.length; i++) {
+            elements[i].classList.add("d-none");
+        }
+    });
+
+</script>
+{% endblock script %}

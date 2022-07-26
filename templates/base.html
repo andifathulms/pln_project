@@ -26,6 +26,14 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Balsamiq+Sans&display=swap" rel="stylesheet">
+
+    <style>
+        th {
+            vertical-align: middle;
+            text-align: center;
+        }
+    </style>
+
     {% block style %}
     {% endblock style%}
 </head>
@@ -100,6 +108,10 @@
     
         $(document).ready(function() {
             $('#dataTable').DataTable({
+                "paging": true
+            });
+
+            $('#dataTableLKAI').DataTable({
                 "paging": true
             });
         });

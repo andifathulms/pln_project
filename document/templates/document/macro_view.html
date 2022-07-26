@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+
+{% endblock style%}
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="container-fluid">
+    
+        <div class="row" id="div-1">
+        </div>
+        <div class="row" id="div-2">
+        </div>
+        <div class="row d-none" id="div-3">
+            <div class="col-12">
+                <button id="to-unhide" class="btn btn-primary mb-3 w-100" >Show Timeline  <span><i class="fa-solid fa-magnifying-glass"></i></span></button>
+            </div>
+        </div>
+        <!-- DataTales Example -->
+        <div class="mb-4 shadow card">
+            <div class="py-3 card-header">
+                <h6 class="m-0 font-weight-bold text-primary">LKAI Macro</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">No</th>
+                                <th rowspan="2">No PRK</th>
+                                <th rowspan="2">No Program</th>
+                                <th rowspan="2">No RUPTL</th>
+                                <th rowspan="2">Cluster</th>
+                                <th rowspan="2">Fungsi</th>
+                                <th rowspan="2">Sub Fungsi</th>
+                                <th rowspan="2">Program Utama/Proyek</th>
+                                <th rowspan="2">Score</th>
+                                <th rowspan="2">Jenis Program</th>
+                                <th colspan="4">Uraian Kegiatan</th>
+                                <th colspan="4">Anggaran/Kontrak</th>
+                                <th rowspan="2">Realisasi Pembayaran s/d 2020</th>
+                                <th rowspan="2">Prediksi Pembayaran 2021</th>
+                                <th rowspan="2">AI Tahun 2022</th>
+                                <th rowspan="2">AKI Tahun 2022</th>
+                                <th rowspan="2">AKI Tahun 2023</th>
+                                <th rowspan="2">AKI Tahun 2024</th>
+                                <th rowspan="2">AKI Tahun 2025</th>
+                                <th rowspan="2">AKI Tahun 2026</th>
+                                <th rowspan="2">AKI Setelah Tahun 2023</th>
+                                <th rowspan="2">Sumber Dana</th>
+                            </tr>
+                            <tr>
+                                <th>No Aktivitas</th>
+                                <th>Uraian</th>
+                                <th>Target Fisik</th>
+                                <th>Satuan</th>
+                                <th>Nilai Anggaran</th>
+                                <th>Status</th>
+                                <th>Jenis Kontrak</th>
+                                <th>Nomor Kontrak</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for doc in macro %}
+                            <tr>
+                                <td>{{forloop.counter}}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+</div>
+{% endblock content %}
+
+{% block script %}
+
+{% endblock script %}

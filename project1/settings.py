@@ -39,13 +39,13 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'import_export',
+    'storages',
     
     'account',
     'division',
     'dummy',
     'document',
     
-
 ]
 
 MIDDLEWARE = [
@@ -153,3 +153,21 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.AllowAllUsersModelBackend', 
     #'account.backends.CaseInsensitiveModelBackend',
 )
+
+AWS_ACCESS_KEY_ID="AKIAXSGIDQGEESDBZHGJ"
+AWS_SECRET_ACCESS_KEY="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"
+AWS_STORAGE_BUCKET_NAME="pln-uip"
+
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+
+AWS_HEADERS = {
+    'Cache-Control': 'max-age=86400',
+}
+# By default don't protect s3 urls and handle that in the model
+AWS_QUERYSTRING_AUTH = False
+
+#STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+#heroku login pwd = 4F@thulMS

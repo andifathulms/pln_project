@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+<style>
+    td {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .active-td {
+        background: #0a0b61 !important;
+        color: aliceblue;
+    }
+</style>
+{% endblock style%}
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="container-fluid">
+
+        <!-- Page Heading -->
+        
+        <div class="row text-center justify-content-center mb-5" id="div-0">
+            <div class="col-xl-6 col-lg-8">
+                <h2 class="font-weight-bold">Perbandingan SKAI Tahun 2022</h2>
+            </div>
+        </div>
+    
+        <div class="row" id="div-1">
+        </div>
+        <div class="row" id="div-2">
+        </div>
+        <div class="row d-none" id="div-3">
+        </div>
+        <!-- DataTables Example -->
+        <div class="mb-4 shadow card">
+            <div class="py-3 card-header">
+                <h6 class="m-0 font-weight-bold text-primary">Perbandingan SKAI Tahun 2022</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive table-wrapper">
+                    <table class="table table-bordered fixed-header-table" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">No</th>
+                                <th rowspan="2">No PRK</th>
+                                <th rowspan="2">Program Utama/Proyek</th>
+                                <th rowspan="2">Uraian Kegiatan</th>
+                                <th colspan="3">AI 2022</th>
+                            </tr>
+                            <tr>
+                                <th>SKAI 2022</th>
+                                <th>SKAI 2022 Revisi 1</th>
+                                <th>SKAI 2022 Revisi 2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>2019.USLS.1.003</td>
+                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
+                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
+                                <td>200</td>
+                                <td>150</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>2019.USLS.1.003</td>
+                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
+                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
+                                <td>200</td>
+                                <td>150</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>2019.USLS.1.003</td>
+                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
+                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
+                                <td>200</td>
+                                <td>150</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>2019.USLS.1.003</td>
+                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
+                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
+                                <td>200</td>
+                                <td>150</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>2019.USLS.1.003</td>
+                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
+                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
+                                <td>200</td>
+                                <td>150</td>
+                                <td>100</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+</div>
+{% endblock content %}
+
+{% block script %}
+<script>
+    $("tbody tr").on("click", function() {
+        //loop through all td elements in the row
+        $(this).find("td").each(function(i) {
+            //toggle between adding/removing the 'active' class
+            $(this).toggleClass('active-td');
+        });
+    });
+</script>
+{% endblock script %}
