@@ -22,21 +22,7 @@ class DocSKAI(models.Model):
     macro           = models.ForeignKey('Macro', on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
-        # if self.revision:
-        #     return "SKAI " + str(self.year) + " Revisi - " + str(self.revision_number)
-        # return "SKAI " + str(self.year)
         return self.document.regarding
-    
-class DocAddedSKAI(models.Model):
-    document        = models.ForeignKey('Document', on_delete=models.CASCADE)
-    revision_on     = models.ForeignKey('DocSKAI', on_delete=models.CASCADE)
-    revision_number = models.PositiveIntegerField()
-
-    #Macro
-    macro           = models.ForeignKey('Macro', on_delete=models.CASCADE, blank=True, null=True)
-
-    def __str__(self):
-        return "Tambahan AI/AKI atas " + self.revision_on.__str__()
 
 class Macro(models.Model):
     macro_file_1        = models.ForeignKey('MacroFile', on_delete=models.CASCADE, related_name="macro_before")
