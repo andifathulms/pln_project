@@ -110,7 +110,7 @@
 
         <!-- Page Heading -->
         
-        <div class="row text-center justify-content-center mb-5" id="div-0">
+        <div class="row text-center justify-content-center mb-5 d-none" id="div-0">
             <div class="col-xl-6 col-lg-8">
                 <h2 class="font-weight-bold">Timeline SKAI 
                     <span class="input-number-decrement">–</span>
@@ -121,7 +121,7 @@
             </div>
         </div>
     
-        <div class="row" id="div-1">
+        <div class="row d-none" id="div-1">
             <div class="col">
                 <div class="timeline-steps aos-init aos-animate" data-aos="fade-up">
                     {% for doc in doc_skai %}
@@ -171,12 +171,12 @@
                 </div>
             </div>
         </div>
-        <div class="row" id="div-2">
+        <div class="row d-none" id="div-2">
             <div class="col-12">
                 <button id="to-hide" class="btn btn-primary mb-3 w-100" >Hide Timeline  <span><i class="fa-solid fa-angles-up"></i></span></button>
             </div>
         </div>
-        <div class="row d-none" id="div-3">
+        <div class="row" id="div-3">
             <div class="col-12">
                 <button id="to-unhide" class="btn btn-primary mb-3 w-100" >Show Timeline  <span><i class="fa-solid fa-magnifying-glass"></i></span></button>
             </div>
@@ -216,8 +216,8 @@
                                     <td style="vertical-align: middle; text-align: center;">{{doc.revision_on.year}}</td>
                                 {% endif %}
                                 <td style="vertical-align: middle; text-align: center;">
-                                    <span class="mr-2"><a target="_blank" rel="noopener noreferrer" href="{% url 'document:pdf-viewer' doc.document.pk %}"><i class="fa-solid fa-file-pdf"></i></a></span>
-                                    <span><a target="_blank" rel="noopener noreferrer" href="{{doc.document.file.url}}" download><i class="fa-solid fa-download"></i></a></span>
+                                    <span class="mr-2"><a target="_blank" rel="noopener noreferrer" href="{{doc.document.file.url}}"><i class="fa-solid fa-file-pdf"></i></a></span>
+                                    <!-- <span><a target="_blank" rel="noopener noreferrer" href="{{doc.document.file.url}}" download><i class="fa-solid fa-download"></i></a></span> -->
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;">
                                     <span class="mr-2"><a target="_blank" rel="noopener noreferrer" href="{% url 'document:doc-list-lkai' %}"><i class="fa-solid fa-table"></i></a></span>
