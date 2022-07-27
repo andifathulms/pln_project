@@ -165,10 +165,13 @@
                                 <th rowspan="2">Tanggal Terbit</th>
                                 <th rowspan="2">Tahun</th>
                                 <th colspan="2">File</th>
+                                <th colspan="2">Action</th>
                             </tr>
                             <tr>
                                 <th>PDF</th>
                                 <th>Macros</th>
+                                <th>Edit</th>
+                                <th>Del</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -190,6 +193,12 @@
                                 <td style="vertical-align: middle; text-align: center;">
                                     <span class="mr-2"><a target="_blank" rel="noopener noreferrer" href="{% url 'document:doc-list-lkai' %}" class="disabled"><i class="fa-solid fa-table text-secondary"></i></a></span>
                                     <span><a target="_blank" rel="noopener noreferrer" href="#" class="disabled" download><i class="fa-solid fa-download text-secondary"></i></a></span>
+                                </td>
+                                <td style="vertical-align: middle; text-align: center;">
+                                    <span class="mr-2"><a href="#" class="disabled"><i class="fa-solid fa-pen-to-square text-secondary"></i></a></span>
+                                </td>
+                                <td style="vertical-align: middle; text-align: center;">
+                                    <span class="mr-2"><a href="#" class="disabled"><i class="fa-solid fa-trash text-secondary"></i></a></span>
                                 </td>
                             </tr>
                             {% endfor %}
