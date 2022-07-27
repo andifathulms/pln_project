@@ -28,7 +28,6 @@ urlpatterns = [
     path('login/', login_view, name="login"),
     path('logout/', logout_view, name="logout"),
 
-    path('dummy/', include('dummy.urls', namespace='dummy')),
     path('document/', include('document.urls', namespace='document')),
 ]
 

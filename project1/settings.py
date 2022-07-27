@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     
     'account',
     'division',
-    'dummy',
     'document',
     
 ]
