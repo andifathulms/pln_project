@@ -3,7 +3,10 @@
 
 {% block style %}
 <style type="text/css">
-    
+    a.disabled {
+        pointer-events: none;
+        cursor: default;
+    }
     .timeline-steps {
         display: flex;
         justify-content: center;
@@ -133,58 +136,23 @@
                         </div>
                     </div>
                     {% endfor %}
-                    <!-- <div class="timeline-step">
-                        <div class="timeline-content" data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="2004">
-                            <div class="inner-circle"></div>
-                            <p class="h6 mt-3 mb-1">2004</p>
-                            <p class="h6 text-muted mb-0 mb-lg-0">Launched Trello</p>
-                        </div>
-                    </div>
-                    <div class="timeline-step">
-                        <div class="timeline-content" data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="2005">
-                            <div class="inner-circle"></div>
-                            <p class="h6 mt-3 mb-1">2005</p>
-                            <p class="h6 text-muted mb-0 mb-lg-0">Launched Messanger</p>
-                        </div>
-                    </div>
-                    <div class="timeline-step">
-                        <div class="timeline-content" data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="2010">
-                            <div class="inner-circle"></div>
-                            <p class="h6 mt-3 mb-1">2010</p>
-                            <p class="h6 text-muted mb-0 mb-lg-0">Open New Branch</p>
-                        </div>
-                    </div>
-                    <div class="timeline-step">
-                        <div class="timeline-content" data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="2010">
-                            <div class="inner-circle"></div>
-                            <p class="h6 mt-3 mb-1">2010</p>
-                            <p class="h6 text-muted mb-0 mb-lg-0">Open New Branch</p>
-                        </div>
-                    </div>
-                    <div class="timeline-step mb-0">
-                        <div class="timeline-content" data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="2020">
-                            <div class="inner-circle"></div>
-                            <p class="h6 mt-3 mb-1">2020</p>
-                            <p class="h6 text-muted mb-0 mb-lg-0">In Fortune 500</p>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>
         <div class="row d-none" id="div-2">
             <div class="col-12">
-                <button id="to-hide" class="btn btn-primary mb-3 w-100" >Hide Timeline  <span><i class="fa-solid fa-angles-up"></i></span></button>
+                <button id="to-hide" class="btn mb-3 w-100" style="background-color: #449798; color: white;">Hide Timeline  <span><i class="fa-solid fa-angles-up"></i></span></button>
             </div>
         </div>
         <div class="row" id="div-3">
             <div class="col-12">
-                <button id="to-unhide" class="btn btn-primary mb-3 w-100" >Show Timeline  <span><i class="fa-solid fa-magnifying-glass"></i></span></button>
+                <button id="to-unhide" class="btn mb-3 w-100" style="background-color: #449798; color: white;">Show Timeline  <span><i class="fa-solid fa-magnifying-glass"></i></span></button>
             </div>
         </div>
         <!-- DataTales Example -->
         <div class="mb-4 shadow card">
             <div class="py-3 card-header">
-                <h6 class="m-0 font-weight-bold text-primary">Daftar SKAI 2022</h6>
+                <h6 class="m-0 font-weight-bold">Daftar SKAI 2022</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -220,8 +188,8 @@
                                     <!-- <span><a target="_blank" rel="noopener noreferrer" href="{{doc.document.file.url}}" download><i class="fa-solid fa-download"></i></a></span> -->
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;">
-                                    <span class="mr-2"><a target="_blank" rel="noopener noreferrer" href="{% url 'document:doc-list-lkai' %}"><i class="fa-solid fa-table"></i></a></span>
-                                    <span><a target="_blank" rel="noopener noreferrer" href="#" download><i class="fa-solid fa-download"></i></a></span>
+                                    <span class="mr-2"><a target="_blank" rel="noopener noreferrer" href="{% url 'document:doc-list-lkai' %}" class="disabled"><i class="fa-solid fa-table text-secondary"></i></a></span>
+                                    <span><a target="_blank" rel="noopener noreferrer" href="#" class="disabled" download><i class="fa-solid fa-download text-secondary"></i></a></span>
                                 </td>
                             </tr>
                             {% endfor %}
