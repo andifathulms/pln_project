@@ -6,6 +6,9 @@ class AccountAdmin(UserAdmin):
     list_display = ('email','name','division','role','date_joined', 'last_login', 'is_admin','is_staff')
     search_fields = ('email','name',)
     readonly_fields=('id', 'date_joined', 'last_login')
+    add_fieldsets = (
+            (None, {'fields': ('email','name','division','role','date_joined', 'last_login', 'is_admin','is_staff', 'password1', 'password2')}),
+        )
     ordering = ('name', )
     filter_horizontal = ()
     list_filter = ()
