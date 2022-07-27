@@ -10,79 +10,71 @@
         <div class="row">
             <div class="col">
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                    <li class="nav-item mr-3" role="presentation">
-                      <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-skai" type="button" role="tab" aria-controls="pills-home" aria-selected="true">SKAI terbit</button>
+                    <li class="col nav-item p-0" role="presentation">
+                      <button class="nav-link active w-100" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-skai" type="button" role="tab" aria-controls="pills-home" aria-selected="true">SKAI terbit</button>
                     </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-usulan-lkai" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Usulan LKAI</button>
+                    <li class="col nav-item p-0" role="presentation">
+                        <button class="nav-link w-100" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-usulan-lkai" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Usulan LKAI</button>
                       </li>
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
-                    <div class="tab-pane fade show active" id="pills-skai" role="tabpanel" aria-labelledby="pills-skai-tab">
-                        <div class="mb-4 d-sm-flex align-items-center justify-content-between">
-                            <h1 class="mb-0 text-gray-800 h3">Upload SKAI</h1>
+                    <div class="tab-pane fade show active" id="pills-skai" style="border-style: dotted; border-radius: 10px;" role="tabpanel" aria-labelledby="pills-skai-tab">
+                        <div class="py-3 card-header">
+                            <h6 class="m-0 font-weight-bold">Upload SKAI</h6>
                         </div>
-                        <form method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <label for="formGroupExampleInput">Tahun</label>
-                                <input type="number" class="form-control" name="year" id="formGroupExampleInput" min="2000" max="2099" step="1" value="2022" />
-                            </div>
-                            <div class="form-group">
-                                <label for="formGroupExampleInput">Nomor Dokumen</label>
-                                <input type="text" class="form-control" name="document_number" id="formGroupExampleInput" placeholder="Nomor Dokumen">
-                            </div>
-                            <div class="form-group">
-                                <label for="formGroupExampleInput">Perihal</label>
-                                <input type="text" class="form-control" name="regarding" id="formGroupExampleInput" placeholder="Perihal">
-                            </div>
-                            <div class="form-group">
-                                <label for="formGroupExampleInput">Tanggal Terbit</label>
-                                <input type="date" class="form-control" name="published_date" id="formGroupExampleInput" placeholder="Tanggal Terbit">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="customFile">File PDF <i class="fa-solid fa-file-pdf"></i></label>
-                                <input type="file" class="form-control" name="file" id="customFile" accept="application/pdf"/>
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="customFile">File Macros <i class="fa-solid fa-table"></i></label>
-                                <input type="file" class="form-control" name="file_xls" id="customFile" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
-                            </div>
-                            <button type="submit" class="btn btn-primary mb-3" name="submit-skai" >Upload</button>
-                        </form>
+                        <div class="card-body">
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="formGroupExampleInput">Tahun</label>
+                                    <input type="number" class="form-control" name="year" id="formGroupExampleInput" min="2000" max="2099" step="1" value="2022" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="formGroupExampleInput">Nomor Dokumen</label>
+                                    <input type="text" class="form-control" name="document_number" id="formGroupExampleInput" placeholder="Nomor Dokumen">
+                                </div>
+                                <div class="form-group">
+                                    <label for="formGroupExampleInput">Perihal</label>
+                                    <input type="text" class="form-control" name="regarding" id="formGroupExampleInput" placeholder="Perihal">
+                                </div>
+                                <div class="form-group">
+                                    <label for="formGroupExampleInput">Tanggal Terbit</label>
+                                    <input type="date" class="form-control" name="published_date" id="formGroupExampleInput" placeholder="Tanggal Terbit">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="customFile">File PDF <i class="fa-solid fa-file-pdf"></i></label>
+                                    <input type="file" class="form-control" name="file" id="customFile" accept="application/pdf"/>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="customFile">File Macros <i class="fa-solid fa-table"></i></label>
+                                    <input type="file" class="form-control" name="file_xls" id="customFile" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
+                                </div>
+                                <button type="submit" class="btn mb-3" name="submit-skai" style="background-color: #449798; color: #161616;">Upload  <i class="fa-solid fa-cloud-arrow-up"></i></button>
+                            </form>
+                        </div>
                     </div>
-                    <div class="tab-pane fade" id="pills-usulan-lkai" role="tabpanel" aria-labelledby="pills-skai-tab">
-                        <div class="mb-4 d-sm-flex align-items-center justify-content-between">
-                            <h1 class="mb-0 text-gray-800 h3">Upload SKAI Revisi</h1>
+                    <div class="tab-pane fade" id="pills-usulan-lkai" style="border-style: dotted; border-radius: 10px;" role="tabpanel" aria-labelledby="pills-skai-tab">
+                        <div class="py-3 card-header">
+                            <h6 class="m-0 font-weight-bold">Upload Usulan LKAI</h6>
                         </div>
-                        <form method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            <div class="form-group">
-                                <label for="formGroupExampleInput">Tahun</label>
-                                <input type="number" class="form-control" name="year" id="formGroupExampleInput" min="2000" max="2099" step="1" value="2022" />
-                            </div>
-                            <div class="form-group">
-                                <label for="formGroupExampleInput">Revisi Ke - </label>
-                                <input type="number" class="form-control" name="rev_number" id="formGroupExampleInput" min="1" max="10" step="1" value="1" />
-                            </div>
-                            <div class="form-group">
-                                <label for="formGroupExampleInput">Nomor Dokumen</label>
-                                <input type="text" class="form-control" name="document_number" id="formGroupExampleInput" placeholder="Nomor Dokumen">
-                            </div>
-                            <div class="form-group">
-                                <label for="formGroupExampleInput">Perihal</label>
-                                <input type="text" class="form-control" name="regarding" id="formGroupExampleInput" placeholder="Perihal">
-                            </div>
-                            <div class="form-group">
-                                <label for="formGroupExampleInput">Tanggal Terbit</label>
-                                <input type="date" class="form-control" name="published_date" id="formGroupExampleInput" placeholder="Tanggal Terbit">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-label" for="customFile">File</label>
-                                <input type="file" class="form-control" name="file" id="customFile" />
-                            </div>
-                            <button type="submit" class="btn btn-primary mb-3" name="submit-skai-rev">Upload</button>
-                        </form>
+                        <div class="card-body">
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="formGroupExampleInput">Tahun</label>
+                                    <input type="number" class="form-control" name="year" id="formGroupExampleInput" min="2000" max="2099" step="1" value="2022" />
+                                </div>
+                                <div class="form-group">
+                                    <label for="formGroupExampleInput">Tanggal Usulan</label>
+                                    <input type="date" class="form-control" name="published_date" id="formGroupExampleInput" placeholder="Tanggal Terbit">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="customFile">File Macros <i class="fa-solid fa-table"></i></label>
+                                    <input type="file" class="form-control" name="file_xls" id="customFile" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
+                                </div>
+                                <button type="submit" class="btn mb-3" name="submit-lkai-usulan" style="background-color: #449798; color: #161616;">Upload  <i class="fa-solid fa-cloud-arrow-up"></i></button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
