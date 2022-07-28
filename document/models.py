@@ -13,7 +13,7 @@ class Document(models.Model):
         return self.document_number
 
 class DocSKAI(models.Model):
-    document        = models.ForeignKey('Document', on_delete=models.CASCADE)
+    document        = models.ForeignKey('Document', on_delete=models.CASCADE, related_name="doc")
     year            = models.IntegerField()
     revision        = models.BooleanField()
     revision_number = models.PositiveIntegerField(blank=True, null=True)

@@ -20,19 +20,10 @@
 
     <div class="container-fluid">
 
-        <!-- Page Heading -->
-        
-        <div class="row text-center justify-content-center mb-5" id="div-0">
-            <div class="col-xl-6 col-lg-8">
-                <h2 class="font-weight-bold">Perbandingan SKAI Tahun 2022</h2>
-            </div>
-        </div>
-    
         <div class="row" id="div-1">
-        </div>
-        <div class="row" id="div-2">
-        </div>
-        <div class="row d-none" id="div-3">
+            <div class="col-12">
+                <button class="btn mb-3 w-100" style="background-color: #449798; color: white;" data-toggle="modal" data-target="#skaiModal">Select SKAI   <span><i class="fa-solid fa-arrow-pointer"></i></span></button>
+            </div>
         </div>
         <!-- DataTables Example -->
         <div class="mb-4 shadow card">
@@ -111,6 +102,7 @@
     </div>
     
 </div>
+{% include 'document\snippets\year_modal.html' %}
 {% endblock content %}
 
 {% block script %}

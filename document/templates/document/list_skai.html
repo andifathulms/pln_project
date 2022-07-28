@@ -104,6 +104,7 @@
         border-left: none;
         border-radius: 0 4px 4px 0; }
 </style>
+
 {% endblock style%}
 
 {% block content %}
@@ -115,11 +116,7 @@
         
         <div class="row text-center justify-content-center mb-5 d-none" id="div-0">
             <div class="col-xl-6 col-lg-8">
-                <h2 class="font-weight-bold">Timeline SKAI 
-                    <span class="input-number-decrement">–</span>
-                    <input class="input-number" type="text" value="2022" min="2010" max="2024">
-                    <span class="input-number-increment">+</span>
-                </h2>
+                <h2 class="font-weight-bold">Timeline SKAI {{doc_skai.0.year}}</h2>
                 <!-- <p class="text-muted">We’re very proud of the path we’ve taken. Explore the history that made us the company we are today.</p> -->
             </div>
         </div>
@@ -140,19 +137,29 @@
             </div>
         </div>
         <div class="row d-none" id="div-2">
-            <div class="col-12">
+            <div class="col-6">
+                <button class="btn mb-3 w-100" style="background-color: #449798; color: white;" data-toggle="modal" data-target="#skaiModal">Select SKAI   <span><i class="fa-solid fa-arrow-pointer"></i></span></button>
+            </div>
+            <div class="col-6">
                 <button id="to-hide" class="btn mb-3 w-100" style="background-color: #449798; color: white;">Hide Timeline  <span><i class="fa-solid fa-angles-up"></i></span></button>
             </div>
         </div>
         <div class="row" id="div-3">
-            <div class="col-12">
+            <div class="col-6">
+                <button class="btn mb-3 w-100" style="background-color: #449798; color: white;" data-toggle="modal" data-target="#skaiModal">Select SKAI   <span><i class="fa-solid fa-arrow-pointer"></i></span></button>
+            </div>
+            <div class="col-6">
                 <button id="to-unhide" class="btn mb-3 w-100" style="background-color: #449798; color: white;">Show Timeline  <span><i class="fa-solid fa-magnifying-glass"></i></span></button>
             </div>
         </div>
         <!-- DataTales Example -->
         <div class="mb-4 shadow card">
             <div class="py-3 card-header">
-                <h6 class="m-0 font-weight-bold">Daftar SKAI 2022</h6>
+                <div class="row">
+                    <div class="col">
+                        <h6 class="m-0 font-weight-bold" style="color: #fff;">Daftar SKAI {{doc_skai.0.year}}</h6>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -198,7 +205,7 @@
                                     <span class="mr-2"><a href="#" class="disabled"><i class="fa-solid fa-pen-to-square text-secondary"></i></a></span>
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;">
-                                    <span class="mr-2"><a href="#" class="disabled"><i class="fa-solid fa-trash text-secondary"></i></a></span>
+                                    <span class="mr-2"><a href="{% url 'document:doc-skai-delete' doc.pk %}"><i class="fa-solid fa-trash text-danger"></i></a></span>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -211,6 +218,8 @@
     </div>
     
 </div>
+
+{% include 'document\snippets\year_modal.html' %}
 {% endblock content %}
 
 {% block script %}
@@ -271,5 +280,6 @@
 
         inputNumber($('.input-number'));
 </script>
+
 
 {% endblock script %}

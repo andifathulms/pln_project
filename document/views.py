@@ -1,7 +1,8 @@
 from django.shortcuts import render
-
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import View
+from django.views.generic.edit import UpdateView, DeleteView
 
 from .models import Document, DocSKAI, MacroFile, Macro, MacroData
 from .forms import DocumentForm
@@ -9,21 +10,35 @@ from .forms import DocumentForm
 from itertools import chain
 
 from tablib import Dataset
+from django.utils import timezone
 
 class SKAIListView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         context = {}
-
-        doc_skai = DocSKAI.objects.select_related('document')
+        today = timezone.now()
+        doc_skai = DocSKAI.objects.select_related('document').filter(document__published_date__year=today.year)
         context["doc_skai"] = sorted(chain(doc_skai), key=lambda x: x.document.published_date, reverse=False)
 
         year = DocSKAI.objects.values("year").distinct()
         context['year'] = year
-
         return render(request, 'document/list_skai.html', context)
     
     def post(self, request, *args, **kwargs):
-        pass
+        context = {}
+        doc_skai = DocSKAI.objects.select_related('document').filter(document__published_date__year=request.POST["year"])
+        context["doc_skai"] = sorted(chain(doc_skai), key=lambda x: x.document.published_date, reverse=False)
+
+        year = DocSKAI.objects.values("year").distinct()
+        context['year'] = year
+        return render(request, 'document/list_skai.html', context)
+
+class SKAIDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = DocSKAI
+    template_name = 'document/skai_delete.html'
+    success_url = reverse_lazy('document:doc-list-skai')
+
+    def test_func(self):
+       return True #BIG WARNING
 
 class LKAIListView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
