@@ -202,7 +202,7 @@
                                     <span><a target="_blank" rel="noopener noreferrer" href="#" class="disabled" download><i class="fa-solid fa-download text-secondary"></i></a></span>
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;">
-                                    <span class="mr-2"><a href="#" class="disabled"><i class="fa-solid fa-pen-to-square text-secondary"></i></a></span>
+                                    <span class="mr-2"><a href="{% url 'document:doc-skai-update' doc.pk %}"><i class="fa-solid fa-pen-to-square text-warning"></i></a></span>
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;">
                                     <span class="mr-2"><a href="{% url 'document:doc-skai-delete' doc.pk %}"><i class="fa-solid fa-trash text-danger"></i></a></span>

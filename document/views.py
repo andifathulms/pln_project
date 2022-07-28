@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import View
@@ -39,6 +39,41 @@ class SKAIDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
 
     def test_func(self):
        return True #BIG WARNING
+
+class SKAIUpdateView(LoginRequiredMixin, View):
+    def get(self, request, pk, *args, **kwargs):
+        context = {}
+
+        skai = DocSKAI.objects.get(pk=pk)
+        context["skai"] = skai
+        context["str_date"] = skai.document.published_date.strftime('%Y-%m-%d')
+        print(skai.document.published_date.strftime('%Y-%m-%d'))
+
+        return render(request, 'document/skai_edit.html', context)
+    
+    def post(self, request, *args, **kwargs):
+        context = {}
+        
+        skai = DocSKAI.objects.get(pk=request.POST["pk"])
+        doc = skai.document
+
+        skai.year = request.POST["year"]
+        doc.document_number = request.POST["document_number"]
+        doc.regarding = request.POST["regarding"]
+        doc.published_date = request.POST["published_date"]
+        doc.save()
+        skai.document = doc
+        skai.save()
+
+        if "file" in request.FILES:
+            doc.file = request.FILES["file"]
+            doc.save()
+            skai.document = doc
+            skai.save()
+        
+        #Macro doc later
+
+        return redirect('document:doc-list-skai')
 
 class LKAIListView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):

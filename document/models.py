@@ -20,6 +20,7 @@ class DocSKAI(models.Model):
 
     #Macro
     macro           = models.ForeignKey('Macro', on_delete=models.CASCADE, blank=True, null=True)
+    #Macro Doc later
 
     def __str__(self):
         return self.document.regarding
