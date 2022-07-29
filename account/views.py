@@ -8,10 +8,21 @@ from django.views import View
 from account.forms import AccountAuthenticationForm, RegistrationForm
 
 from division.models import Division
+from document.models import DocSKAI
+from .models import Account
 
 class DashboardView(LoginRequiredMixin,View):
     def get(self, request, *args, **kwargs):
-        return render(request, 'account/dashboard.html', {})
+        context = {}
+        
+        count_account = Account.objects.count()
+        count_skai = DocSKAI.objects.count()
+
+
+        context["count_account"] = count_account
+        context["count_skai"] = count_skai
+
+        return render(request, 'account/dashboard.html', context)
 
 def dashboard_view(request,*args,**kwargs):
     return render(request, 'account/dashboard.html', {})

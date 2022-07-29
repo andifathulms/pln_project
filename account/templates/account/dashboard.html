@@ -16,10 +16,10 @@
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="mr-2 col">
-                            <div class="mb-1 text-xs font-weight-bold text-primary text-uppercase">Jumlah Pengguna
+                            <div class="mb-1 text-xs font-weight-bold text-primary text-uppercase">Jumlah User
                             </div>
                             <div class="mb-0 text-gray-800 h5 font-weight-bold">
-                                300
+                                {{count_account}}
                             </div>
                         </div>
                         <div class="col-auto">
@@ -29,15 +29,15 @@
                 </div>
             </div>
         </div>
-        <a href="#"  class="mb-4 col-xl-4 col-md-6">
+        <a href="{% url 'document:doc-list-skai' %}"  class="mb-4 col-xl-4 col-md-6">
             <div class="py-2 shadow card border-left-primary h-100">
                 <div class="card-body">
                     <div class="row no-gutters align-items-center">
                         <div class="mr-2 col">
-                            <div class="mb-1 text-xs font-weight-bold text-primary text-uppercase">Jumlah Laporan 
+                            <div class="mb-1 text-xs font-weight-bold text-primary text-uppercase">Jumlah SKAI Upload 
                             </div>
                             <div class="mb-0 text-gray-800 h5 font-weight-bold">
-                                300
+                                {{count_skai}}
                             </div>
                         </div>
                         <div class="col-auto">

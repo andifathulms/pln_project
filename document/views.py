@@ -1,3 +1,4 @@
+from urllib import request
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -79,10 +80,31 @@ class LKAIListView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         context = {}
 
-        doc_skai = DocSKAI.objects.select_related('document')
+        year = DocSKAI.objects.values("year").distinct()
+        context['year'] = year
+
+        today = timezone.now()
+        doc_skai = DocSKAI.objects.select_related('document').filter(document__published_date__year=today.year)
         context["doc_skai"] = sorted(chain(doc_skai), key=lambda x: x.document.published_date, reverse=False)
 
-        return render(request, 'document/list_lkai.html', context)
+        return render(request, 'document/lkai_list.html', context)
+    
+    def post(self, request, *args, **kwargs):
+        context = {}
+        doc_skai = DocSKAI.objects.select_related('document').filter(document__published_date__year=request.POST["year"])
+        context["doc_skai"] = sorted(chain(doc_skai), key=lambda x: x.document.published_date, reverse=False)
+
+        year = DocSKAI.objects.values("year").distinct()
+        context['year'] = year
+        return render(request, 'document/lkai_list.html', context)
+
+class LKAIView(LoginRequiredMixin, View):
+    def get(self, request, pk, *args, **kwargs):
+        context = {}
+
+        context["skai"] = DocSKAI.objects.get(pk=pk)
+
+        return render(request, 'document/lkai_view.html', context)
 
     def post(self, request, *args, **kwargs):
         pass
