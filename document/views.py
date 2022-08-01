@@ -17,8 +17,11 @@ class SKAIListView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         context = {}
         today = timezone.now()
-        doc_skai = DocSKAI.objects.select_related('document').filter(document__published_date__year=today.year)
-        context["doc_skai"] = sorted(chain(doc_skai), key=lambda x: x.document.published_date, reverse=False)
+        doc_skai_1 = DocSKAI.objects.select_related('document').filter(document__published_date__year=today.year, type="Penetapan")
+        doc_skai_2 = DocSKAI.objects.select_related('document').filter(document__published_date__year=today.year, type="Usulan")
+
+        context["doc_skai_1"] = sorted(chain(doc_skai_1), key=lambda x: x.document.published_date, reverse=False)
+        context["doc_skai_2"] = sorted(chain(doc_skai_2), key=lambda x: x.document.published_date, reverse=False)
 
         year = DocSKAI.objects.values("year").distinct()
         context['year'] = year
@@ -26,8 +29,11 @@ class SKAIListView(LoginRequiredMixin, View):
     
     def post(self, request, *args, **kwargs):
         context = {}
-        doc_skai = DocSKAI.objects.select_related('document').filter(document__published_date__year=request.POST["year"])
-        context["doc_skai"] = sorted(chain(doc_skai), key=lambda x: x.document.published_date, reverse=False)
+        doc_skai_1 = DocSKAI.objects.select_related('document').filter(document__published_date__year=request.POST["year"], type="Penetapan")
+        doc_skai_2 = DocSKAI.objects.select_related('document').filter(document__published_date__year=request.POST["year"], type="Usulan")
+        
+        context["doc_skai_1"] = sorted(chain(doc_skai_1), key=lambda x: x.document.published_date, reverse=False)
+        context["doc_skai_2"] = sorted(chain(doc_skai_2), key=lambda x: x.document.published_date, reverse=False)
 
         year = DocSKAI.objects.values("year").distinct()
         context['year'] = year
@@ -139,14 +145,14 @@ class UploadSKAI(LoginRequiredMixin, View):
                 skai.save()
             else:
                 print(doc.errors)
-        elif 'submit-skai-rev' in request.POST:
+        elif 'submit-skai-usulan' in request.POST:
             doc_form = DocumentForm(request.POST, request.FILES)
             if doc_form.is_valid():
                 doc = doc_form.save(commit=False)
                 doc.uploader = request.user
                 doc.save()
 
-                skai = DocSKAI(document=doc, year=request.POST['year'],revision=True,revision_number=request.POST['rev_number'])
+                skai = DocSKAI(document=doc, year=request.POST['year'],type="Usulan")
                 skai.save()
         
         doc_skai = DocSKAI.objects.all()

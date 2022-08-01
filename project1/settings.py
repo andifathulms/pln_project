@@ -41,10 +41,12 @@ INSTALLED_APPS = [
 
     'import_export',
     'storages',
+    'channels',
     
     'account',
     'division',
     'document',
+    'notification',
     
 ]
 
@@ -80,6 +82,7 @@ TEMPLATES = [
     },
 ]
 
+ASGI_APPLICATION = 'project1.routing.application'
 WSGI_APPLICATION = 'project1.wsgi.application'
 
 
@@ -132,6 +135,7 @@ USE_I18N = True
 USE_TZ = True
 
 LOGIN_URL = '/login'
+BASE_URL = "https://uipapang.herokuapp.com/"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -172,5 +176,16 @@ STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 django_heroku.settings(locals())
+
+#chanel-redis config
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            #"hosts": [('127.0.0.1', 6379)], #dev only
+            "hosts": [os.environ.get('REDIS_URL', 6379)],
+        },
+    },
+}
 
 #heroku login pwd = 4F@thulMS

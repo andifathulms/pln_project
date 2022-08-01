@@ -19,6 +19,9 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+    <!-- Material Icon -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+
     <!-- Custom styles for this template-->
     <link href="{% static 'css/sb-admin-2.css' %}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.3/css/jquery.dataTables.css">
@@ -64,6 +67,8 @@
             color: #FCFCFC;
             background-color: #161616;
         }
+
+        
     </style>
 
     {% block style %}
@@ -135,6 +140,7 @@
     <!--<script src="{% static 'js/jquery-3.6.0.js' %}"></script>-->
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+
     <script>
         // Call the dataTables jQuery plugin
     
@@ -148,6 +154,9 @@
             });
         });
     </script>
+
+    {% include 'snippets/general_notifications.html' %}
+    
     {% block script %}
     {% endblock script%}
 

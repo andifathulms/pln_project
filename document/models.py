@@ -15,7 +15,8 @@ class Document(models.Model):
 class DocSKAI(models.Model):
     document        = models.ForeignKey('Document', on_delete=models.CASCADE, related_name="doc")
     year            = models.IntegerField()
-    revision        = models.BooleanField()
+    type            = models.CharField(max_length=50, default="Penetapan")
+    revision        = models.BooleanField(default=False)
     revision_number = models.PositiveIntegerField(blank=True, null=True)
 
     #Macro

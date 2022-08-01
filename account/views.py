@@ -1,4 +1,3 @@
-from __future__ import division
 from django.shortcuts import redirect, render
 from django.contrib.auth import login, authenticate, logout
 
@@ -21,6 +20,11 @@ class DashboardView(LoginRequiredMixin,View):
 
         context["count_account"] = count_account
         context["count_skai"] = count_skai
+
+        profile = request.user
+        print(profile)
+        admin = Account.objects.get(pk=1)
+        profile.create_notif_first_login(admin)
 
         return render(request, 'account/dashboard.html', context)
 

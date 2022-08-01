@@ -14,7 +14,7 @@
                       <button class="nav-link active w-100" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-skai" type="button" role="tab" aria-controls="pills-home" aria-selected="true">SKAI terbit</button>
                     </li>
                     <li class="col nav-item p-0" role="presentation">
-                        <button class="nav-link w-100" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-usulan-lkai" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Usulan LKAI</button>
+                        <button class="nav-link w-100" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-usulan-lkai" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">SKAI usulan</button>
                       </li>
                 </ul>
                 <div class="tab-content" id="pills-tabContent">
@@ -65,14 +65,26 @@
                                     <input type="number" class="form-control" name="year" id="formGroupExampleInput" min="2000" max="2099" step="1" value="2022" />
                                 </div>
                                 <div class="form-group">
-                                    <label for="formGroupExampleInput">Tanggal Usulan</label>
+                                    <label for="formGroupExampleInput">Nomor Dokumen</label>
+                                    <input type="text" class="form-control" name="document_number" id="formGroupExampleInput" placeholder="Nomor Dokumen">
+                                </div>
+                                <div class="form-group">
+                                    <label for="formGroupExampleInput">Perihal</label>
+                                    <input type="text" class="form-control" name="regarding" id="formGroupExampleInput" placeholder="Perihal">
+                                </div>
+                                <div class="form-group">
+                                    <label for="formGroupExampleInput">Tanggal Terbit</label>
                                     <input type="date" class="form-control" name="published_date" id="formGroupExampleInput" placeholder="Tanggal Terbit">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="customFile">File PDF <i class="fa-solid fa-file-pdf"></i></label>
+                                    <input type="file" class="form-control" name="file" id="customFile" accept="application/pdf"/>
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="customFile">File Macros <i class="fa-solid fa-table"></i></label>
                                     <input type="file" class="form-control" name="file_xls" id="customFile" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
                                 </div>
-                                <button class="btn mb-3" name="submit-lkai-usulan" style="background-color: #449798; color: #161616;">Upload  <i class="fa-solid fa-cloud-arrow-up"></i></button>
+                                <button type="submit" class="btn mb-3" name="submit-skai-usulan" style="background-color: #449798; color: #161616;">Upload  <i class="fa-solid fa-cloud-arrow-up"></i></button>
                             </form>
                         </div>
                     </div>

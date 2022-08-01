@@ -1,6 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericRelation
+
+from django.conf import settings
+
+from notification.models import Notification
+
 class MyAccountManager(BaseUserManager):
     def create_user(self, email, name, password=None):
         if not email:
@@ -40,6 +47,9 @@ class Account(AbstractBaseUser):
     is_active				= models.BooleanField(default=True)
     is_staff				= models.BooleanField(default=False)
 
+    # set up the reverse relation to GenericForeignKey
+    notifications   		= GenericRelation(Notification)	
+
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name']
 
@@ -53,3 +63,23 @@ class Account(AbstractBaseUser):
     
     def  has_module_perms(self, app_label):
         return True
+    
+    def create_notif_first_login(self, account):
+        content_type = ContentType.objects.get_for_model(self)
+        
+        self.notifications.create(
+            target=self,
+            from_user=account,
+			redirect_url=f"{settings.BASE_URL}",
+			verb="Welcome to UIP Apang !",
+			content_type=content_type,
+		)
+        self.save()
+        print("DONE")
+    
+    @property
+    def get_cname(self):
+        """
+		For determining what kind of object is associated with a Notification
+		"""
+        return "Account"

@@ -1,3 +1,7 @@
+{% block style %}
+
+{% endblock style %}
+
 <nav class="mb-4 bg-white shadow navbar navbar-expand navbar-light topbar static-top">
     <!-- Topbar Navbar -->
     <ul class="mr-auto navbar-nav">
@@ -10,9 +14,18 @@
         <div class="topbar-divider d-none d-sm-block"></div>
     </ul>
     <ul class="ml-auto navbar-nav">
-        <div class="topbar-divider d-none d-sm-block"></div>
         
         <!-- Nav Item - User Information -->
+        
+        <li class="icons dropdown d-none d-md-flex">
+            <div class="d-flex notifications-icon-container rounded-circle align-items-center ml-2" id="id_notification_dropdown_toggle" data-toggle="dropdown" onclick="setGeneralNotificationsAsRead()">
+                <span id="id_general_notifications_count" class="badge badge-pill gradient-2 badge-primary"></span>
+                <span class="d-flex material-icons notifications-material-icon m-auto align-items-center">notifications_none</span>
+                <div class="dropdown-menu scrollable-menu" aria-labelledby="id_notification_dropdown_toggle" id="id_general_notifications_container" style="min-width: 23rem; max-height: 500px; overflow-y: auto; left: -300% !important;">                                       
+                </div>
+            </div>
+        </li>
+
         <li class="nav-item dropdown no-arrow">
             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
