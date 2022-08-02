@@ -1,8 +1,14 @@
 {% extends 'base.html' %}
+{% load humanize %}
 {% load static %}
 
 {% block style %}
 <style type="text/css">
+    .hiddenRow {
+        padding: 0 !important;
+        border: 0px !important;
+    }
+
     a.disabled {
         pointer-events: none;
         cursor: default;
@@ -189,7 +195,7 @@
                                 </thead>
                                 <tbody>
                                     {% for doc in doc_skai_1 %}
-                                    <tr>
+                                    <tr data-toggle="collapse" data-target="#demo-1-{{doc.pk}}" class="accordion-toggle">
                                         <td>{{forloop.counter}}</td>
                                         <td>{{doc.document.regarding}}</td>
                                         <td>{{doc.document.document_number}}</td>
@@ -212,6 +218,31 @@
                                         <td style="vertical-align: middle; text-align: center;">
                                             <span class="mr-2"><a href="{% url 'document:doc-skai-delete' doc.pk %}"><i class="fa-solid fa-trash text-danger"></i></a></span>
                                         </td>
+                                    </tr>
+                                    <tr style="border: none;">
+                                        <td colspan="9" class="hiddenRow"><div id="demo-1-{{doc.pk}}" class="accordian-body collapse">
+                                            <table class="table">
+                                                <tbody>
+                                                  <tr>
+                                                    <th style="border: 1px solid #e3e6f0 !important;">Di Upload</th>
+                                                    <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.uploader.name}}</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <th style="border: 1px solid #e3e6f0 !important;">Tanggal Upload</th>
+                                                    <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.upload_date}} ({{doc.document.upload_date|naturaltime}})</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <th style="border: 1px solid #e3e6f0 !important;">PDF File Size</th>
+                                                    <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.file.name}}</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <th style="border: 1px solid #e3e6f0 !important;">Macros File Size</th>
+                                                    <td style="border: 1px solid #e3e6f0 !important;">0</td>
+                                                  </tr>
+                                                </tbody>
+                                            </table>
+                                        </div></td>
+                                        
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -251,7 +282,7 @@
                                 </thead>
                                 <tbody>
                                     {% for doc in doc_skai_2 %}
-                                    <tr>
+                                    <tr data-toggle="collapse" data-target="#demo-2-{{doc.pk}}" class="accordion-toggle">
                                         <td>{{forloop.counter}}</td>
                                         <td>{{doc.document.regarding}}</td>
                                         <td>{{doc.document.document_number}}</td>
@@ -274,6 +305,30 @@
                                         <td style="vertical-align: middle; text-align: center;">
                                             <span class="mr-2"><a href="{% url 'document:doc-skai-delete' doc.pk %}"><i class="fa-solid fa-trash text-danger"></i></a></span>
                                         </td>
+                                    </tr>
+                                    <tr style="border: none;">
+                                        <td colspan="9" class="hiddenRow"><div id="demo-2-{{doc.pk}}" class="accordian-body collapse">
+                                            <table class="table">
+                                                <tbody>
+                                                  <tr>
+                                                    <th style="border: 1px solid #e3e6f0 !important;">Di Upload</th>
+                                                    <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.uploader.name}}</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <th style="border: 1px solid #e3e6f0 !important;">Tanggal Upload</th>
+                                                    <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.upload_date}} ({{doc.document.upload_date|naturaltime}})</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <th style="border: 1px solid #e3e6f0 !important;">PDF File Size</th>
+                                                    <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.file.name}}</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <th style="border: 1px solid #e3e6f0 !important;">Macros File Size</th>
+                                                    <td style="border: 1px solid #e3e6f0 !important;">0</td>
+                                                  </tr>
+                                                </tbody>
+                                            </table>
+                                        </div></td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -314,9 +369,9 @@
                                 <tbody>
                                     {% for doc in doc_skai_3 %}
                                     {% if doc.type == "Usulan" %}
-                                    <tr style="background-color: #F5F5F5;">
+                                    <tr data-toggle="collapse" data-target="#demo-3-{{doc.pk}}" class="accordion-toggle" style="background-color: #F5F5F5;">
                                     {% else %}
-                                    <tr>
+                                    <tr data-toggle="collapse" data-target="#demo-3-{{doc.pk}}" class="accordion-toggle">
                                     {% endif %}
                                         <td>{{forloop.counter}}</td>
                                         <td>{{doc.document.regarding}}</td>
@@ -340,6 +395,30 @@
                                         <td style="vertical-align: middle; text-align: center;">
                                             <span class="mr-2"><a href="{% url 'document:doc-skai-delete' doc.pk %}"><i class="fa-solid fa-trash text-danger"></i></a></span>
                                         </td>
+                                    </tr>
+                                    <tr style="border: none;">
+                                        <td colspan="9" class="hiddenRow"><div id="demo-3-{{doc.pk}}" class="accordian-body collapse">
+                                            <table class="table">
+                                                <tbody>
+                                                  <tr>
+                                                    <th style="border: 1px solid #e3e6f0 !important;">Di Upload</th>
+                                                    <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.uploader.name}}</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <th style="border: 1px solid #e3e6f0 !important;">Tanggal Upload</th>
+                                                    <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.upload_date}} ({{doc.document.upload_date|naturaltime}})</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <th style="border: 1px solid #e3e6f0 !important;">PDF File Size</th>
+                                                    <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.file.name}}</td>
+                                                  </tr>
+                                                  <tr>
+                                                    <th style="border: 1px solid #e3e6f0 !important;">Macros File Size</th>
+                                                    <td style="border: 1px solid #e3e6f0 !important;">0</td>
+                                                  </tr>
+                                                </tbody>
+                                            </table>
+                                        </div></td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
