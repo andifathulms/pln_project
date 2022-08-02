@@ -1,6 +1,13 @@
 from django.db import models
 from account.models import Account
 
+from django.conf import settings
+
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.fields import GenericRelation
+
+from notification.models import Notification
+
 class Document(models.Model):
     document_number     = models.CharField(max_length=100)
     published_date      = models.DateField()
@@ -23,8 +30,31 @@ class DocSKAI(models.Model):
     macro           = models.ForeignKey('Macro', on_delete=models.CASCADE, blank=True, null=True)
     #Macro Doc later
 
+    # set up the reverse relation to GenericForeignKey
+    notifications   		= GenericRelation(Notification)
+
     def __str__(self):
         return self.document.regarding
+    
+    def create_notif_on_upload(self, account, content):
+        content_type = ContentType.objects.get_for_model(self)
+        
+        self.notifications.create(
+            target=self,
+            from_user=account,
+			redirect_url=f"{settings.BASE_URL}",
+			verb=f"{account.name} uploaded SKAI. ({content})",
+			content_type=content_type,
+		)
+        self.save()
+        print("DONE")
+    
+    @property
+    def get_cname(self):
+        """
+		For determining what kind of object is associated with a Notification
+		"""
+        return "DocSKAI"
 
 class Macro(models.Model):
     macro_file_1        = models.ForeignKey('MacroFile', on_delete=models.CASCADE, related_name="macro_before")

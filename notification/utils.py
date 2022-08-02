@@ -55,6 +55,22 @@ class CustomNotificationEncoder(JSONSerializer):
 						"image_url": str("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png")
 					}
 				})
+			elif obj.get_content_object_type() == "DocSKAI":
+				dump_object.update({'notification_type': obj.get_content_object_type()})
+				dump_object.update({'notification_id': str(obj.pk)})
+				dump_object.update({'verb': obj.verb})
+				dump_object.update({'is_active': str(obj.content_object.is_active)})
+				dump_object.update({'is_read': str(obj.read)})
+				dump_object.update({'natural_timestamp': str(naturaltime(obj.timestamp))})
+				dump_object.update({'timestamp': str(obj.timestamp)})
+				dump_object.update({
+					'actions': {
+						'redirect_url': str(obj.redirect_url),
+					},
+					"from": {
+						"image_url": str("https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png")
+					}
+				})
 			else:
 				print("Not Account")
 		except Exception as e: 

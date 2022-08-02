@@ -5,6 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import View
 from django.views.generic.edit import UpdateView, DeleteView
 
+from account.models import Account
 from .models import Document, DocSKAI, MacroFile, Macro, MacroData
 from .forms import DocumentForm
 
@@ -22,9 +23,12 @@ class SKAIListView(LoginRequiredMixin, View):
 
         context["doc_skai_1"] = sorted(chain(doc_skai_1), key=lambda x: x.document.published_date, reverse=False)
         context["doc_skai_2"] = sorted(chain(doc_skai_2), key=lambda x: x.document.published_date, reverse=False)
+        context["doc_skai_3"] = sorted(chain(doc_skai_1, doc_skai_2), key=lambda x: x.document.published_date, reverse=False)
 
         year = DocSKAI.objects.values("year").distinct()
         context['year'] = year
+
+        context['the_year'] = today.year
         return render(request, 'document/list_skai.html', context)
     
     def post(self, request, *args, **kwargs):
@@ -34,9 +38,11 @@ class SKAIListView(LoginRequiredMixin, View):
         
         context["doc_skai_1"] = sorted(chain(doc_skai_1), key=lambda x: x.document.published_date, reverse=False)
         context["doc_skai_2"] = sorted(chain(doc_skai_2), key=lambda x: x.document.published_date, reverse=False)
+        context["doc_skai_3"] = sorted(chain(doc_skai_1, doc_skai_2), key=lambda x: x.document.published_date, reverse=False)
 
         year = DocSKAI.objects.values("year").distinct()
         context['year'] = year
+        context['the_year'] = request.POST["year"]
         return render(request, 'document/list_skai.html', context)
 
 class SKAIDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
@@ -143,6 +149,8 @@ class UploadSKAI(LoginRequiredMixin, View):
 
                 skai = DocSKAI(document=doc, year=request.POST['year'],revision=False)
                 skai.save()
+
+                #skai.create_notif_on_upload(skai.document.uploader,skai.document.regarding)
             else:
                 print(doc.errors)
         elif 'submit-skai-usulan' in request.POST:
@@ -154,6 +162,7 @@ class UploadSKAI(LoginRequiredMixin, View):
 
                 skai = DocSKAI(document=doc, year=request.POST['year'],type="Usulan")
                 skai.save()
+                #skai.create_notif_on_upload(skai.document.uploader,skai.document.regarding)
         
         doc_skai = DocSKAI.objects.all()
         context["doc_skai"] = list(chain(doc_skai))

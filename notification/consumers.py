@@ -19,6 +19,7 @@ from .exceptions import *
 from .utils import *
 
 from account.models import Account
+from document.models import DocSKAI
 
 class NotificationConsumer(AsyncJsonWebsocketConsumer):
 
@@ -145,7 +146,8 @@ def get_general_notifications(user, page_number):
 	#ADD COMENT LATER
     if user.is_authenticated:
         account_ct = ContentType.objects.get_for_model(Account)
-        notifications = Notification.objects.filter(target=user, content_type__in=[account_ct]).order_by('-timestamp')
+        docSKAI_ct = ContentType.objects.get_for_model(DocSKAI)
+        notifications = Notification.objects.filter(target=user, content_type__in=[account_ct, docSKAI_ct]).order_by('-timestamp')
         p = Paginator(notifications, DEFAULT_NOTIFICATION_PAGE_SIZE)
         payload = {}
         if len(notifications) > 0:
@@ -173,7 +175,8 @@ def get_new_general_notifications(user, newest_timestamp):
         timestamp = datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S.%f')
 
         account_ct = ContentType.objects.get_for_model(Account)
-        notifications = Notification.objects.filter(target=user, content_type__in=[account_ct], timestamp__gt=timestamp, read=False).order_by('-timestamp')
+        docSKAI_ct = ContentType.objects.get_for_model(DocSKAI)
+        notifications = Notification.objects.filter(target=user, content_type__in=[account_ct, docSKAI_ct], timestamp__gt=timestamp, read=False).order_by('-timestamp')
         s = CustomNotificationEncoder()
         payload['notifications'] = s.serialize(notifications)
     else:
@@ -191,6 +194,7 @@ def refresh_general_notifications(user, oldest_timestamp, newest_timestamp):
 	"""
 	payload = {}
 	if user.is_authenticated:
+        
 		oldest_ts = oldest_timestamp[0:oldest_timestamp.find("+")] # remove timezone because who cares
 		print(oldest_ts)
 		oldest_ts = datetime.strptime(oldest_ts, '%Y-%m-%d %H:%M:%S.%f')
@@ -201,7 +205,7 @@ def refresh_general_notifications(user, oldest_timestamp, newest_timestamp):
 		#print(newest_ts)
 		newest_ts = datetime.strptime(newest_ts, '%Y-%m-%d %H:%M:%S.%f')
 		#print(newest_ts)
-		notifications = Notification.objects.filter(target=user, content_type__in=[], timestamp__gte=oldest_ts, timestamp__lte=newest_ts).order_by('-timestamp')
+		notifications = Notification.objects.filter(target=user, content_type__in=[ContentType.objects.get_for_model(Account), ContentType.objects.get_for_model(DocSKAI)], timestamp__gte=oldest_ts, timestamp__lte=newest_ts).order_by('-timestamp')
 
 		s = CustomNotificationEncoder()
 		payload['notifications'] = s.serialize(notifications)
@@ -214,7 +218,7 @@ def refresh_general_notifications(user, oldest_timestamp, newest_timestamp):
 def get_unread_general_notification_count(user):
 	payload = {}
 	if user.is_authenticated:
-		notifications = Notification.objects.filter(target=user, content_type__in=[])
+		notifications = Notification.objects.filter(target=user, content_type__in=[ContentType.objects.get_for_model(Account), ContentType.objects.get_for_model(DocSKAI)])
 
 		unread_count = 0
 		if notifications:
