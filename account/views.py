@@ -22,7 +22,6 @@ class DashboardView(LoginRequiredMixin,View):
         context["count_skai"] = count_skai
 
         profile = request.user
-        print(profile)
         admin = Account.objects.get(pk=1)
         profile.create_notif_first_login(admin)
 
