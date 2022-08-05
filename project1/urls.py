@@ -21,14 +21,21 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from account.views import login_view, DashboardView, logout_view
+from document.views import XLSM_Playground
+from notification.views import not_found_404
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', DashboardView.as_view(), name="home"),
     path('login/', login_view, name="login"),
     path('logout/', logout_view, name="logout"),
+    path('not_found/', not_found_404.as_view(), name="not_found"),
 
     path('document/', include('document.urls', namespace='document')),
+    path('monev/', include('monev.urls', namespace='monev')),
+
+    #for dev only
+    path('playground/', XLSM_Playground.as_view(), name="playground"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

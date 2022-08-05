@@ -1,7 +1,5 @@
-import asyncio
 import json
 from datetime import datetime
-from xxlimited import new
 
 from channels.consumer import AsyncConsumer
 from channels.db import database_sync_to_async

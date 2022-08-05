@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<p id="target">{{macros}}</p>
+{% endblock content %}
+
+{% block script %}
+
+<script>
+    target = document.getElementById('target')
+    //var wsStart='wss://'
+    var wsStart = window.location.protocol == "https:" ? "wss://" : "ws://";
+    //var endpoint = wsStart + window.location.host + window.location.pathname
+    var endpoint = wsStart + window.location.host + "/playground/";
+    var macrosSocket = new WebSocket(endpoint)
+
+    macrosSocket.onclose = function(e) {
+        console.error('Macros Socket closed unexpectedly');
+    };
+
+    macrosSocket.onopen = function(e){
+        console.log("Macros Socket on open: " + e)
+        macrosSocket.send("Macros")
+    }
+
+    macrosSocket.onmessage = function(message){
+        console.log('MESSAGE : ',message)
+        target.innerHTML = message.data
+    }
+</script>
+
+{% endblock script %}

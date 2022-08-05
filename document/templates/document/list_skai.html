@@ -117,314 +117,103 @@
 <div class="container-fluid">
 
     <div class="container-fluid">
-
-        <!-- Page Heading -->
-        
-        <!-- <div class="row text-center justify-content-center mb-5 d-none" id="div-0">
-            <div class="col-xl-6 col-lg-8">
-                <h2 class="font-weight-bold">Timeline SKAI {{doc_skai.0.year}}</h2>
-            </div>
-        </div>
-    
-        <div class="row d-none" id="div-1">
-            <div class="col">
-                <div class="timeline-steps aos-init aos-animate" data-aos="fade-up">
-                    {% for doc in doc_skai %}
-                    <div class="timeline-step">
-                        <div class="timeline-content" data-toggle="popover" data-trigger="hover" data-placement="top" title="" data-content="And here's some amazing content. It's very engaging. Right?" data-original-title="2003">
-                            <div class="inner-circle"></div>
-                            <p class="h6 mt-3 mb-1">{{doc.document.published_date}}</p>
-                            <p class="h6 text-muted mb-0 mb-lg-0 font-weight-bold" >{{doc}}</p>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div> -->
-        <div class="row">
-            <div class="col">
-                <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                    <li class="col nav-item p-0" role="presentation">
-                      <button class="nav-link active w-100" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-skai-1" type="button" role="tab" aria-controls="pills-home" aria-selected="true">SKAI terbit</button>
-                    </li>
-                    <li class="col nav-item p-0" role="presentation">
-                        <button class="nav-link w-100" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-skai-2" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">SKAI usulan</button>
-                    </li>
-                    <li class="col nav-item p-0" role="presentation">
-                        <button class="nav-link w-100" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-skai-3" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">SKAI</button>
-                    </li>
-                </ul>
-            </div>
-            <div class="col-3">
-                <button class="btn mb-3 w-100" style="background-color: #449798; color: white;" data-toggle="modal" data-target="#skaiModal">Select SKAI   <span><i class="fa-solid fa-arrow-pointer"></i></span></button>
-            </div>
-            <div class="col-3">
-                <a class="btn mb-3 w-100" style="background-color: #449798; color: white;" href="{% url 'document:doc-upload-skai' %}">Upload SKAI    <span><i class="fa-solid fa-file-arrow-up"></i></span></a>
-            </div>
-        </div>
         <!-- DataTales Example -->
-        <div class="tab-content" id="pills-tabContent">
-            <div class="tab-pane fade show active" id="pills-skai-1" role="tabpanel" aria-labelledby="pills-skai-tab">
-                <div class="mb-4 shadow card">
-                    <div class="py-3 card-header">
-                        <div class="row">
-                            <div class="col">
-                                <h6 class="m-0 font-weight-bold" style="color: #fff;">Daftar SKAI Terbit {{the_year}}</h6>
-                            </div>
-                        </div>
+        <div class="mb-4 shadow card">
+            <div class="py-3 card-header">
+                <div class="row">
+                    <div class="col-8">
+                        <h6 class="m-0 font-weight-bold" style="color: #fff;">Daftar SKAI {{skai_verb}} {{the_year}}</h6>
                     </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th rowspan="2">No</th>
-                                        <th rowspan="2">Perihal</th>
-                                        <th rowspan="2">Nomor Surat SKAI</th>
-                                        <th rowspan="2">Tanggal Terbit</th>
-                                        <th rowspan="2">Tahun</th>
-                                        <th colspan="2">File</th>
-                                        <th colspan="2">Action</th>
-                                    </tr>
-                                    <tr>
-                                        <th>PDF</th>
-                                        <th>Macros</th>
-                                        <th>Edit</th>
-                                        <th>Del</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for doc in doc_skai_1 %}
-                                    <tr data-toggle="collapse" data-target="#demo-1-{{doc.pk}}" class="accordion-toggle">
-                                        <td>{{forloop.counter}}</td>
-                                        <td>{{doc.document.regarding}}</td>
-                                        <td>{{doc.document.document_number}}</td>
-                                        <td style="vertical-align: middle; text-align: center;">{{doc.document.published_date}}</td>
-                                        {% if doc.year %}
-                                            <td style="vertical-align: middle; text-align: center;">{{doc.year}}</td>
-                                        {% else %}
-                                            <td style="vertical-align: middle; text-align: center;">{{doc.revision_on.year}}</td>
-                                        {% endif %}
-                                        <td style="vertical-align: middle; text-align: center;">
-                                            <span class="mr-2"><a target="_blank" rel="noopener noreferrer" href="{{doc.document.file.url}}"><i class="fa-solid fa-file-pdf"></i></a></span>
-                                        </td>
-                                        <td style="vertical-align: middle; text-align: center;">
-                                            <span class="mr-2"><a target="_blank" rel="noopener noreferrer" href="{% url 'document:doc-list-lkai' %}" class="disabled"><i class="fa-solid fa-table text-secondary"></i></a></span>
-                                            <span><a target="_blank" rel="noopener noreferrer" href="#" class="disabled" download><i class="fa-solid fa-download text-secondary"></i></a></span>
-                                        </td>
-                                        <td style="vertical-align: middle; text-align: center;">
-                                            <span class="mr-2"><a href="{% url 'document:doc-skai-update' doc.pk %}"><i class="fa-solid fa-pen-to-square text-warning"></i></a></span>
-                                        </td>
-                                        <td style="vertical-align: middle; text-align: center;">
-                                            <span class="mr-2"><a href="{% url 'document:doc-skai-delete' doc.pk %}"><i class="fa-solid fa-trash text-danger"></i></a></span>
-                                        </td>
-                                    </tr>
-                                    <tr style="border: none;">
-                                        <td colspan="9" class="hiddenRow"><div id="demo-1-{{doc.pk}}" class="accordian-body collapse">
-                                            <table class="table">
-                                                <tbody>
-                                                  <tr>
-                                                    <th style="border: 1px solid #e3e6f0 !important;">Di Upload</th>
-                                                    <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.uploader.name}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <th style="border: 1px solid #e3e6f0 !important;">Tanggal Upload</th>
-                                                    <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.upload_date}} ({{doc.document.upload_date|naturaltime}})</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <th style="border: 1px solid #e3e6f0 !important;">PDF File Size</th>
-                                                    <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.file.name}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <th style="border: 1px solid #e3e6f0 !important;">Macros File Size</th>
-                                                    <td style="border: 1px solid #e3e6f0 !important;">0</td>
-                                                  </tr>
-                                                </tbody>
-                                            </table>
-                                        </div></td>
-                                        
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="col-4 ">
+                        <button class="btn btn-info btn-icon-split btn-sm float-right" data-toggle="modal" data-target="#skaiModal">
+                            <span class="icon text-white-50">
+                                <i class="fa-solid fa-arrow-pointer"></i>
+                            </span>
+                            <span class="text">SKAI Tahun</span>
+                        </button>
+                        <a href="{% url 'document:doc-upload-skai' %}" class="btn btn-success btn-icon-split btn-sm float-right mr-1">
+                            <span class="icon text-white-50">
+                                <i class="fa-solid fa-file-arrow-up"></i>
+                            </span>
+                            <span class="text">Upload SKAI</span>
+                        </a>
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade show" id="pills-skai-2" role="tabpanel" aria-labelledby="pills-skai-tab">
-                <div class="mb-4 shadow card">
-                    <div class="py-3 card-header">
-                        <div class="row">
-                            <div class="col">
-                                <h6 class="m-0 font-weight-bold" style="color: #fff;">Daftar SKAI Usulan {{the_year}}</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th rowspan="2">No</th>
-                                        <th rowspan="2">Perihal</th>
-                                        <th rowspan="2">Nomor Surat SKAI</th>
-                                        <th rowspan="2">Tanggal Terbit</th>
-                                        <th rowspan="2">Tahun</th>
-                                        <th colspan="2">File</th>
-                                        <th colspan="2">Action</th>
-                                    </tr>
-                                    <tr>
-                                        <th>PDF</th>
-                                        <th>Macros</th>
-                                        <th>Edit</th>
-                                        <th>Del</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for doc in doc_skai_2 %}
-                                    <tr data-toggle="collapse" data-target="#demo-2-{{doc.pk}}" class="accordion-toggle">
-                                        <td>{{forloop.counter}}</td>
-                                        <td>{{doc.document.regarding}}</td>
-                                        <td>{{doc.document.document_number}}</td>
-                                        <td style="vertical-align: middle; text-align: center;">{{doc.document.published_date}}</td>
-                                        {% if doc.year %}
-                                            <td style="vertical-align: middle; text-align: center;">{{doc.year}}</td>
-                                        {% else %}
-                                            <td style="vertical-align: middle; text-align: center;">{{doc.revision_on.year}}</td>
-                                        {% endif %}
-                                        <td style="vertical-align: middle; text-align: center;">
-                                            <span class="mr-2"><a target="_blank" rel="noopener noreferrer" href="{{doc.document.file.url}}"><i class="fa-solid fa-file-pdf"></i></a></span>
-                                        </td>
-                                        <td style="vertical-align: middle; text-align: center;">
-                                            <span class="mr-2"><a target="_blank" rel="noopener noreferrer" href="{% url 'document:doc-list-lkai' %}" class="disabled"><i class="fa-solid fa-table text-secondary"></i></a></span>
-                                            <span><a target="_blank" rel="noopener noreferrer" href="#" class="disabled" download><i class="fa-solid fa-download text-secondary"></i></a></span>
-                                        </td>
-                                        <td style="vertical-align: middle; text-align: center;">
-                                            <span class="mr-2"><a href="{% url 'document:doc-skai-update' doc.pk %}"><i class="fa-solid fa-pen-to-square text-warning"></i></a></span>
-                                        </td>
-                                        <td style="vertical-align: middle; text-align: center;">
-                                            <span class="mr-2"><a href="{% url 'document:doc-skai-delete' doc.pk %}"><i class="fa-solid fa-trash text-danger"></i></a></span>
-                                        </td>
-                                    </tr>
-                                    <tr style="border: none;">
-                                        <td colspan="9" class="hiddenRow"><div id="demo-2-{{doc.pk}}" class="accordian-body collapse">
-                                            <table class="table">
-                                                <tbody>
-                                                  <tr>
-                                                    <th style="border: 1px solid #e3e6f0 !important;">Di Upload</th>
-                                                    <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.uploader.name}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <th style="border: 1px solid #e3e6f0 !important;">Tanggal Upload</th>
-                                                    <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.upload_date}} ({{doc.document.upload_date|naturaltime}})</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <th style="border: 1px solid #e3e6f0 !important;">PDF File Size</th>
-                                                    <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.file.name}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <th style="border: 1px solid #e3e6f0 !important;">Macros File Size</th>
-                                                    <td style="border: 1px solid #e3e6f0 !important;">0</td>
-                                                  </tr>
-                                                </tbody>
-                                            </table>
-                                        </div></td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="tab-pane fade show" id="pills-skai-3" role="tabpanel" aria-labelledby="pills-skai-tab">
-                <div class="mb-4 shadow card">
-                    <div class="py-3 card-header">
-                        <div class="row">
-                            <div class="col">
-                                <h6 class="m-0 font-weight-bold" style="color: #fff;">Daftar SKAI {{the_year}}</h6>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th rowspan="2">No</th>
-                                        <th rowspan="2">Perihal</th>
-                                        <th rowspan="2">Nomor Surat SKAI</th>
-                                        <th rowspan="2">Tanggal Terbit</th>
-                                        <th rowspan="2">Tahun</th>
-                                        <th colspan="2">File</th>
-                                        <th colspan="2">Action</th>
-                                    </tr>
-                                    <tr>
-                                        <th>PDF</th>
-                                        <th>Macros</th>
-                                        <th>Edit</th>
-                                        <th>Del</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for doc in doc_skai_3 %}
-                                    {% if doc.type == "Usulan" %}
-                                    <tr data-toggle="collapse" data-target="#demo-3-{{doc.pk}}" class="accordion-toggle" style="background-color: #F5F5F5;">
-                                    {% else %}
-                                    <tr data-toggle="collapse" data-target="#demo-3-{{doc.pk}}" class="accordion-toggle">
-                                    {% endif %}
-                                        <td>{{forloop.counter}}</td>
-                                        <td>{{doc.document.regarding}}</td>
-                                        <td>{{doc.document.document_number}}</td>
-                                        <td style="vertical-align: middle; text-align: center;">{{doc.document.published_date}}</td>
-                                        {% if doc.year %}
-                                            <td style="vertical-align: middle; text-align: center;">{{doc.year}}</td>
-                                        {% else %}
-                                            <td style="vertical-align: middle; text-align: center;">{{doc.revision_on.year}}</td>
-                                        {% endif %}
-                                        <td style="vertical-align: middle; text-align: center;">
-                                            <span class="mr-2"><a target="_blank" rel="noopener noreferrer" href="{{doc.document.file.url}}"><i class="fa-solid fa-file-pdf"></i></a></span>
-                                        </td>
-                                        <td style="vertical-align: middle; text-align: center;">
-                                            <span class="mr-2"><a target="_blank" rel="noopener noreferrer" href="{% url 'document:doc-list-lkai' %}" class="disabled"><i class="fa-solid fa-table text-secondary"></i></a></span>
-                                            <span><a target="_blank" rel="noopener noreferrer" href="#" class="disabled" download><i class="fa-solid fa-download text-secondary"></i></a></span>
-                                        </td>
-                                        <td style="vertical-align: middle; text-align: center;">
-                                            <span class="mr-2"><a href="{% url 'document:doc-skai-update' doc.pk %}"><i class="fa-solid fa-pen-to-square text-warning"></i></a></span>
-                                        </td>
-                                        <td style="vertical-align: middle; text-align: center;">
-                                            <span class="mr-2"><a href="{% url 'document:doc-skai-delete' doc.pk %}"><i class="fa-solid fa-trash text-danger"></i></a></span>
-                                        </td>
-                                    </tr>
-                                    <tr style="border: none;">
-                                        <td colspan="9" class="hiddenRow"><div id="demo-3-{{doc.pk}}" class="accordian-body collapse">
-                                            <table class="table">
-                                                <tbody>
-                                                  <tr>
-                                                    <th style="border: 1px solid #e3e6f0 !important;">Di Upload</th>
-                                                    <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.uploader.name}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <th style="border: 1px solid #e3e6f0 !important;">Tanggal Upload</th>
-                                                    <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.upload_date}} ({{doc.document.upload_date|naturaltime}})</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <th style="border: 1px solid #e3e6f0 !important;">PDF File Size</th>
-                                                    <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.file.name}}</td>
-                                                  </tr>
-                                                  <tr>
-                                                    <th style="border: 1px solid #e3e6f0 !important;">Macros File Size</th>
-                                                    <td style="border: 1px solid #e3e6f0 !important;">0</td>
-                                                  </tr>
-                                                </tbody>
-                                            </table>
-                                        </div></td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">No</th>
+                                <th rowspan="2">Perihal</th>
+                                <th rowspan="2">Nomor Surat SKAI</th>
+                                <th rowspan="2">Tanggal Terbit</th>
+                                <th rowspan="2">Tahun</th>
+                                <th colspan="2">File</th>
+                                <th colspan="2">Action</th>
+                            </tr>
+                            <tr>
+                                <th>PDF</th>
+                                <th>LKAI</th>
+                                <th>Edit</th>
+                                <th>Del</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for doc in doc_skai %}
+                            <tr data-toggle="collapse" data-target="#demo-1-{{doc.pk}}" class="accordion-toggle">
+                                <td>{{forloop.counter}}</td>
+                                <td>{{doc.document.regarding}}</td>
+                                <td>{{doc.document.document_number}}</td>
+                                <td style="vertical-align: middle; text-align: center;">{{doc.document.published_date}}</td>
+                                {% if doc.year %}
+                                    <td style="vertical-align: middle; text-align: center;">{{doc.year}}</td>
+                                {% else %}
+                                    <td style="vertical-align: middle; text-align: center;">{{doc.revision_on.year}}</td>
+                                {% endif %}
+                                <td style="vertical-align: middle; text-align: center;">
+                                    <span class="mr-2"><a target="_blank" rel="noopener noreferrer" href="{{doc.document.file.url}}"><i class="fa-solid fa-file-pdf"></i></a></span>
+                                </td>
+                                <td style="vertical-align: middle; text-align: center;">
+                                    <span class="mr-2"><a href="{% url 'document:doc-view-lkai' doc.pk %}"><i class="fa-solid fa-table text-success"></i></a></span>
+                                </td>
+                                <td style="vertical-align: middle; text-align: center;">
+                                    <span class="mr-2"><a href="{% url 'document:doc-skai-update' doc.pk %}"><i class="fa-solid fa-pen-to-square text-warning"></i></a></span>
+                                </td>
+                                <td style="vertical-align: middle; text-align: center;">
+                                    <span class="mr-2"><a href="{% url 'document:doc-skai-delete' doc.pk %}"><i class="fa-solid fa-trash text-danger"></i></a></span>
+                                </td>
+                            </tr>
+                            <tr style="border: none;">
+                                <td class="hiddenRow"></td>
+                                <td colspan="3" class="hiddenRow"><div id="demo-1-{{doc.pk}}" class="accordian-body collapse">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                            <th style="border: 1px solid #e3e6f0 !important;">Di Upload</th>
+                                            <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.uploader.name}}</td>
+                                            </tr>
+                                            <tr>
+                                            <th style="border: 1px solid #e3e6f0 !important;">Tanggal Upload</th>
+                                            <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.upload_date}} ({{doc.document.upload_date|naturaltime}})</td>
+                                            </tr>
+                                            <tr>
+                                            <th style="border: 1px solid #e3e6f0 !important;">PDF File Size</th>
+                                            <td style="border: 1px solid #e3e6f0 !important;">{{doc.document.file.name}}</td>
+                                            </tr>
+                                            <tr>
+                                            <th style="border: 1px solid #e3e6f0 !important;">Macros File Size</th>
+                                            <td style="border: 1px solid #e3e6f0 !important;">0</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div></td>
+                                
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>

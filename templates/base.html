@@ -47,7 +47,7 @@
         }
         
         thead {
-            background-color: #449798;
+            background-color: #023047;
             color: #fff;
         }
 
@@ -60,7 +60,7 @@
         }
 
         .header-info{
-            color: #449798;
+            color: #023047;
         }
 
         .nav-pills .nav-link.active{
@@ -81,7 +81,7 @@
     <div id="wrapper">
 
         <!-- Sidebar -->
-        {% include 'snippets/sidebar.html' %}
+        {% include 'snippets/sidebar_copy.html' %}
         <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
@@ -171,11 +171,7 @@
     
         notificationSocket.onopen = function(e){
             console.log("Notification Socket on open: " + e)
-            // if("{{request.user.is_authenticated}}"){
-            // 	notificationSocket.send(JSON.stringify({
-            // 		"command": "dummy_command",
-            //     }));
-            // }
+            
             setupGeneralNotificationsMenu()
             getFirstGeneralNotificationsPage()
             getUnreadGeneralNotificationsCount()

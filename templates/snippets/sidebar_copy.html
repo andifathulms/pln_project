@@ -1,15 +1,8 @@
-{% block style %}
-<style>
-    
-</style>
-{% endblock style %}
-
-<ul class="text-white sidebar-dark navbar-nav sidebar accordion" id="accordionSidebar" style="background-color: #31087B;">
+<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar" style="background-color: #2a9d8f !important;">
 
     <!-- Sidebar - Brand -->
-    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
-        <div class="sidebar-brand-icon"> <!--rotate-n-15-->
-            
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+        <div class="sidebar-brand-icon">
             <svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" width="100" height="100" version="1.1" style="shape-rendering:geometricPrecision; text-rendering:geometricPrecision; image-rendering:optimizeQuality; fill-rule:evenodd; clip-rule:evenodd"
                 viewBox="0 0 37676.66 25400"
                 xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -43,82 +36,78 @@
                 </g>
             </svg>
         </div>
-        <div class="mr-3 sidebar-brand-text">PLN UIP Sulawesi</div>
+        <div class="sidebar-brand-text mx-3">PLN UIP Sulawesi</div>
     </a>
 
     <!-- Divider -->
-    <hr class="my-0 sidebar-divider">
+    <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active" style="margin-top: 15px;">
+    <li class="nav-item active">
         <a class="nav-link" href="{% url 'home' %}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-clipboard-data" viewBox="0 0 16 16">
-                <path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0v-1zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0V7zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0V9z"/>
-                <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
-                <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
-            </svg>
+            <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
 
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        SKAI
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSKAI"
-            aria-expanded="true" aria-controls="collapseSKAI">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-file-text-fill" viewBox="0 0 16 16">
-                <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5 4h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zM5 8h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1zm0 2h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1z"/>
-            </svg>
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
+            aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fa-solid fa-file-lines"></i>
             <span>Histori SKAI</span>
         </a>
-        <div id="collapseSKAI" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-            <div class="py-2 collapse-inner">
-                <a class="collapse-item" style="white-space: normal; !important" href="{% url 'document:doc-list-skai' %}">Surat Ketetapan Anggaran Investasi (SKAI)</a>
-                <a class="collapse-item" style="white-space: normal; !important" href="{% url 'document:doc-skai-compare' %}"><span>Perbandingan SKAI</span></a>    
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Dokumen SKAI</h6>
+                <a class="nav-link collapse-item" href="#" data-toggle="collapse" data-target="#collapseInnerTwo" style="white-space: normal; !important">Surat Ketetapan Anggaran Investasi (SKAI)</a>
+                <div id="collapseInnerTwo" class="collapse">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Jenis SKAI</h6>
+                        <a class="collapse-item" href="{% url 'document:doc-list-skai' 1 %}">SKAI Terbit</a>
+                        <a class="collapse-item" href="{% url 'document:doc-list-skai' 2 %}">SKAI Usulan</a>
+                        <a class="collapse-item" href="{% url 'document:doc-list-skai' 3 %}">Semua SKAI</a>
+                    </div>
+                </div>
+                <a class="collapse-item" style="white-space: normal; !important" href="{% url 'document:doc-skai-compare' %}">Perbandingan SKAI</a>
             </div>
         </div>
     </li>
-    <li class="nav-item active">
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        MONEV
+    </div>
+
+    <!-- Nav Item - Charts -->
+    <li class="nav-item">
         <a class="nav-link" href="{% url 'monev:monev-view' %}">
-            <svg version="1.1" id="Layer_1" width="20" height="20" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-            fill="currentColor" class="bi bi-file-text-fill" viewBox="0 0 492.308 492.308" style="enable-background:new 0 0 492.308 492.308;" xml:space="preserve">
-                <g>
-                    <g>
-                        <path d="M459.649,85.072H32.659C14.649,85.072,0,99.716,0,117.726v256.846c0,18.01,14.649,32.663,32.659,32.663h426.99
-                            c18.01,0,32.659-14.654,32.659-32.663V117.726C492.308,99.716,477.659,85.072,459.649,85.072z M472.615,374.572
-                            c0,7.154-5.817,12.971-12.966,12.971H32.659c-7.149,0-12.966-5.817-12.966-12.971V117.726c0-7.144,5.817-12.962,12.966-12.962
-                            h426.99c7.149,0,12.966,5.817,12.966,12.962V374.572z"/>
-                    </g>
-                </g>
-                <g>
-                    <g>
-                        <path d="M413.538,186.649c-12.577,0-22.813-10.231-22.813-22.808v-9.846H101.582v9.846c0,12.577-10.236,22.808-22.813,22.808
-                            h-9.846v119h9.846c12.577,0,22.813,10.24,22.813,22.817v9.846h289.144v-9.846c0-12.577,10.236-22.817,22.813-22.817h9.846v-119
-                            H413.538z M403.692,287.111c-15.543,3.702-27.808,15.962-31.51,31.51H120.125c-3.702-15.548-15.966-27.808-31.51-31.51v-81.923
-                            c15.543-3.702,27.808-15.962,31.51-31.5h252.058c3.702,15.539,15.966,27.798,31.51,31.5V287.111z"/>
-                    </g>
-                </g>
-                <g>
-                    <g>
-                        <path d="M246.154,204.341c-23.053,0-41.808,18.76-41.808,41.808c0,23.048,18.755,41.808,41.808,41.808
-                            c23.053,0,41.808-18.76,41.808-41.808C287.962,223.101,269.207,204.341,246.154,204.341z M246.154,268.264
-                            c-12.192,0-22.115-9.923-22.115-22.115c0-12.192,9.923-22.115,22.115-22.115s22.115,9.923,22.115,22.115
-                            C268.269,258.341,258.346,268.264,246.154,268.264z"/>
-                    </g>
-                </g>
-            </svg>
-            <span>Monev</span>
-        </a>
+            <i class="fa-solid fa-money-bill-transfer"></i>
+            <span>Monev</span></a>
     </li>
-    <!-- <li class="nav-item active" style="margin-top: 15px;">
-        <a class="nav-link" href="{% url 'playground' %}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-clipboard-data" viewBox="0 0 16 16">
-                <path d="M4 11a1 1 0 1 1 2 0v1a1 1 0 1 1-2 0v-1zm6-4a1 1 0 1 1 2 0v5a1 1 0 1 1-2 0V7zM7 9a1 1 0 0 1 2 0v3a1 1 0 1 1-2 0V9z"/>
-                <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
-                <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
-            </svg>
-            <span>XLSM Playground</span></a>
-    </li> -->
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">
-        <button class="border-0 rounded-circle" id="sidebarToggle"></button>
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+    <!-- Sidebar Message -->
+    <div class="sidebar-card d-none d-lg-flex">
+        <p class="text-center mb-2"><strong>UIP Apang</strong> is still under construction!</p>
     </div>
 
 </ul>
-
+<!-- End of Sidebar -->

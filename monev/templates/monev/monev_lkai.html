@@ -1,0 +1,271 @@
+<!--COPY FROM MACRO VIEW-->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+<style>
+    td {
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .active-td {
+        background: #449798 !important;
+        color: aliceblue;
+    }
+
+    table#dataTableLKAI{
+        background-color: #FCFCFC !important;
+        border-spacing: 0;
+        color: #161616;
+        overflow: hidden;
+    }
+
+    table#dataTableLKAI>tbody>tr:hover {
+        background-color: rgba(68, 151, 152, 0.1);
+    }
+</style>
+{% endblock style%}
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="container-fluid">
+    
+        <div class="row" id="div-1">
+        </div>
+        <!-- DataTales Example -->
+        <div class="mb-4 shadow card">
+            <div class="py-3 card-header">
+                <h6 class="m-0 font-weight-bold">Monev LKAI</h6>
+            </div>
+            <div class="col m-0 p-0">
+                
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTableLKAI" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">No</th>
+                                <th rowspan="2">No PRK</th>
+                                <th rowspan="2">Program Utama/Proyek</th>
+                                <th rowspan="2">Uraian Kegiatan</th>
+                                <th rowspan="2">Status</th>
+                                <th colspan="2">SKAI Tahun 2022</th>
+                                <th colspan="2">SKAI Revisi 1 Tahun 2022</th>
+                                <th colspan="2">SKAI Revisi 2 Tahun 2022</th>
+                                <th colspan="25">Rencana/Realisasi 2022</th>
+                                <th rowspan="2">Sisa AKI</th>
+                                <th rowspan="2">Kode PRK</th>
+                                <th rowspan="2">Kode BPO</th>
+                                <th rowspan="2">UPP</th>
+                                <th rowspan="2">Lokasi</th>
+                                <th rowspan="2">Rekap User Induk</th>
+                                <th rowspan="2">Sumber Dana</th>
+                                <th rowspan="2">Mekanisme Pembayaran</th>
+                                <th rowspan="2">Cek AKI Real AKB</th>
+                                <th rowspan="2">Sisa Pengalihan</th>
+                            </tr>
+                            <tr>
+                                <th>AI</th>
+                                <th>AKI</th>
+                                <th>AI</th>
+                                <th>AKI</th>
+                                <th>AI</th>
+                                <th>AKI</th>
+
+                                <th>AKB Januari</th>
+                                <th>Januari</th>
+                                <th>AKB Februari</th>
+                                <th>Februari</th>
+                                <th>AKB Maret</th>
+                                <th>Maret</th>
+                                <th>AKB April</th>
+                                <th>April</th>
+                                <th>AKB Mei</th>
+                                <th>Mei</th>
+                                <th>AKB Juni</th>
+                                <th>Juni</th>
+                                <th>AKB Juli</th>
+                                <th>Juli</th>
+                                <th>AKB Agustus</th>
+                                <th>Agustus</th>
+                                <th>AKB September</th>
+                                <th>September</th>
+                                <th>AKB Oktober</th>
+                                <th>Oktober</th>
+                                <th>AKB November</th>
+                                <th>November</th>
+                                <th>AKB Desember</th>
+                                <th>Desember</th>
+                                <th>Total Realisasi</th>
+                            </tr>
+                            
+                        </thead>
+                        <tbody id="macro-table">
+                            <tr>
+                                <td>1</td>
+                                <td>2019.USLS.1.003</td>
+                                <td>R-11-K-003-SN</td>
+                                <td style="min-width: 500px;">Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
+                                <td>Lanjutan</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td>100</td>
+
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+
+                                <td>JS</td>
+                                <td>OPK I</td>
+                                <td></td>
+                                <td></td>
+                                <td>OPK I</td>
+                                <td>APLN</td>
+                                <td>Unit</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>2019.USLS.1.003</td>
+                                <td>R-11-K-003-SN</td>
+                                <td style="min-width: 500px;">Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
+                                <td>Lanjutan</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td>100</td>
+
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+
+                                <td>JS</td>
+                                <td>OPK I</td>
+                                <td></td>
+                                <td></td>
+                                <td>OPK I</td>
+                                <td>APLN</td>
+                                <td>Unit</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td>2019.USLS.1.003</td>
+                                <td>R-11-K-003-SN</td>
+                                <td style="min-width: 500px;">Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
+                                <td>Lanjutan</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td>100</td>
+                                <td>100</td>
+
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+
+                                <td>JS</td>
+                                <td>OPK I</td>
+                                <td></td>
+                                <td></td>
+                                <td>OPK I</td>
+                                <td>APLN</td>
+                                <td>Unit</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+</div>
+{% endblock content %}
+
+{% block script %}
+
+{% endblock script %}

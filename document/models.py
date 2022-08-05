@@ -23,12 +23,13 @@ class DocSKAI(models.Model):
     document        = models.ForeignKey('Document', on_delete=models.CASCADE, related_name="doc")
     year            = models.IntegerField()
     type            = models.CharField(max_length=50, default="Penetapan")
-    revision        = models.BooleanField(default=False)
-    revision_number = models.PositiveIntegerField(blank=True, null=True)
-
+    keyword         = models.CharField(max_length=100, default="SKAI")
+    
     #Macro
     macro           = models.ForeignKey('Macro', on_delete=models.CASCADE, blank=True, null=True)
-    #Macro Doc later
+
+    #Macro Document
+    macro_doc       = models.FileField(upload_to='document/macro', blank=True, null=True)
 
     # set up the reverse relation to GenericForeignKey
     notifications   		= GenericRelation(Notification)
@@ -61,7 +62,7 @@ class Macro(models.Model):
     macro_file_2        = models.ForeignKey('MacroFile', on_delete=models.CASCADE, null=True, blank=True, related_name="macro_after")
 
 class MacroFile(models.Model):
-    uploader            = models.ForeignKey(Account, on_delete=models.CASCADE)
+    #uploader            = models.ForeignKey(Account, on_delete=models.CASCADE)
     upload_date         = models.DateTimeField(auto_now_add=True)
 
 class MacroData(models.Model):

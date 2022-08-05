@@ -19,16 +19,21 @@
 <div class="container-fluid">
 
     <div class="container-fluid">
-
-        <div class="row" id="div-1">
-            <div class="col-12">
-                <button class="btn mb-3 w-100" style="background-color: #449798; color: white;" data-toggle="modal" data-target="#skaiModal">Select SKAI   <span><i class="fa-solid fa-arrow-pointer"></i></span></button>
-            </div>
-        </div>
-        <!-- DataTables Example -->
         <div class="mb-4 shadow card">
             <div class="py-3 card-header">
-                <h6 class="m-0 font-weight-bold">Perbandingan SKAI Tahun 2022</h6>
+                <div class="row">
+                    <div class="col-8">
+                        <h6 class="m-0 font-weight-bold">Perbandingan SKAI Tahun 2022</h6>
+                    </div>
+                    <div class="col-4 ">
+                        <button class="btn btn-info btn-icon-split btn-sm float-right" data-toggle="modal" data-target="#skaiModal">
+                            <span class="icon text-white-50">
+                                <i class="fa-solid fa-arrow-pointer"></i>
+                            </span>
+                            <span class="text">SKAI Tahun</span>
+                        </button>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive table-wrapper">
