@@ -176,7 +176,17 @@
                                     <span class="mr-2"><a target="_blank" rel="noopener noreferrer" href="{{doc.document.file.url}}"><i class="fa-solid fa-file-pdf"></i></a></span>
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;">
-                                    <span class="mr-2"><a href="{% url 'document:doc-view-lkai' doc.pk %}"><i class="fa-solid fa-table text-success"></i></a></span>
+                                    <span class="mr-2">
+                                        {% if doc.macro_doc %}
+                                        <a href="{% url 'document:doc-view-lkai' doc.pk %}">
+                                            <i class="fa-solid fa-table text-success"></i>
+                                        </a>
+                                        {% else %}
+                                        <a href="{% url 'document:doc-view-lkai' doc.pk %}" style="pointer-events: none;">
+                                            <i class="fa-solid fa-table text-secondary"></i>
+                                        </a>
+                                        {% endif %}
+                                    </span>
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;">
                                     <span class="mr-2"><a href="{% url 'document:doc-skai-update' doc.pk %}"><i class="fa-solid fa-pen-to-square text-warning"></i></a></span>

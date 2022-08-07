@@ -24,6 +24,40 @@
     table#dataTableLKAI>tbody>tr:hover {
         background-color: rgba(68, 151, 152, 0.1);
     }
+
+    /* Pagination. */
+    .pagination {
+        background: #333;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        text-align: center;
+        display: flex;
+        justify-content: center;
+    }
+
+    #numbers {
+        padding: 0;
+        margin: 0 2rem;
+        list-style-type: none;
+        display: flex;
+    }
+
+    #numbers li a {
+        color: #fff;
+        padding: .5rem 1rem;
+        text-decoration: none;
+        opacity: .7;
+    }
+
+    #numbers li a:hover {
+        opacity: 1;
+    }
+
+    #numbers li a.active {
+        opacity: 1;
+        background: #fff;
+        color: #333;
+    }
 </style>
 {% endblock style%}
 
@@ -50,28 +84,43 @@
                         <button id="to-expand" class="btn mb-3 w-100" style="background-color: #449798; color: white;">Expand Table  <span><i class="fa-solid fa-up-right-and-down-left-from-center"></i></span></button>
                     </div>
                 </div>
+                <div class="form-group"> 	<!--		Show Numbers Of Rows 		-->
+                    <select class  ="form-control" name="state" id="maxRows">
+                        <option value="5000">Show ALL Rows</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="70">70</option>
+                        <option value="100">100</option>
+                       </select>
+                 </div>
+                 <div class="pagination">
+                    <ol id="numbers"></ol>
+                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTableLKAI" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th rowspan="3">No</th>
+                                <th rowspan="3" class="skip-filter">No</th>
                                 <th rowspan="3">No PRK</th>
                                 <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">No Program</th>
                                 <th rowspan="3">No RUPTL</th>
                                 <th rowspan="3">Cluster</th>
                                 <th rowspan="3">Fungsi</th>
                                 <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">Sub Fungsi</th>
-                                <th rowspan="3">Program Utama/Proyek</th>
+                                <th rowspan="3" >Program Utama/Proyek</th>
                                 <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">Score</th>
                                 <th rowspan="3">Jenis Program</th>
-                                <th colspan="2" id="th-kegiatan">Uraian Kegiatan</th>
-                                <th colspan="4">Anggaran/Kontrak</th>
-                                <th rowspan="3">Realisasi Pembayaran s/d 2020</th>
-                                <th rowspan="3">Prediksi Pembayaran 2021</th>
-                                <th rowspan="3">AI Tahun 2022</th>
-                                <th rowspan="3">AKI Tahun 2022</th>
+                                <th class="skip-filter" colspan="2" id="th-kegiatan">Uraian Kegiatan</th>
+                                <th class="skip-filter" colspan="4">Anggaran/Kontrak</th>
+                                <th class="skip-filter" rowspan="3">Realisasi Pembayaran s/d 2020</th>
+                                <th class="skip-filter" rowspan="3">Prediksi Pembayaran 2021</th>
+                                <th class="skip-filter" rowspan="3">AI Tahun 2022</th>
+                                <th class="skip-filter" rowspan="3">AKI Tahun 2022</th>
                                 <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">AKI Tahun 2023</th>
                                 <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">AKI Tahun 2024</th>
                                 <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">AKI Tahun 2025</th>
@@ -79,16 +128,16 @@
                                 <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">AKI Setelah Tahun 2023</th>
                                 <th rowspan="3">Sumber Dana</th>
 
-                                <th rowspan="3" class="idr2">Rencana Terkontrak</th>
-                                <th rowspan="3" class="idr2">Rencana COD (dd/mm/yy)</th>
-                                <th colspan="24">Progress Fisik dan Rencana Disburse Tahun 2022</th>
+                                <th class="skip-filter" rowspan="3" class="idr2">Rencana Terkontrak</th>
+                                <th rowspan="3" class="idr2 skip-filter">Rencana COD (dd/mm/yy)</th>
+                                <th colspan="24" class="skip-filter">Progress Fisik dan Rencana Disburse Tahun 2022</th>
                             </tr>
                             <tr>
                                 <th rowspan="2" class="to-hide d-none" style="background-color: #C8AD7F;">No Aktivitas</th>
                                 <th rowspan="2" style="min-width: 500px;">Uraian</th>
                                 <th rowspan="2">Target Fisik</th>
                                 <th rowspan="2" class="to-hide d-none" style="background-color: #C8AD7F;">Satuan</th>
-                                <th rowspan="2">Nilai Anggaran</th>
+                                <th class="skip-filter" rowspan="2">Nilai Anggaran</th>
                                 <th rowspan="2">Status</th>
                                 <th rowspan="2">Jenis Kontrak</th>
                                 <th rowspan="2">Nomor Kontrak</th>
@@ -97,7 +146,7 @@
                                 <th colspan="2">Februari</th>
                                 <th colspan="2">Maret</th>
                                 <th colspan="2">April</th>
-                                <th colspan="2">Mei</th>
+                                <th colspan="2" class="skip-filter">Mei</th>
                                 <th colspan="2">Juni</th>
                                 <th colspan="2">Juli</th>
                                 <th colspan="2">Agustus</th>
@@ -134,635 +183,260 @@
                             </tr>
                         </thead>
                         <tbody id="macro-table">
+                            {% for data in macros %}
+                            {% if data.no_prk %}
                             <tr>
-                                <td>1</td>
-                                <td>2019.USLS.1.003</td>
-                                <td class="to-hide d-none">1</td>
-                                <td>R-11-K-003-SN</td>
-                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
-                                <td>Pembangkit</td>
-                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
-                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
-                                <td class="to-hide d-none">10,01</td>
-                                <td>Pekerjaan Utama</td>
-                                <td class="to-hide d-none">3</td>
-                                <td style="min-width: 500px;">Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
-                                <td></td>
-                                <td class="to-hide d-none"></td>
-                                <td>100</td>
-                                <td>Lanjutan</td>
-                                <td>Unit</td>
-                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td>APLN</td>
+                                <td>{{forloop.counter}}</td>
+                                <td style="min-width: 100px;">{{data.no_prk}}</td>
+                                <td class="to-hide d-none">{{data.no_program}}</td>
 
-                                <td></td>
-                                <td>31/12/21</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>2019.USLS.1.003</td>
-                                <td class="to-hide d-none">1</td>
-                                <td>R-11-K-003-SN</td>
-                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
-                                <td>Pembangkit</td>
-                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
-                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
-                                <td class="to-hide d-none">10,01</td>
-                                <td>Pekerjaan Utama</td>
-                                <td class="to-hide d-none">3</td>
-                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
-                                <td></td>
-                                <td class="to-hide d-none"></td>
-                                <td>100</td>
-                                <td>Lanjutan</td>
-                                <td>Unit</td>
-                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td>APLN</td>
+                                {% if data.no_ruptl == None or data.no_ruptl == "0" %}
+                                <td> - </td>
+                                {% else %}
+                                <td style="min-width: 150px;">{{data.no_ruptl}}</td>
+                                {% endif %}
 
-                                <td></td>
-                                <td>31/12/21</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>2019.USLS.1.003</td>
-                                <td class="to-hide d-none">1</td>
-                                <td>R-11-K-003-SN</td>
-                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
-                                <td>Pembangkit</td>
-                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
-                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
-                                <td class="to-hide d-none">10,01</td>
-                                <td>Pekerjaan Utama</td>
-                                <td class="to-hide d-none">3</td>
-                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
-                                <td></td>
-                                <td class="to-hide d-none"></td>
-                                <td>100</td>
-                                <td>Lanjutan</td>
-                                <td>Unit</td>
-                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td>APLN</td>
+                                <td style="min-width: 150px;">{{data.cluster}}</td>
+                                <td style="min-width: 150px;">{{data.fungsi}}</td>
+                                <td class="to-hide d-none">{{data.sub_fungsi}}</td>
+                                <td style="min-width: 180px;">{{data.program_utama}}</td>
+                                <td class="to-hide d-none">{{data.score}}</td>
+                                <td>{{data.jenis_program}}</td>
+                                <td class="to-hide d-none">{{data.keg_no}}</td>
+                                <td style="min-width: 500px;">{{data.keg_uraian}}</td>
+                                
+                                {% if data.keg_target_fisik == None %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% else %}
+                                <td style="min-width: 150px;">{{data.keg_target_fisik}}</td>
+                                {% endif %}
+                                
+                                <td style="min-width: 150px;" class="to-hide d-none">{{data.keg_satuan}}</td>
+                                
+                                {% if data.ang_nilai %}
+                                <td style="min-width: 150px;">Rp. {{data.ang_nilai}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
 
-                                <td></td>
-                                <td>31/12/21</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
-                                <td>2019.USLS.1.003</td>
-                                <td class="to-hide d-none">1</td>
-                                <td>R-11-K-003-SN</td>
-                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
-                                <td>Pembangkit</td>
-                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
-                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
-                                <td class="to-hide d-none">10,01</td>
-                                <td>Pekerjaan Utama</td>
-                                <td class="to-hide d-none">3</td>
-                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
-                                <td></td>
-                                <td class="to-hide d-none"></td>
-                                <td>100</td>
-                                <td>Lanjutan</td>
-                                <td>Unit</td>
-                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td>APLN</td>
+                                <td style="min-width: 150px;">{{data.ang_status}}</td>
+                                <td style="min-width: 150px;">{{data.ang_jenis_kontrak}}</td>
 
-                                <td></td>
-                                <td>31/12/21</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>2019.USLS.1.003</td>
-                                <td class="to-hide d-none">1</td>
-                                <td>R-11-K-003-SN</td>
-                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
-                                <td>Pembangkit</td>
-                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
-                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
-                                <td class="to-hide d-none">10,01</td>
-                                <td>Pekerjaan Utama</td>
-                                <td class="to-hide d-none">3</td>
-                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
-                                <td></td>
-                                <td class="to-hide d-none"></td>
-                                <td>100</td>
-                                <td>Lanjutan</td>
-                                <td>Unit</td>
-                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td>APLN</td>
+                                {% if data.ang_no_kontrak    %}
+                                <td style="min-width: 150px;">{{data.ang_no_kontrak}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+                                
+                                {% if data.realisasi_pembayaran    %}
+                                <td style="min-width: 150px;">Rp. {{data.realisasi_pembayaran}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
 
-                                <td></td>
-                                <td>31/12/21</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>2019.USLS.1.003</td>
-                                <td class="to-hide d-none">1</td>
-                                <td>R-11-K-003-SN</td>
-                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
-                                <td>Pembangkit</td>
-                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
-                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
-                                <td class="to-hide d-none">10,01</td>
-                                <td>Pekerjaan Utama</td>
-                                <td class="to-hide d-none">3</td>
-                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
-                                <td></td>
-                                <td class="to-hide d-none"></td>
-                                <td>100</td>
-                                <td>Lanjutan</td>
-                                <td>Unit</td>
-                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td>APLN</td>
+                                {% if data.prediksi_pembayaran    %}
+                                <td style="min-width: 150px;">Rp. {{data.prediksi_pembayaran}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
 
-                                <td></td>
-                                <td>31/12/21</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>7</td>
-                                <td>2019.USLS.1.003</td>
-                                <td class="to-hide d-none">1</td>
-                                <td>R-11-K-003-SN</td>
-                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
-                                <td>Pembangkit</td>
-                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
-                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
-                                <td class="to-hide d-none">10,01</td>
-                                <td>Pekerjaan Utama</td>
-                                <td class="to-hide d-none">3</td>
-                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
-                                <td></td>
-                                <td class="to-hide d-none"></td>
-                                <td>100</td>
-                                <td>Lanjutan</td>
-                                <td>Unit</td>
-                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td>APLN</td>
+                                {% if data.ai_this_year    %}
+                                <td style="min-width: 150px;">Rp. {{data.ai_this_year}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
 
-                                <td></td>
-                                <td>31/12/21</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>8</td>
-                                <td>2019.USLS.1.003</td>
-                                <td class="to-hide d-none">1</td>
-                                <td>R-11-K-003-SN</td>
-                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
-                                <td>Pembangkit</td>
-                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
-                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
-                                <td class="to-hide d-none">10,01</td>
-                                <td>Pekerjaan Utama</td>
-                                <td class="to-hide d-none">3</td>
-                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
-                                <td></td>
-                                <td class="to-hide d-none"></td>
-                                <td>100</td>
-                                <td>Lanjutan</td>
-                                <td>Unit</td>
-                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td>APLN</td>
+                                {% if data.aki_this_year    %}
+                                <td style="min-width: 150px;">Rp. {{data.aki_this_year}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
 
-                                <td></td>
-                                <td>31/12/21</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>9</td>
-                                <td>2019.USLS.1.003</td>
-                                <td class="to-hide d-none">1</td>
-                                <td>R-11-K-003-SN</td>
-                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
-                                <td>Pembangkit</td>
-                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
-                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
-                                <td class="to-hide d-none">10,01</td>
-                                <td>Pekerjaan Utama</td>
-                                <td class="to-hide d-none">3</td>
-                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
-                                <td></td>
-                                <td class="to-hide d-none"></td>
-                                <td>100</td>
-                                <td>Lanjutan</td>
-                                <td>Unit</td>
-                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td>APLN</td>
+                                <td style="min-width: 150px;" class="to-hide d-none">{{data.aki_n1_year}}</td>
+                                <td style="min-width: 150px;" class="to-hide d-none">{{data.aki_n2_year}}</td>
+                                <td style="min-width: 150px;" class="to-hide d-none">{{data.aki_n3_year}}</td>
+                                <td style="min-width: 150px;" class="to-hide d-none">{{data.aki_n4_year}}</td>
+                                <td style="min-width: 150px;" class="to-hide d-none">{{data.aki_after_n1_year}}</td>
+                                <td>{{data.sumber_dana}}</td>
 
-                                <td></td>
-                                <td>31/12/21</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>10</td>
-                                <td>2019.USLS.1.003</td>
-                                <td class="to-hide d-none">1</td>
-                                <td>R-11-K-003-SN</td>
-                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
-                                <td>Pembangkit</td>
-                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
-                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
-                                <td class="to-hide d-none">10,01</td>
-                                <td>Pekerjaan Utama</td>
-                                <td class="to-hide d-none">3</td>
-                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
-                                <td></td>
-                                <td class="to-hide d-none"></td>
-                                <td>100</td>
-                                <td>Lanjutan</td>
-                                <td>Unit</td>
-                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td>APLN</td>
+                                {% if data.rencana_terkontrak    %}
+                                <td style="min-width: 150px;">{{data.rencana_terkontrak}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+                                
+                                {% if data.rencana_COD    %}
+                                <td style="min-width: 150px;">{{data.rencana_COD}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
 
-                                <td></td>
-                                <td>31/12/21</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                            </tr>
-                            <tr>
-                                <td>11</td>
-                                <td>2019.USLS.1.003</td>
-                                <td class="to-hide d-none">1</td>
-                                <td>R-11-K-003-SN</td>
-                                <td>Pengembangan - Pembangunan Pembangkit baru</td>
-                                <td>Pembangkit</td>
-                                <td class="to-hide d-none">02 - Pembangkitan PLTU</td>
-                                <td>PLTU SULAWESI SELATAN - BARRU (2 x 50 MW)</td>
-                                <td class="to-hide d-none">10,01</td>
-                                <td>Pekerjaan Utama</td>
-                                <td class="to-hide d-none">3</td>
-                                <td>Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
-                                <td></td>
-                                <td class="to-hide d-none"></td>
-                                <td>100</td>
-                                <td>Lanjutan</td>
-                                <td>Unit</td>
-                                <td>010.PJ/041/KITSULMAPA/2009 , 31  Des  2013</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td class="to-hide d-none">0</td>
-                                <td>APLN</td>
+                                {% if data.jan_progress_fisik    %}
+                                <td style="min-width: 150px;">Rp. {{data.jan_progress_fisik}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
 
-                                <td></td>
-                                <td>31/12/21</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
-                                <td>0</td>
+                                {% if data.jan_rencana_disburse    %}
+                                <td style="min-width: 150px;">Rp. {{data.jan_rencana_disburse}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.feb_progress_fisik    %}
+                                <td style="min-width: 150px;">Rp. {{data.feb_progress_fisik}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.feb_rencana_disburse    %}
+                                <td style="min-width: 150px;">Rp. {{data.feb_rencana_disburse}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.mar_progress_fisik    %}
+                                <td style="min-width: 150px;">Rp. {{data.mar_progress_fisik}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.mar_rencana_disburse    %}
+                                <td style="min-width: 150px;">Rp. {{data.mar_rencana_disburse}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.apr_progress_fisik    %}
+                                <td style="min-width: 150px;">Rp. {{data.apr_progress_fisik}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.apr_rencana_disburse    %}
+                                <td style="min-width: 150px;">Rp. {{data.apr_rencana_disburse}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.mei_progress_fisik    %}
+                                <td style="min-width: 150px;">Rp. {{data.mei_progress_fisik}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.mei_rencana_disburse    %}
+                                <td style="min-width: 150px;">Rp. {{data.mei_rencana_disburse}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.jun_progress_fisik    %}
+                                <td style="min-width: 150px;">Rp. {{data.jun_progress_fisik}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.jun_rencana_disburse    %}
+                                <td style="min-width: 150px;">Rp. {{data.jun_rencana_disburse}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.jul_progress_fisik    %}
+                                <td style="min-width: 150px;">Rp. {{data.jul_progress_fisik}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.jul_rencana_disburse    %}
+                                <td style="min-width: 150px;">Rp. {{data.jul_rencana_disburse}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.aug_progress_fisik    %}
+                                <td style="min-width: 150px;">Rp. {{data.aug_progress_fisik}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.aug_rencana_disburse    %}
+                                <td style="min-width: 150px;">Rp. {{data.aug_rencana_disburse}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.sep_progress_fisik    %}
+                                <td style="min-width: 150px;">Rp. {{data.sep_progress_fisik}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.sep_rencana_disburse    %}
+                                <td style="min-width: 150px;">Rp. {{data.sep_rencana_disburse}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.okt_progress_fisik    %}
+                                <td style="min-width: 150px;">Rp. {{data.okt_progress_fisik}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.okt_rencana_disburse    %}
+                                <td style="min-width: 150px;">Rp. {{data.okt_rencana_disburse}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.nov_progress_fisik    %}
+                                <td style="min-width: 150px;">Rp. {{data.nov_progress_fisik}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.nov_rencana_disburse    %}
+                                <td style="min-width: 150px;">Rp. {{data.nov_rencana_disburse}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.des_progress_fisik    %}
+                                <td style="min-width: 150px;">Rp. {{data.des_progress_fisik}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+                                {% if data.des_rencana_disburse    %}
+                                <td style="min-width: 150px;">Rp. {{data.des_rencana_disburse}}</td>
+                                {% else %}
+                                <td style="min-width: 150px;"> - </td>
+                                {% endif %}
+
+
                             </tr>
+                            {% endif %}
+                            {% endfor %}
+                            
+                            
                         </tbody>
                     </table>
+                    <!--		Start Pagination -->
+                    <!-- <div class='pagination-container' >
+                        <nav>
+                            <ul class="pagination">
+                                <li data-page="prev" >
+                                    <span> < <span class="sr-only">(current)</span></span>
+                                </li>
+                                        
+                                <li data-page="next" id="prev">
+                                    <span> > <span class="sr-only">(current)</span></span>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -774,13 +448,12 @@
 
 {% block script %}
 <script>
-    // $(document).ready(function () {
-    //     $('#dataTableLKAI').DataTable({
-    //         // scrollY: '500px',
-    //         // scrollCollapse: true,
-    //         paging: true,
-    //     });
-    // });
+    $(document).ready(function () {
+        $('#dataTableLKAI').ddTableFilter();
+        // $('#dataTableLKAI').DataTable({
+        //     "paging": true
+        // });
+    });
 
     //on clicking the row
     $("tbody tr").on("click", function() {
@@ -814,4 +487,206 @@
     });
 
 </script>
+<script>
+    getPagination('#dataTableLKAI');
+	//getPagination('.table-class');
+	//getPagination('table');
+
+    /*					PAGINATION 
+    - on change max rows select options fade out all rows gt option value mx = 5
+    - append pagination list as per numbers of rows / max rows option (20row/5= 4pages )
+    - each pagination li on click -> fade out all tr gt max rows * li num and (5*pagenum 2 = 10 rows)
+    - fade out all tr lt max rows * li num - max rows ((5*pagenum 2 = 10) - 5)
+    - fade in all tr between (maxRows*PageNum) and (maxRows*pageNum)- MaxRows 
+    */
+		 
+
+    function getPagination(table) {
+        var lastPage = 1;
+
+        $('#maxRows')
+            .on('change', function(evt) {
+            //$('.paginationprev').html('');						// reset pagination
+
+            lastPage = 1;
+            $('.pagination')
+                .find('li')
+                .slice(1, -1)
+                .remove();
+            var trnum = 0; // reset tr counter
+            var maxRows = parseInt($(this).val()); // get Max Rows from select option
+
+            if (maxRows == 5000) {
+                $('.pagination').hide();
+            } else {
+                $('.pagination').show();
+            }
+
+            var totalRows = $(table + ' tbody tr').length; // numbers of rows
+            $(table + ' tr:gt(0)').each(function() {
+                // each TR in  table and not the header
+                trnum++; // Start Counter
+                if (trnum > maxRows) {
+                // if tr number gt maxRows
+
+                $(this).hide(); // fade it out
+                }
+                if (trnum <= maxRows) {
+                $(this).show();
+                } // else fade in Important in case if it ..
+            }); //  was fade out to fade it in
+            if (totalRows > maxRows) {
+                // if tr total rows gt max rows option
+                var pagenum = Math.ceil(totalRows / maxRows); // ceil total(rows/maxrows) to get ..
+                //	numbers of pages
+                for (var i = 1; i <= pagenum; ) {
+                // for each page append pagination li
+                $('.pagination #prev')
+                    .before(
+                    '<li data-page="' +
+                        i +
+                        '">\
+                                        <span>' +
+                        i++ +
+                        '<span class="sr-only">(current)</span></span>\
+                                        </li>'
+                    )
+                    .show();
+                } // end for i
+            } // end if row count > max rows
+            $('.pagination [data-page="1"]').addClass('active'); // add active class to the first li
+            $('.pagination li').on('click', function(evt) {
+                // on click each page
+                evt.stopImmediatePropagation();
+                evt.preventDefault();
+                var pageNum = $(this).attr('data-page'); // get it's number
+
+                var maxRows = parseInt($('#maxRows').val()); // get Max Rows from select option
+
+                if (pageNum == 'prev') {
+                if (lastPage == 1) {
+                    return;
+                }
+                pageNum = --lastPage;
+                }
+                if (pageNum == 'next') {
+                if (lastPage == $('.pagination li').length - 2) {
+                    return;
+                }
+                pageNum = ++lastPage;
+                }
+
+                lastPage = pageNum;
+                var trIndex = 0; // reset tr counter
+                $('.pagination li').removeClass('active'); // remove active class from all li
+                $('.pagination [data-page="' + lastPage + '"]').addClass('active'); // add active class to the clicked
+                // $(this).addClass('active');					// add active class to the clicked
+                limitPagging();
+                $(table + ' tr:gt(0)').each(function() {
+                // each tr in table not the header
+                trIndex++; // tr index counter
+                // if tr index gt maxRows*pageNum or lt maxRows*pageNum-maxRows fade if out
+                if (
+                    trIndex > maxRows * pageNum ||
+                    trIndex <= maxRows * pageNum - maxRows
+                ) {
+                    $(this).hide();
+                } else {
+                    $(this).show();
+                } //else fade in
+                }); // end of for each tr in table
+            }); // end of on click pagination list
+            limitPagging();
+        })
+        .val(5)
+        .change();
+
+    // end of on select change
+
+    // END OF PAGINATION
+    }
+
+    function limitPagging(){
+        // alert($('.pagination li').length)
+
+        if($('.pagination li').length > 7 ){
+            if( $('.pagination li.active').attr('data-page') <= 3 ){
+                $('.pagination li:gt(5)').hide();
+                $('.pagination li:lt(5)').show();
+                $('.pagination [data-page="next"]').show();
+            }
+            
+            if ($('.pagination li.active').attr('data-page') > 3){
+                $('.pagination li:gt(0)').hide();
+                $('.pagination [data-page="next"]').show();
+                for( let i = ( parseInt($('.pagination li.active').attr('data-page'))  -2 )  ; i <= ( parseInt($('.pagination li.active').attr('data-page'))  + 2 ) ; i++ ){
+                    $('.pagination [data-page="'+i+'"]').show();
+
+                }
+            }
+        }
+    }
+
+    // $(function() {
+    // // Just to append id number for each row
+    // $('table tr:eq(0)').prepend('<th> ID </th>');
+
+    // var id = 0;
+
+    // $('table tr:gt(0)').each(function() {
+    //     id++;
+    //     $(this).prepend('<td>' + id + '</td>');
+    // });
+    // });
+</script>
+
+<script>
+    $(function() {
+        const rowsPerPage = 13;
+        const rows = $('#dataTableLKAIz tbody tr');
+        const rowsCount = rows.length;
+        const pageCount = Math.ceil(rowsCount / rowsPerPage); // avoid decimals
+        const numbers = $('#numbers');
+        
+        // Generate the pagination.
+        for (var i = 0; i < pageCount; i++) {
+            numbers.append('<li><a href="#">' + (i+1) + '</a></li>');
+        }
+            
+        // Mark the first page link as active.
+        $('#numbers li:first-child a').addClass('active');
+
+        // Display the first set of rows.
+        displayRows(1);
+        
+        // On pagination click.
+        $('#numbers li a').click(function(e) {
+            var $this = $(this);
+            
+            e.preventDefault();
+            
+            // Remove the active class from the links.
+            $('#numbers li a').removeClass('active');
+            
+            // Add the active class to the current link.
+            $this.addClass('active');
+            
+            // Show the rows corresponding to the clicked page ID.
+            displayRows($this.text());
+        });
+        
+        // Function that displays rows for a specific page.
+        function displayRows(index) {
+            var start = (index - 1) * rowsPerPage;
+            var end = start + rowsPerPage;
+            
+            // Hide all rows.
+            rows.hide();
+            
+            // Show the proper rows for this page.
+            rows.slice(start, end).show();
+        }
+    });
+</script>
+
 {% endblock script %}

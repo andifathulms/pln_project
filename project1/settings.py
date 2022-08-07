@@ -196,4 +196,6 @@ CHANNEL_LAYERS = {
     },
 }
 
+USE_THOUSAND_SEPARATOR = True
+
 #heroku login pwd = 4F@thulMS
