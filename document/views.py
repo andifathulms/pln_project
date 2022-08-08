@@ -304,7 +304,7 @@ class JSON_Dumps(UserPassesTestMixin, View):
 
     def get(self, request, *args, **kwargs):
 
-        doc = DocSKAI.objects.get(pk=8)
+        doc = DocSKAI.objects.get(pk=1)
         macro = doc.macro
         macro_1 = macro.macro_file_1
 
