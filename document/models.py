@@ -31,6 +31,9 @@ class DocSKAI(models.Model):
     #Macro Document
     macro_doc       = models.FileField(upload_to='document/macro', blank=True, null=True)
 
+    #JSON File
+    json            = models.FileField(upload_to='document/json', blank=True, null = True)
+
     # set up the reverse relation to GenericForeignKey
     notifications   		= GenericRelation(Notification)
 

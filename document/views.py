@@ -304,7 +304,7 @@ class JSON_Dumps(UserPassesTestMixin, View):
 
     def get(self, request, *args, **kwargs):
 
-        # doc = DocSKAI.objects.get(pk=1)
+        doc = DocSKAI.objects.get(pk=1)
         # macro = doc.macro
         # macro_1 = macro.macro_file_1
 
@@ -312,7 +312,8 @@ class JSON_Dumps(UserPassesTestMixin, View):
 
         BASE_DIR = settings.BASE_DIR
 
-        json_file = open(str(BASE_DIR)+'\model.json')
+        #json_file = open(str(BASE_DIR)+'\model.json')
+        json_file = doc.json
         data1 = json.load(json_file) # deserialises it
         #data2 = json.dumps(data1) # json formatted string
         #print(data2)
