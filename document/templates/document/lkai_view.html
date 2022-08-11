@@ -84,12 +84,10 @@
                         <button id="to-expand" class="btn mb-3 w-100" style="background-color: #449798; color: white;">Expand Table  <span><i class="fa-solid fa-up-right-and-down-left-from-center"></i></span></button>
                     </div>
                 </div>
-                <div class="form-group"> 	<!--		Show Numbers Of Rows 		-->
+                <!-- <div class="form-group">
                     <select class  ="form-control" name="state" id="maxRows">
                         <option value="5000">Show ALL Rows</option>
-                        <option value="5">5</option>
-                        <option value="10">10</option>
-                        <option value="15">15</option>
+                        <option value="10" selected>10</option>
                         <option value="20">20</option>
                         <option value="50">50</option>
                         <option value="70">70</option>
@@ -98,7 +96,7 @@
                  </div>
                  <div class="pagination">
                     <ol id="numbers"></ol>
-                </div>
+                </div> -->
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -449,7 +447,13 @@
 {% block script %}
 <script>
     $(document).ready(function () {
-        $('#dataTableLKAI').ddTableFilter();
+        var table = $('#dataTableLKAI').DataTable({
+            "paging": true,
+            dom: 'Qlfrtip'
+        });
+ 
+        
+        //$('#dataTableLKAI').ddTableFilter();
         // $('#dataTableLKAI').DataTable({
         //     "paging": true
         // });
@@ -507,7 +511,7 @@
         $('#maxRows')
             .on('change', function(evt) {
             //$('.paginationprev').html('');						// reset pagination
-
+            
             lastPage = 1;
             $('.pagination')
                 .find('li')
@@ -627,23 +631,12 @@
         }
     }
 
-    // $(function() {
-    // // Just to append id number for each row
-    // $('table tr:eq(0)').prepend('<th> ID </th>');
-
-    // var id = 0;
-
-    // $('table tr:gt(0)').each(function() {
-    //     id++;
-    //     $(this).prepend('<td>' + id + '</td>');
-    // });
-    // });
 </script>
 
 <script>
     $(function() {
         const rowsPerPage = 13;
-        const rows = $('#dataTableLKAIz tbody tr');
+        const rows = $('#dataTableLKAI tbody tr');
         const rowsCount = rows.length;
         const pageCount = Math.ceil(rowsCount / rowsPerPage); // avoid decimals
         const numbers = $('#numbers');

@@ -104,18 +104,19 @@
                             
                         </thead>
                         <tbody id="macro-table">
+                            {% for d in data %}
                             <tr>
-                                <td>1</td>
-                                <td>2019.USLS.1.003</td>
-                                <td>R-11-K-003-SN</td>
-                                <td style="min-width: 500px;">Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
-                                <td>Lanjutan</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td>100</td>
+                                <td>{{forloop.counter}}</td>
+                                <td>{{d.0.no_prk}}</td>
+                                <td>{{d.0.program_utama}}</td>
+                                <td style="min-width: 500px;">{{d.0.keg_uraian}}</td>
+                                <td>{{d.0.ang_status}}</td>
+                                <td>{{d.0.ai_this_year}}</td>
+                                <td>{{d.0.aki_this_year}}</td>
+                                <td></td>
+                                <td></td>
+                                <td>{{d.1.ai_this_year}}</td>
+                                <td>{{d.1.aki_this_year}}</td>
 
                                 <td></td>
                                 <td></td>
@@ -154,107 +155,7 @@
                                 <td></td>
                                 <td></td>
                             </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>2019.USLS.1.003</td>
-                                <td>R-11-K-003-SN</td>
-                                <td style="min-width: 500px;">Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
-                                <td>Lanjutan</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td>100</td>
-
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-
-                                <td>JS</td>
-                                <td>OPK I</td>
-                                <td></td>
-                                <td></td>
-                                <td>OPK I</td>
-                                <td>APLN</td>
-                                <td>Unit</td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>2019.USLS.1.003</td>
-                                <td>R-11-K-003-SN</td>
-                                <td style="min-width: 500px;">Supervisi Engineering Kontrak No. : 010.PJ/041/KITSULMAPA/2009 Tanggal       : 31  Desember  2013 PT. PRIMA LAYANAN NASIONAL ENJINIRING Kontrak No.  010.PJ/041/KITSULMAPA/2009 </td>
-                                <td>Lanjutan</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td>100</td>
-                                <td>100</td>
-
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-
-                                <td>JS</td>
-                                <td>OPK I</td>
-                                <td></td>
-                                <td></td>
-                                <td>OPK I</td>
-                                <td>APLN</td>
-                                <td>Unit</td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                            
+                            {% endfor %}
                         </tbody>
                     </table>
                 </div>
