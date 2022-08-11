@@ -133,12 +133,12 @@ class SKAIComparison(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         context = {}
         #skai_1 = DocSKAI.objects.get(pk=8) #DEV
-        skai_1 = DocSKAI.objects.get(pk=1) #DEV
+        skai_1 = DocSKAI.objects.get(pk=1) #PROD
         macro_1 = skai_1.macro.macro_file_1
         macro_data_1 = MacroData.objects.filter(macro_file=macro_1)
 
         #skai_2 = DocSKAI.objects.get(pk=19) #DEV
-        skai_2 = DocSKAI.objects.get(pk=6) #DEV
+        skai_2 = DocSKAI.objects.get(pk=6) #PROD
         macro_2 = skai_2.macro.macro_file_1
         macro_data_2 = MacroData.objects.filter(macro_file=macro_2)
 
@@ -219,7 +219,7 @@ class XLSM_Playground(UserPassesTestMixin, View):
 
         doc = DocSKAI.objects.get(pk=8)
         context["macros"] = doc.macro_doc
-
+        print(doc.macro_doc)
         print("Load Workbook")
         wb = load_workbook(doc.macro_doc, keep_vba=True, data_only=True)
         print("Done")
@@ -336,99 +336,102 @@ class JSON_Dumps(UserPassesTestMixin, View):
 
     def get(self, request, *args, **kwargs):
 
-        doc = DocSKAI.objects.get(pk=19)
+        # # TO DUMP JSON #
+        doc = DocSKAI.objects.get(pk=6)
         macro = doc.macro
         macro_1 = macro.macro_file_1
 
-        macro_data = MacroData.objects.filter(macro_file=macro_1)
-        print(len(macro_data))
+        # macro_data = MacroData.objects.filter(macro_file=macro_1)
+        # print(len(macro_data))
 
-        BASE_DIR = settings.BASE_DIR
+        # BASE_DIR = settings.BASE_DIR
+        # # TO DUMP JSON #
 
-        # json_file = doc.json
-        # data1 = json.load(json_file) # deserialises it
-        # json_file.close()
+        json_file = doc.json
+        data1 = json.load(json_file) # deserialises it
+        json_file.close()
 
-        # macro_file = MacroFile()
-        # macro_file.save()
+        macro_file = MacroFile()
+        macro_file.save()
 
-        # for d in data1:
-        #     try:
-        #         macro_data = MacroData(macro_file = macro_file,
-        #             no_prk = d["no_prk"],
-        #             no_program = d["no_program"],
-        #             no_ruptl = d["no_ruptl"],
-        #             cluster = d["cluster"],
-        #             fungsi = d["fungsi"],
-        #             sub_fungsi = d["sub_fungsi"],
-        #             program_utama = d["program_utama"],
-        #             score = d["score"],
-        #             jenis_program = d["jenis_program"],
-        #             keg_no = d["keg_no"],
-        #             keg_uraian = d["keg_uraian"],
-        #             keg_target_fisik = d["keg_target_fisik"],
-        #             keg_satuan = d["keg_satuan"],
-        #             ang_nilai = d["ang_nilai"],
-        #             ang_status = d["ang_status"],
-        #             ang_jenis_kontrak = d["ang_jenis_kontrak"],
-        #             ang_no_kontrak = d["ang_no_kontrak"],
-        #             realisasi_pembayaran = d["realisasi_pembayaran"],
-        #             prediksi_pembayaran = d["prediksi_pembayaran"],
-        #             ai_this_year = d["ai_this_year"],
-        #             aki_this_year = d["aki_this_year"],
-        #             aki_n1_year = d["aki_n1_year"],
-        #             aki_n2_year = d["aki_n2_year"],
-        #             aki_n3_year = d["aki_n3_year"],
-        #             aki_n4_year = d["aki_n4_year"],
-        #             aki_after_n1_year = d["aki_after_n1_year"],
-        #             sumber_dana = d["sumber_dana"],
-        #             rencana_terkontrak = d["rencana_terkontrak"],
-        #             rencana_COD = d["rencana_COD"],
-        #             jan_progress_fisik   = d["jan_progress_fisik"],
-        #             jan_rencana_disburse = d["jan_rencana_disburse"], 
-        #             feb_progress_fisik   = d["feb_progress_fisik"], 
-        #             feb_rencana_disburse = d["feb_rencana_disburse"], 
-        #             mar_progress_fisik   = d["mar_progress_fisik"], 
-        #             mar_rencana_disburse = d["mar_rencana_disburse"], 
-        #             apr_progress_fisik   = d["apr_progress_fisik"], 
-        #             apr_rencana_disburse = d["apr_rencana_disburse"], 
-        #             mei_progress_fisik   = d["mei_progress_fisik"], 
-        #             mei_rencana_disburse = d["mei_rencana_disburse"], 
-        #             jun_progress_fisik   = d["jun_progress_fisik"], 
-        #             jun_rencana_disburse = d["jun_rencana_disburse"], 
-        #             jul_progress_fisik   = d["jul_progress_fisik"], 
-        #             jul_rencana_disburse = d["jul_rencana_disburse"], 
-        #             aug_progress_fisik   = d["aug_progress_fisik"], 
-        #             aug_rencana_disburse = d["aug_rencana_disburse"], 
-        #             sep_progress_fisik   = d["sep_progress_fisik"], 
-        #             sep_rencana_disburse = d["sep_rencana_disburse"], 
-        #             okt_progress_fisik   = d["okt_progress_fisik"], 
-        #             okt_rencana_disburse = d["okt_rencana_disburse"], 
-        #             nov_progress_fisik   = d["nov_progress_fisik"], 
-        #             nov_rencana_disburse = d["nov_rencana_disburse"], 
-        #             des_progress_fisik   = d["des_progress_fisik"], 
-        #             des_rencana_disburse = d["des_rencana_disburse"] 
-        #         )
-        #         macro_data.save()
+        for d in data1:
+            try:
+                macro_data = MacroData(macro_file = macro_file,
+                    no_prk = d["no_prk"],
+                    no_program = d["no_program"],
+                    no_ruptl = d["no_ruptl"],
+                    cluster = d["cluster"],
+                    fungsi = d["fungsi"],
+                    sub_fungsi = d["sub_fungsi"],
+                    program_utama = d["program_utama"],
+                    score = d["score"],
+                    jenis_program = d["jenis_program"],
+                    keg_no = d["keg_no"],
+                    keg_uraian = d["keg_uraian"],
+                    keg_target_fisik = d["keg_target_fisik"],
+                    keg_satuan = d["keg_satuan"],
+                    ang_nilai = d["ang_nilai"],
+                    ang_status = d["ang_status"],
+                    ang_jenis_kontrak = d["ang_jenis_kontrak"],
+                    ang_no_kontrak = d["ang_no_kontrak"],
+                    realisasi_pembayaran = d["realisasi_pembayaran"],
+                    prediksi_pembayaran = d["prediksi_pembayaran"],
+                    ai_this_year = d["ai_this_year"],
+                    aki_this_year = d["aki_this_year"],
+                    aki_n1_year = d["aki_n1_year"],
+                    aki_n2_year = d["aki_n2_year"],
+                    aki_n3_year = d["aki_n3_year"],
+                    aki_n4_year = d["aki_n4_year"],
+                    aki_after_n1_year = d["aki_after_n1_year"],
+                    sumber_dana = d["sumber_dana"],
+                    rencana_terkontrak = d["rencana_terkontrak"],
+                    rencana_COD = d["rencana_COD"],
+                    jan_progress_fisik   = d["jan_progress_fisik"],
+                    jan_rencana_disburse = d["jan_rencana_disburse"], 
+                    feb_progress_fisik   = d["feb_progress_fisik"], 
+                    feb_rencana_disburse = d["feb_rencana_disburse"], 
+                    mar_progress_fisik   = d["mar_progress_fisik"], 
+                    mar_rencana_disburse = d["mar_rencana_disburse"], 
+                    apr_progress_fisik   = d["apr_progress_fisik"], 
+                    apr_rencana_disburse = d["apr_rencana_disburse"], 
+                    mei_progress_fisik   = d["mei_progress_fisik"], 
+                    mei_rencana_disburse = d["mei_rencana_disburse"], 
+                    jun_progress_fisik   = d["jun_progress_fisik"], 
+                    jun_rencana_disburse = d["jun_rencana_disburse"], 
+                    jul_progress_fisik   = d["jul_progress_fisik"], 
+                    jul_rencana_disburse = d["jul_rencana_disburse"], 
+                    aug_progress_fisik   = d["aug_progress_fisik"], 
+                    aug_rencana_disburse = d["aug_rencana_disburse"], 
+                    sep_progress_fisik   = d["sep_progress_fisik"], 
+                    sep_rencana_disburse = d["sep_rencana_disburse"], 
+                    okt_progress_fisik   = d["okt_progress_fisik"], 
+                    okt_rencana_disburse = d["okt_rencana_disburse"], 
+                    nov_progress_fisik   = d["nov_progress_fisik"], 
+                    nov_rencana_disburse = d["nov_rencana_disburse"], 
+                    des_progress_fisik   = d["des_progress_fisik"], 
+                    des_rencana_disburse = d["des_rencana_disburse"] 
+                )
+                macro_data.save()
 
-        #     except Exception as e:
-        #         print(e) 
+            except Exception as e:
+                print(e) 
         
-        # macro = Macro(macro_file_1=macro_file)
-        # macro.save()
+        macro = Macro(macro_file_1=macro_file)
+        macro.save()
 
-        with open("model2.json", 'w', encoding='utf-8') as outfile:
-            print(outfile)
-            for data in macro_data:
-                d = json.dumps(data, cls=ExtendedEncoder, indent=4, separators=(',', ': '))
-                outfile.write(',')
-                try:
-                    outfile.write(d)
-                    print("DONE")
-                except Exception as e:
-                    print(e)
-                #print(d)
+        # # TO DUMP JSON #
+        # with open("rev.json", 'w', encoding='utf-8') as outfile:
+        #     print(outfile)
+        #     for data in macro_data:
+        #         d = json.dumps(data, cls=ExtendedEncoder, indent=4, separators=(',', ': '))
+        #         outfile.write(',')
+        #         try:
+        #             outfile.write(d)
+        #             print("DONE")
+        #         except Exception as e:
+        #             print(e)
+        #         #print(d)
         
-
+        # # TO DUMP JSON #
 
         return render(request, 'document/json_dumps.html', {})

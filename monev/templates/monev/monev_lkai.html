@@ -44,7 +44,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTableLKAI" width="100%" cellspacing="0">
+                    <table class="table table-bordered" id="dataTableMonev" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th rowspan="2">No</th>
@@ -111,12 +111,33 @@
                                 <td>{{d.0.program_utama}}</td>
                                 <td style="min-width: 500px;">{{d.0.keg_uraian}}</td>
                                 <td>{{d.0.ang_status}}</td>
-                                <td>{{d.0.ai_this_year}}</td>
-                                <td>{{d.0.aki_this_year}}</td>
-                                <td></td>
-                                <td></td>
-                                <td>{{d.1.ai_this_year}}</td>
-                                <td>{{d.1.aki_this_year}}</td>
+
+                                {% if d.0.ai_this_year %}
+                                <td style="min-width: 120px;" >Rp. {{d.0.ai_this_year}}</td>
+                                {% else %}
+                                <td style="min-width: 120px;" > - </td>
+                                {% endif %}
+
+                                {% if d.0.aki_this_year %}
+                                <td style="min-width: 120px;" >Rp. {{d.0.aki_this_year}}</td>
+                                {% else %}
+                                <td style="min-width: 120px;" > - </td>
+                                {% endif %}
+
+                                <td style="min-width: 120px;" ></td>
+                                <td style="min-width: 120px;" ></td>
+
+                                {% if d.1.ai_this_year %}
+                                <td style="min-width: 120px;">Rp. {{d.1.ai_this_year}}</td>
+                                {% else %}
+                                <td style="min-width: 120px;"> - </td>
+                                {% endif %}
+
+                                {% if d.1.aki_this_year %}
+                                <td style="min-width: 120px;">Rp. {{d.1.aki_this_year}}</td>
+                                {% else %}
+                                <td style="min-width: 120px;"> - </td>
+                                {% endif %}
 
                                 <td></td>
                                 <td></td>
@@ -168,5 +189,18 @@
 {% endblock content %}
 
 {% block script %}
-
+<script>
+    $(document).ready(function () {
+        var table = $('#dataTableMonev').DataTable({
+            "paging": true,
+            dom: 'Qlfrtip'
+        });
+ 
+        
+        //$('#dataTableLKAI').ddTableFilter();
+        // $('#dataTableLKAI').DataTable({
+        //     "paging": true
+        // });
+    });
+</script>
 {% endblock script %}
