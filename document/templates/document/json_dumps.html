@@ -2,6 +2,11 @@
 
 {% block content %}
 <p id="target">{{macros}}</p>
+<p>Data = {{data}}</p>
+{% for e in error %}
+<p>{{e}}</p>
+{% endfor %}
+
 {% endblock content %}
 
 {% block script %}

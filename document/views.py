@@ -336,6 +336,8 @@ class JSON_Dumps(UserPassesTestMixin, View):
 
     def get(self, request, *args, **kwargs):
 
+        context = {}
+
         # # TO DUMP JSON #
         doc = DocSKAI.objects.get(pk=6)
         macro = doc.macro
@@ -353,6 +355,10 @@ class JSON_Dumps(UserPassesTestMixin, View):
 
         macro_file = MacroFile()
         macro_file.save()
+
+        context["data"] = data1
+
+        error = []
 
         for d in data1:
             try:
@@ -414,7 +420,10 @@ class JSON_Dumps(UserPassesTestMixin, View):
                 macro_data.save()
 
             except Exception as e:
-                print(e) 
+                print(e)
+                error.append(e)
+        
+        context["error"] = error
         
         macro = Macro(macro_file_1=macro_file)
         macro.save()
@@ -434,4 +443,4 @@ class JSON_Dumps(UserPassesTestMixin, View):
         
         # # TO DUMP JSON #
 
-        return render(request, 'document/json_dumps.html', {})
+        return render(request, 'document/json_dumps.html', context)
