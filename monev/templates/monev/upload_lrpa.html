@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load document_tags %}
+
+{% block content %}
+<div class="container-fluid">
+
+    <!-- Content Row -->
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col p-0" style="border-style: dotted; border-radius: 10px;">
+                
+                <div class="py-3 card-header">
+                    <h6 class="m-0 font-weight-bold">Upload LRPA</h6>
+                </div>
+                <div class="card-body">
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="formGroupExampleInput">Bulan</label>
+                            <input type="number" class="form-control" name="for_month" id="formGroupExampleInput" min="1" max="12" step="1" value="1" />
+                        </div>
+                        <div class="form-group">
+                            <label for="formGroupExampleInput">Tahun</label>
+                            <input type="number" class="form-control" name="for_year" id="formGroupExampleInput" min="2000" max="2099" step="1" value="2022" />
+                        </div>
+                        <div class="form-group">
+                            <label for="formGroupExampleInput">File Export Date</label>
+                            <input type="date" class="form-control" name="export_date" id="formGroupExampleInput" placeholder="Tanggal Tarikan FIX">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="customFile">File LRPA <i class="fa-solid fa-table"></i></label>
+                            <input type="file" class="form-control" name="file_xls" id="customFile" accept=".csv, .xlsm, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"/>
+                        </div>
+                        <button type="submit" class="btn mb-3" name="submit-skai" style="background-color: #449798; color: #161616;">Upload  <i class="fa-solid fa-cloud-arrow-up"></i></button>
+                    </form>
+                </div>
+                
+            </div>
+            <div class="col p-0" style="border-style: dotted; border-radius: 10px;">
+                <div class="py-3 card-header">
+                    <h6 class="m-0 font-weight-bold">LRPA File Upload History</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nomor Dokumen</th>
+                                    <th>Tahun</th>
+                                    <th>Upload By</th>
+                                    <th>Tanggal Upload</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for doc in doc_skai %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{doc.document.document_number}}</td>
+                                    {% if doc.year %}
+                                        <td>{{doc.year}}</td>
+                                    {% else %}
+                                        <td>{{doc.revision_on.year}}</td>
+                                    {% endif %}
+                                    <td>{{doc.document.uploader}}</td>
+                                    <td>{{doc.document.upload_date}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+{% endblock content %}

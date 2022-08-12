@@ -37,7 +37,19 @@
         <!-- DataTales Example -->
         <div class="mb-4 shadow card">
             <div class="py-3 card-header">
-                <h6 class="m-0 font-weight-bold">Monev LKAI</h6>
+                <div class="row">
+                    <div class="col-8">
+                        <h6 class="m-0 font-weight-bold" style="color: #fff;">Monev LKAI</h6>
+                    </div>
+                    <div class="col-4 ">
+                        <a href="{% url 'monev:monev-upload-lrpa' %}" class="btn btn-success btn-icon-split btn-sm float-right mr-1">
+                            <span class="icon text-white-50">
+                                <i class="fa-solid fa-file-arrow-up"></i>
+                            </span>
+                            <span class="text">Upload LRPA</span>
+                        </a>
+                    </div>
+                </div>
             </div>
             <div class="col m-0 p-0">
                 
@@ -108,8 +120,8 @@
                             <tr>
                                 <td>{{forloop.counter}}</td>
                                 <td>{{d.0.no_prk}}</td>
-                                <td>{{d.0.program_utama}}</td>
-                                <td style="min-width: 500px;">{{d.0.keg_uraian}}</td>
+                                <td style="text-align: justify;">{{d.0.program_utama}}</td>
+                                <td style="min-width: 500px; text-align: justify;">{{d.0.keg_uraian}}</td>
                                 <td>{{d.0.ang_status}}</td>
 
                                 {% if d.0.ai_this_year %}

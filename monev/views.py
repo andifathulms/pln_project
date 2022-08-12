@@ -5,6 +5,10 @@ from django.views import View
 
 from document.models import DocSKAI, MacroData
 
+from openpyxl import load_workbook
+
+from .models import LRPA_Monitoring
+
 class MonevView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
@@ -38,3 +42,30 @@ class MonevView(LoginRequiredMixin, View):
         
         context["data"] = combine_list
         return render(request, 'monev/monev_lkai.html', context)
+
+class UploadLRPA(LoginRequiredMixin, View):
+    
+    def get(self, request, *args, **kwargs):
+        context = {}
+
+        return render(request, 'monev/upload_lrpa.html', context)
+    
+    def post(self, request, *args, **kwargs):
+        context = {}
+        file = request.FILES["file_xls"]
+        print(file)
+        wb = load_workbook(file)
+        ws = wb['Monitoring LRPA']
+
+        start_col = 1
+        end_col = 42
+
+        list_rows = [idx for idx,cell in enumerate(ws["B"]) if cell.value and idx >= 6]
+        print(list_rows)
+
+        for rows in list_rows:
+            row = [cell.value for cell in ws[rows][start_col:end_col+1]]
+            
+            
+
+        return render(request, 'monev/upload_lrpa.html', context)
