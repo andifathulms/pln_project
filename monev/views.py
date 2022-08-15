@@ -14,32 +14,42 @@ class MonevView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         context = {}
-        skai_1 = DocSKAI.objects.get(pk=8) #DEV
-        #skai_1 = DocSKAI.objects.get(pk=1) #PROD
+        #skai_1 = DocSKAI.objects.get(pk=8) #DEV
+        skai_1 = DocSKAI.objects.get(pk=1) #PROD
         macro_1 = skai_1.macro.macro_file_1
         macro_data_1 = MacroData.objects.filter(macro_file=macro_1)
 
-        skai_2 = DocSKAI.objects.get(pk=19) #DEV
-        #skai_2 = DocSKAI.objects.get(pk=6) #PROD
+        #skai_2 = DocSKAI.objects.get(pk=19) #DEV
+        skai_2 = DocSKAI.objects.get(pk=6) #PROD
         macro_2 = skai_2.macro.macro_file_1
         macro_data_2 = MacroData.objects.filter(macro_file=macro_2)
 
-        temp_data = MacroData.objects.filter(no_prk="2019.USLS.27.001")
-        for d in temp_data:
-            print(d.aki_this_year)
+        # temp_data = MacroData.objects.filter(no_prk="2019.USLS.27.001")
+        # for d in temp_data:
+        #     print(d.aki_this_year)
+
+        last_lrpa = LRPA_File.objects.order_by('-file_export_date').first()
+        # lrpa_data = LRPA_Monitoring.objects.filter(file=last_lrpa)
+        # print(len(lrpa_data))
 
         combine_list = []
         #ALL SKIP
         for data in macro_data_1:
             try:
                 temp = MacroData.objects.get(no_prk=data.no_prk, macro_file=macro_2)
+                lrpa = LRPA_Monitoring.objects.get(no_prk=data.no_prk, file=last_lrpa)
+
+                #get total realisasi
+                total_realisasi = int(lrpa.jan_realisasi_disburse) + int(lrpa.feb_realisasi_disburse) + int(lrpa.mar_realisasi_disburse) + int(lrpa.apr_realisasi_disburse) + int(lrpa.mei_realisasi_disburse) + int(lrpa.jun_realisasi_disburse) + int(lrpa.jul_realisasi_disburse) + int(lrpa.aug_realisasi_disburse) + int(lrpa.sep_realisasi_disburse) + int(lrpa.okt_realisasi_disburse) + int(lrpa.nov_realisasi_disburse) + int(lrpa.des_realisasi_disburse)
+
                 if temp.no_prk != None:
-                    combine_list.append((data,temp))
+                    combine_list.append((data,temp,lrpa,total_realisasi))
 
                 #print(data.macro_file.pk == temp.macro_file.pk)
             except Exception as e:
                 #print("Skip " + str(data.no_prk))
                 print(e)
+            
         
         context["data"] = combine_list
         return render(request, 'monev/monev_lkai.html', context)
