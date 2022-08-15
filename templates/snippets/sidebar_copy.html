@@ -91,9 +91,18 @@
 
     <!-- Nav Item - Charts -->
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'monev:monev-view' %}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree"
+            aria-expanded="true" aria-controls="collapseThree">
             <i class="fa-solid fa-money-bill-transfer"></i>
-            <span>Monev</span></a>
+            <span>Monev</span>
+        </a>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Monev</h6>
+                <a class="collapse-item" style="white-space: normal; !important" href="{% url 'monev:monev-view' %}">Monev LKAI</a>
+                <a class="collapse-item" style="white-space: normal; !important" href="{% url 'monev:monev-list-lrpa' %}">LRPA</a>
+            </div>
+        </div>
     </li>
 
     <!-- Divider -->

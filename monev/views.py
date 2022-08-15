@@ -7,19 +7,20 @@ from document.models import DocSKAI, MacroData
 
 from openpyxl import load_workbook
 
-from .models import LRPA_Monitoring
+from .models import LRPA_Monitoring, LRPA_File
+from .forms import LRPAFileForm
 
 class MonevView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         context = {}
-        #skai_1 = DocSKAI.objects.get(pk=8) #DEV
-        skai_1 = DocSKAI.objects.get(pk=1) #PROD
+        skai_1 = DocSKAI.objects.get(pk=8) #DEV
+        #skai_1 = DocSKAI.objects.get(pk=1) #PROD
         macro_1 = skai_1.macro.macro_file_1
         macro_data_1 = MacroData.objects.filter(macro_file=macro_1)
 
-        #skai_2 = DocSKAI.objects.get(pk=19) #DEV
-        skai_2 = DocSKAI.objects.get(pk=6) #PROD
+        skai_2 = DocSKAI.objects.get(pk=19) #DEV
+        #skai_2 = DocSKAI.objects.get(pk=6) #PROD
         macro_2 = skai_2.macro.macro_file_1
         macro_data_2 = MacroData.objects.filter(macro_file=macro_2)
 
@@ -52,8 +53,9 @@ class UploadLRPA(LoginRequiredMixin, View):
     
     def post(self, request, *args, **kwargs):
         context = {}
-        file = request.FILES["file_xls"]
-        print(file)
+        print(request.FILES)
+        file = request.FILES["lrpa_file"]
+        
         wb = load_workbook(file)
         ws = wb['Monitoring LRPA']
 
@@ -61,11 +63,61 @@ class UploadLRPA(LoginRequiredMixin, View):
         end_col = 42
 
         list_rows = [idx for idx,cell in enumerate(ws["B"]) if cell.value and idx >= 6]
-        print(list_rows)
+        #print(list_rows)
+        
+        doc_form = LRPAFileForm(request.POST, request.FILES)
+        if doc_form.is_valid():
+            doc = doc_form.save(commit=False)
+            doc.upload_by = request.user
+            doc.save()
+            
+            for rows in list_rows:
+                row = [cell.value for cell in ws[rows][start_col:end_col+1]]
+                try:
+                    lrpa = LRPA_Monitoring(
+                        file = doc,
+                        no_prk = row[0],
+                        disburse_year_before = row[9],
+                        jan_rencana_disburse = row[18],
+                        jan_realisasi_disburse = row[19],
+                        feb_rencana_disburse = row[20],
+                        feb_realisasi_disburse = row[21],
+                        mar_rencana_disburse = row[22],
+                        mar_realisasi_disburse = row[23],
+                        apr_rencana_disburse = row[24],
+                        apr_realisasi_disburse = row[25],
+                        mei_rencana_disburse = row[26],
+                        mei_realisasi_disburse = row[27],
+                        jun_rencana_disburse = row[28],
+                        jun_realisasi_disburse = row[29],
+                        jul_rencana_disburse = row[30],
+                        jul_realisasi_disburse = row[31],
+                        aug_rencana_disburse = row[32],
+                        aug_realisasi_disburse = row[33],
+                        sep_rencana_disburse = row[34],
+                        sep_realisasi_disburse = row[35],
+                        okt_rencana_disburse = row[36],
+                        okt_realisasi_disburse = row[37],
+                        nov_rencana_disburse = row[38],
+                        nov_realisasi_disburse = row[39],
+                        des_rencana_disburse = row[40],
+                        des_realisasi_disburse = row[41]
+                    )
 
-        for rows in list_rows:
-            row = [cell.value for cell in ws[rows][start_col:end_col+1]]
-            
-            
+                    lrpa.save()
+                except Exception as e:
+                    print(e)
+        else:
+            print(doc_form.errors)
 
         return render(request, 'monev/upload_lrpa.html', context)
+
+class LRPAList(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+
+        lrpa = LRPA_File.objects.all()
+        context["lrpa"] = lrpa
+
+        return render(request, 'monev/list_lrpa.html', context)

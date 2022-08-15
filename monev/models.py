@@ -2,12 +2,16 @@ from django.db import models
 from datetime import date
 from account.models import Account
 
-class LRPA_Monitoring(models.Model):
+class LRPA_File(models.Model):
+    lrpa_file               = models.FileField(upload_to='monev/lrpa')
     upload_date             = models.DateField(auto_now_add=True)
     upload_by               = models.ForeignKey(Account, on_delete=models.CASCADE)
     file_export_date        = models.DateField(default=date.today)
     for_month               = models.IntegerField()
     for_year                = models.IntegerField()
+
+class LRPA_Monitoring(models.Model):
+    file                    = models.ForeignKey('LRPA_File', on_delete=models.CASCADE, blank=True, null=True)
     no_prk                  = models.CharField(max_length=100, blank=True, null=True)
     disburse_year_before    = models.CharField(max_length=100, blank=True, null=True)
     jan_rencana_disburse    = models.CharField(max_length=100, blank=True, null=True)
