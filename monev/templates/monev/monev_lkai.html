@@ -7,6 +7,8 @@
     td {
         vertical-align: middle;
         text-align: center;
+        color: #161616;
+        
     }
 
     .active-td {
@@ -23,6 +25,75 @@
 
     table#dataTableLKAI>tbody>tr:hover {
         background-color: rgba(68, 151, 152, 0.1);
+    }
+
+    .cell-disabled{
+        background-color: #CFD2CF;
+        opacity: 0.2;
+    }
+
+    .sum-cell{
+        background-color: #161616;
+        color: #FCFCFC;
+        text-align: center !important;
+    }
+
+    .copy_container{
+        display: flex;
+        justify-content: space-between;
+        top: 0px;
+        left: 0px;
+        width: 240px;
+        padding: 20px 20px;
+        font-size: 18px;
+        color: #161616;
+        border-radius: 8px 8px 0 0;
+        cursor: pointer;
+    }
+
+    .copy{
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        align-items: center;
+        opacity: 0.6;
+        transition: all 0.1s ease;
+    }
+
+    .tooltip{
+        position: absolute;
+        top: 30px;
+        left: -30px;
+        background: #161616;
+        padding: 10px 15px;
+        display: flex;
+        justify-content: center;
+        color: #fff;
+        font-size: 14px;
+        border-radius: 4px;
+        letter-spacing: 1px;
+        opacity: 0;
+    }
+
+    .tooltip.appear {
+        animation: appear 1s ease;
+    }
+
+    @keyframes appear {
+        0% {
+            opacity: 0;
+        }
+        20% {
+            transform: translateY(10px);
+            opacity: 1;
+        }
+        80% {
+            transform: translateY(0px);
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
     }
 </style>
 {% endblock style%}
@@ -64,36 +135,36 @@
                                 <td style="visibility: hidden;"></td>
                                 <td style="visibility: hidden;"></td>
                                 <td style="visibility: hidden;"></td>
-                                <td id="total_ai_1"></td>
-                                <td id="total_aki_1"></td>
+                                <td class="sum-cell" id="total_ai_1"></td>
+                                <td class="sum-cell" id="total_aki_1"></td>
                                 <td></td>
                                 <td></td>
-                                <td id="total_ai_3"></td>
-                                <td id="total_aki_3"></td>
-                                <td id="jan_akb"></td>
-                                <td id="jan_real"></td>
-                                <td id="feb_akb"></td>
-                                <td id="feb_real"></td>
-                                <td id="mar_akb"></td>
-                                <td id="mar_real"></td>
-                                <td id="apr_akb"></td>
-                                <td id="apr_real"></td>
-                                <td id="mei_akb"></td>
-                                <td id="mei_real"></td>
-                                <td id="jun_akb"></td>
-                                <td id="jun_real"></td>
-                                <td id="jul_akb"></td>
-                                <td id="jul_real"></td>
-                                <td id="aug_akb"></td>
-                                <td id="aug_real"></td>
-                                <td id="sep_akb"></td>
-                                <td id="sep_real"></td>
-                                <td id="okt_akb"></td>
-                                <td id="okt_real"></td>
-                                <td id="nov_akb"></td>
-                                <td id="nov_real"></td>
-                                <td id="des_akb"></td>
-                                <td id="des_real"></td>
+                                <td class="sum-cell" id="total_ai_3"></td>
+                                <td class="sum-cell" id="total_aki_3"></td>
+                                <td class="sum-cell" id="jan_akb"></td>
+                                <td class="sum-cell" id="jan_real"></td>
+                                <td class="sum-cell" id="feb_akb"></td>
+                                <td class="sum-cell" id="feb_real"></td>
+                                <td class="sum-cell" id="mar_akb"></td>
+                                <td class="sum-cell" id="mar_real"></td>
+                                <td class="sum-cell" id="apr_akb"></td>
+                                <td class="sum-cell" id="apr_real"></td>
+                                <td class="sum-cell" id="mei_akb"></td>
+                                <td class="sum-cell" id="mei_real"></td>
+                                <td class="sum-cell" id="jun_akb"></td>
+                                <td class="sum-cell" id="jun_real"></td>
+                                <td class="sum-cell" id="jul_akb"></td>
+                                <td class="sum-cell" id="jul_real"></td>
+                                <td class="sum-cell" id="aug_akb"></td>
+                                <td class="sum-cell" id="aug_real"></td>
+                                <td class="sum-cell" id="sep_akb"></td>
+                                <td class="sum-cell" id="sep_real"></td>
+                                <td class="sum-cell" id="okt_akb"></td>
+                                <td class="sum-cell" id="okt_real"></td>
+                                <td class="sum-cell" id="nov_akb"></td>
+                                <td class="sum-cell" id="nov_real"></td>
+                                <td class="sum-cell" id="des_akb"></td>
+                                <td class="sum-cell" id="des_real"></td>
                             </tr>
                             <tr>
                                 <th rowspan="2">No</th>
@@ -152,21 +223,29 @@
                             {% for d in data %}
                             <tr>
                                 <td>{{forloop.counter}}</td>
-                                <td>{{d.0.no_prk}}</td>
-                                <td style="text-align: justify;">{{d.0.program_utama}}</td>
-                                <td style="min-width: 500px; text-align: justify;">{{d.0.keg_uraian}}</td>
+                                <td style="position:relative; grid-row: 3 / 4; grid-column: 2 / 3;">
+                                    <div id="id-{{d.0.pk}}" class="copy_container">
+                                        <p style="margin: auto;">{{d.0.no_prk}}</p>
+                                        <div id="copy-{{d.0.pk}}" class="copy">
+                                            <span class="tooltip">Copied PRK Number</span>
+                                            <i class="material-icons">content_copy</i>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="min-width: 150px; text-align: justify;">{{d.0.program_utama}}</td>
+                                <td style="min-width: 400px; text-align: justify;">{{d.0.keg_uraian}}</td>
                                 <td>{{d.0.ang_status}}</td>
 
                                 {% if d.0.ai_this_year %}
                                 <td style="min-width: 140px;" >{{d.0.ai_this_year}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;" > - </td>
+                                <td class="cell-disabled" style="min-width: 140px;" > - </td>
                                 {% endif %}
 
                                 {% if d.0.aki_this_year %}
                                 <td style="min-width: 140px;" >{{d.0.aki_this_year}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;" > - </td>
+                                <td class="cell-disabled" style="min-width: 140px;" > - </td>
                                 {% endif %}
 
                                 <td style="min-width: 140px;" ></td>
@@ -175,163 +254,163 @@
                                 {% if d.1.ai_this_year %}
                                 <td style="min-width: 140px;">{{d.1.ai_this_year}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.1.aki_this_year %}
                                 <td style="min-width: 140px;">{{d.1.aki_this_year}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.jan_rencana_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.jan_rencana_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.jan_realisasi_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.jan_realisasi_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.feb_rencana_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.feb_rencana_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.feb_realisasi_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.feb_realisasi_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.mar_rencana_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.mar_rencana_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.mar_realisasi_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.mar_realisasi_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.apr_rencana_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.apr_rencana_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.apr_realisasi_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.apr_realisasi_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.mei_rencana_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.mei_rencana_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.mei_realisasi_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.mei_realisasi_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.jun_rencana_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.jun_rencana_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.jun_realisasi_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.jun_realisasi_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.jul_rencana_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.jul_rencana_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.jul_realisasi_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.jul_realisasi_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.aug_rencana_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.aug_rencana_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.aug_realisasi_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.aug_realisasi_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.sep_rencana_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.sep_rencana_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.sep_realisasi_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.sep_realisasi_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.okt_rencana_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.okt_rencana_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.okt_realisasi_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.okt_realisasi_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.nov_rencana_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.nov_rencana_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.nov_realisasi_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.nov_realisasi_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.des_rencana_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.des_rencana_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.des_realisasi_disburse != "0" %}
                                 <td style="min-width: 140px;">{{d.2.des_realisasi_disburse|floatformat}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.3 != 0 %}
                                 <td style="min-width: 140px;">{{d.3}}</td>
                                 {% else %}
-                                <td style="min-width: 140px;"> - </td>
+                                <td class="cell-disabled" style="min-width: 140px;"> - </td>
                                 {% endif %}
                                 <td></td>
 
@@ -343,7 +422,7 @@
                                 {% if d.2.mekanisme_pembayaran %}
                                 <td>{{d.2.mekanisme_pembayaran}}</td>
                                 {% else %}
-                                <td> - </td>
+                                <td class="cell-disabled" > - </td>
                                 {% endif %}
                                 
                             </tr>
@@ -431,44 +510,61 @@
                 var sum_ai_3 = data_ai_3.reduce(myFunc);
                 var sum_aki_3 = data_aki_3.reduce(myFunc);
 
-                $('#total_ai_1').html(reduceColumn[0]);
-                $('#total_aki_1').html(reduceColumn[1]);
-                $('#total_ai_3').html(reduceColumn[2]);
-                $('#total_aki_3').html(reduceColumn[3]);
-                $('#jan_akb').html(reduceColumn[4]);
-                $('#jan_real').html(reduceColumn[5]);
-                $('#feb_akb').html(reduceColumn[6]);
-                $('#feb_real').html(reduceColumn[7]);
-                $('#mar_akb').html(reduceColumn[8]);
-                $('#mar_real').html(reduceColumn[9]);
-                $('#apr_akb').html(reduceColumn[10]);
-                $('#apr_real').html(reduceColumn[11]);
-                $('#mei_akb').html(reduceColumn[12]);
-                $('#mei_real').html(reduceColumn[13]);
-                $('#jun_akb').html(reduceColumn[14]);
-                $('#jun_real').html(reduceColumn[15]);
-                $('#jul_akb').html(reduceColumn[16]);
-                $('#jul_real').html(reduceColumn[17]);
-                $('#aug_akb').html(reduceColumn[18]);
-                $('#aug_real').html(reduceColumn[19]);
-                $('#sep_akb').html(reduceColumn[20]);
-                $('#sep_real').html(reduceColumn[21]);
-                $('#okt_akb').html(reduceColumn[22]);
-                $('#okt_real').html(reduceColumn[23]);
-                $('#nov_akb').html(reduceColumn[24]);
-                $('#nov_real').html(reduceColumn[25]);
-                $('#des_akb').html(reduceColumn[26]);
-                $('#des_real').html(reduceColumn[27]);
+                $('#total_ai_1').html(Number(reduceColumn[0]).toLocaleString('id'));
+                $('#total_aki_1').html(Number(reduceColumn[1]).toLocaleString('id'));
+                $('#total_ai_3').html(Number(reduceColumn[2]).toLocaleString('id'));
+                $('#total_aki_3').html(Number(reduceColumn[3]).toLocaleString('id'));
+                $('#jan_akb').html(Number(reduceColumn[4]).toLocaleString('id'));
+                $('#jan_real').html(Number(reduceColumn[5]).toLocaleString('id'));
+                $('#feb_akb').html(Number(reduceColumn[6]).toLocaleString('id'));
+                $('#feb_real').html(Number(reduceColumn[7]).toLocaleString('id'));
+                $('#mar_akb').html(Number(reduceColumn[8]).toLocaleString('id'));
+                $('#mar_real').html(Number(reduceColumn[9]).toLocaleString('id'));
+                $('#apr_akb').html(Number(reduceColumn[10]).toLocaleString('id'));
+                $('#apr_real').html(Number(reduceColumn[11]).toLocaleString('id'));
+                $('#mei_akb').html(Number(reduceColumn[12]).toLocaleString('id'));
+                $('#mei_real').html(Number(reduceColumn[13]).toLocaleString('id'));
+                $('#jun_akb').html(Number(reduceColumn[14]).toLocaleString('id'));
+                $('#jun_real').html(Number(reduceColumn[15]).toLocaleString('id'));
+                $('#jul_akb').html(Number(reduceColumn[16]).toLocaleString('id'));
+                $('#jul_real').html(Number(reduceColumn[17]).toLocaleString('id'));
+                $('#aug_akb').html(Number(reduceColumn[18]).toLocaleString('id'));
+                $('#aug_real').html(Number(reduceColumn[19]).toLocaleString('id'));
+                $('#sep_akb').html(Number(reduceColumn[20]).toLocaleString('id'));
+                $('#sep_real').html(Number(reduceColumn[21]).toLocaleString('id'));
+                $('#okt_akb').html(Number(reduceColumn[22]).toLocaleString('id'));
+                $('#okt_real').html(Number(reduceColumn[23]).toLocaleString('id'));
+                $('#nov_akb').html(Number(reduceColumn[24]).toLocaleString('id'));
+                $('#nov_real').html(Number(reduceColumn[25]).toLocaleString('id'));
+                $('#des_akb').html(Number(reduceColumn[26]).toLocaleString('id'));
+                $('#des_real').html(Number(reduceColumn[27]).toLocaleString('id'));
 
                 
             }
         });
  
-        
-        //$('#dataTableLKAI').ddTableFilter();
-        // $('#dataTableLKAI').DataTable({
-        //     "paging": true
-        // });
+    });
+</script>
+
+<script>
+    $("[id^=copy-").on("click", function(e){
+        e.preventDefault();
+
+        //find the number of the parent
+        let num = $(this).parent().attr("id").slice("id-".length);
+        let elem = $("#id-" + num);
+
+        //copy the text
+        let $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val(elem.children(":first").text()).select();
+        document.execCommand("copy");
+        $temp.remove();
+
+        $(this).children(".tooltip").addClass("appear").delay(1000).queue(function( next ){
+            $(this).removeClass("appear"); 
+            $(this).dequeue();
+        });
     });
 </script>
 {% endblock script %}
