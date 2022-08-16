@@ -14,6 +14,7 @@ class LRPA_Monitoring(models.Model):
     file                    = models.ForeignKey('LRPA_File', on_delete=models.CASCADE, blank=True, null=True)
     no_prk                  = models.CharField(max_length=100, blank=True, null=True)
     disburse_year_before    = models.CharField(max_length=100, blank=True, null=True)
+    mekanisme_pembayaran    = models.CharField(max_length=100, blank=True, null=True)
     jan_rencana_disburse    = models.CharField(max_length=100, blank=True, null=True)
     jan_realisasi_disburse  = models.CharField(max_length=100, blank=True, null=True)
     feb_rencana_disburse    = models.CharField(max_length=100, blank=True, null=True)

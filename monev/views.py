@@ -14,13 +14,13 @@ class MonevView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         context = {}
-        #skai_1 = DocSKAI.objects.get(pk=8) #DEV
-        skai_1 = DocSKAI.objects.get(pk=1) #PROD
+        skai_1 = DocSKAI.objects.get(pk=8) #DEV
+        #skai_1 = DocSKAI.objects.get(pk=1) #PROD
         macro_1 = skai_1.macro.macro_file_1
         macro_data_1 = MacroData.objects.filter(macro_file=macro_1)
 
-        #skai_2 = DocSKAI.objects.get(pk=19) #DEV
-        skai_2 = DocSKAI.objects.get(pk=6) #PROD
+        skai_2 = DocSKAI.objects.get(pk=19) #DEV
+        #skai_2 = DocSKAI.objects.get(pk=6) #PROD
         macro_2 = skai_2.macro.macro_file_1
         macro_data_2 = MacroData.objects.filter(macro_file=macro_2)
 
@@ -33,12 +33,21 @@ class MonevView(LoginRequiredMixin, View):
         # print(len(lrpa_data))
 
         combine_list = []
-        #ALL SKIP
+
+        #MANUALLY DECLARE!!!
+        total_of_ai_0 = 0
+        total_of_aki_0 = 0
+        total_of_ai_2 = 0
+        total_of_aki_2 = 0
+        
         for data in macro_data_1:
             try:
                 temp = MacroData.objects.get(no_prk=data.no_prk, macro_file=macro_2)
                 lrpa = LRPA_Monitoring.objects.get(no_prk=data.no_prk, file=last_lrpa)
-
+                total_of_ai_0 = total_of_ai_0 + data.ai_this_year
+                total_of_aki_0 = total_of_aki_0 + data.aki_this_year
+                total_of_ai_2 = total_of_ai_2 + temp.ai_this_year
+                total_of_aki_2 = total_of_aki_2 + temp.aki_this_year
                 #get total realisasi
                 total_realisasi = int(lrpa.jan_realisasi_disburse) + int(lrpa.feb_realisasi_disburse) + int(lrpa.mar_realisasi_disburse) + int(lrpa.apr_realisasi_disburse) + int(lrpa.mei_realisasi_disburse) + int(lrpa.jun_realisasi_disburse) + int(lrpa.jul_realisasi_disburse) + int(lrpa.aug_realisasi_disburse) + int(lrpa.sep_realisasi_disburse) + int(lrpa.okt_realisasi_disburse) + int(lrpa.nov_realisasi_disburse) + int(lrpa.des_realisasi_disburse)
 
@@ -52,6 +61,10 @@ class MonevView(LoginRequiredMixin, View):
             
         
         context["data"] = combine_list
+        context["total_of_ai_0"] = total_of_ai_0
+        context["total_of_aki_0"] = total_of_aki_0
+        context["total_of_ai_2"] = total_of_ai_2
+        context["total_of_aki_2"] = total_of_aki_2
         return render(request, 'monev/monev_lkai.html', context)
 
 class UploadLRPA(LoginRequiredMixin, View):
@@ -111,7 +124,8 @@ class UploadLRPA(LoginRequiredMixin, View):
                         nov_rencana_disburse = row[38],
                         nov_realisasi_disburse = row[39],
                         des_rencana_disburse = row[40],
-                        des_realisasi_disburse = row[41]
+                        des_realisasi_disburse = row[41],
+                        mekanisme_pembayaran = row[14]
                     )
 
                     lrpa.save()

@@ -59,6 +59,43 @@
                     <table class="table table-bordered" id="dataTableMonev" width="100%" cellspacing="0">
                         <thead>
                             <tr>
+                                <td style="visibility: hidden;"></td>
+                                <td style="visibility: hidden;"></td>
+                                <td style="visibility: hidden;"></td>
+                                <td style="visibility: hidden;"></td>
+                                <td style="visibility: hidden;"></td>
+                                <td id="total_ai_1"></td>
+                                <td id="total_aki_1"></td>
+                                <td></td>
+                                <td></td>
+                                <td id="total_ai_3"></td>
+                                <td id="total_aki_3"></td>
+                                <td id="jan_akb"></td>
+                                <td id="jan_real"></td>
+                                <td id="feb_akb"></td>
+                                <td id="feb_real"></td>
+                                <td id="mar_akb"></td>
+                                <td id="mar_real"></td>
+                                <td id="apr_akb"></td>
+                                <td id="apr_real"></td>
+                                <td id="mei_akb"></td>
+                                <td id="mei_real"></td>
+                                <td id="jun_akb"></td>
+                                <td id="jun_real"></td>
+                                <td id="jul_akb"></td>
+                                <td id="jul_real"></td>
+                                <td id="aug_akb"></td>
+                                <td id="aug_real"></td>
+                                <td id="sep_akb"></td>
+                                <td id="sep_real"></td>
+                                <td id="okt_akb"></td>
+                                <td id="okt_real"></td>
+                                <td id="nov_akb"></td>
+                                <td id="nov_real"></td>
+                                <td id="des_akb"></td>
+                                <td id="des_real"></td>
+                            </tr>
+                            <tr>
                                 <th rowspan="2">No</th>
                                 <th rowspan="2">No PRK</th>
                                 <th rowspan="2">Program Utama/Proyek</th>
@@ -71,13 +108,9 @@
                                 <th rowspan="2">Sisa AKI</th>
                                 <th rowspan="2">Kode PRK</th>
                                 <th rowspan="2">Kode BPO</th>
-                                <th rowspan="2">UPP</th>
-                                <th rowspan="2">Lokasi</th>
                                 <th rowspan="2">Rekap User Induk</th>
                                 <th rowspan="2">Sumber Dana</th>
                                 <th rowspan="2">Mekanisme Pembayaran</th>
-                                <th rowspan="2">Cek AKI Real AKB</th>
-                                <th rowspan="2">Sisa Pengalihan</th>
                             </tr>
                             <tr>
                                 <th>AI</th>
@@ -125,13 +158,13 @@
                                 <td>{{d.0.ang_status}}</td>
 
                                 {% if d.0.ai_this_year %}
-                                <td style="min-width: 140px;" >Rp. {{d.0.ai_this_year}}</td>
+                                <td style="min-width: 140px;" >{{d.0.ai_this_year}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;" > - </td>
                                 {% endif %}
 
                                 {% if d.0.aki_this_year %}
-                                <td style="min-width: 140px;" >Rp. {{d.0.aki_this_year}}</td>
+                                <td style="min-width: 140px;" >{{d.0.aki_this_year}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;" > - </td>
                                 {% endif %}
@@ -140,177 +173,179 @@
                                 <td style="min-width: 140px;" ></td>
 
                                 {% if d.1.ai_this_year %}
-                                <td style="min-width: 140px;">Rp. {{d.1.ai_this_year}}</td>
+                                <td style="min-width: 140px;">{{d.1.ai_this_year}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.1.aki_this_year %}
-                                <td style="min-width: 140px;">Rp. {{d.1.aki_this_year}}</td>
+                                <td style="min-width: 140px;">{{d.1.aki_this_year}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.jan_rencana_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.jan_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.jan_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.jan_realisasi_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.jan_realisasi_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.jan_realisasi_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.feb_rencana_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.feb_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.feb_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.feb_realisasi_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.feb_realisasi_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.feb_realisasi_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.mar_rencana_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.mar_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.mar_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.mar_realisasi_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.mar_realisasi_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.mar_realisasi_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.apr_rencana_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.apr_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.apr_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.apr_realisasi_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.apr_realisasi_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.apr_realisasi_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.mei_rencana_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.mei_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.mei_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.mei_realisasi_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.mei_realisasi_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.mei_realisasi_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.jun_rencana_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.jun_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.jun_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.jun_realisasi_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.jun_realisasi_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.jun_realisasi_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.jul_rencana_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.jul_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.jul_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.jul_realisasi_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.jul_realisasi_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.jul_realisasi_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.aug_rencana_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.aug_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.aug_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.aug_realisasi_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.aug_realisasi_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.aug_realisasi_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.sep_rencana_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.sep_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.sep_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.sep_realisasi_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.sep_realisasi_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.sep_realisasi_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.okt_rencana_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.okt_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.okt_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.okt_realisasi_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.okt_realisasi_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.okt_realisasi_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.nov_rencana_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.nov_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.nov_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.nov_realisasi_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.nov_realisasi_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.nov_realisasi_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.des_rencana_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.des_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.des_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.2.des_realisasi_disburse != "0" %}
-                                <td style="min-width: 140px;">Rp. {{d.2.des_realisasi_disburse|floatformat}}</td>
+                                <td style="min-width: 140px;">{{d.2.des_realisasi_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
 
                                 {% if d.3 != 0 %}
-                                <td style="min-width: 140px;">Rp. {{d.3}}</td>
+                                <td style="min-width: 140px;">{{d.3}}</td>
                                 {% else %}
                                 <td style="min-width: 140px;"> - </td>
                                 {% endif %}
                                 <td></td>
 
-                                <td>JS</td>
-                                <td>OPK I</td>
                                 <td></td>
                                 <td></td>
-                                <td>OPK I</td>
-                                <td>APLN</td>
-                                <td>Unit</td>
                                 <td></td>
-                                <td></td>
+                                <td>{{d.0.sumber_dana}}</td>
+
+                                {% if d.2.mekanisme_pembayaran %}
+                                <td>{{d.2.mekanisme_pembayaran}}</td>
+                                {% else %}
+                                <td> - </td>
+                                {% endif %}
+                                
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -329,7 +364,104 @@
     $(document).ready(function () {
         var table = $('#dataTableMonev').DataTable({
             "paging": true,
-            dom: 'Qlfrtip'
+            dom: 'Qlfrtip',
+            drawCallback: function(){
+                var api = this.api();
+                var intVal = function (i) {
+                    return parseInt(i) || 0;
+                };
+                
+                function myFunc(total, num) {
+                    return intVal(total) + intVal(num);
+                }
+                var data_ai_1 = api.column(5).data();
+                var data_aki_1 = api.column(6).data();
+
+                var data_ai_3 = api.column(9).data();
+                var data_aki_3 = api.column(10).data();
+
+                var jan_akb = api.column(11).data();
+                var jan_real = api.column(12).data();
+                var feb_akb = api.column(13).data();
+                var feb_real = api.column(14).data();
+                var mar_akb = api.column(15).data();
+                var mar_real = api.column(16).data();
+                var apr_akb = api.column(17).data();
+                var apr_real = api.column(18).data();
+                var mei_akb = api.column(19).data();
+                var mei_real = api.column(20).data();
+                var jun_akb = api.column(21).data();
+                var jun_real = api.column(22).data();
+                var jul_akb = api.column(23).data();
+                var jul_real = api.column(24).data();
+                var aug_akb = api.column(25).data();
+                var aug_real = api.column(26).data();
+                var sep_akb = api.column(27).data();
+                var sep_real = api.column(28).data();
+                var okt_akb = api.column(29).data();
+                var okt_real = api.column(30).data();
+                var nov_akb = api.column(31).data();
+                var nov_real = api.column(32).data();
+                var des_akb = api.column(33).data();
+                var des_real = api.column(34).data();
+
+                //alert( Object.keys(data_ai_1).length );
+
+                var listColumn = [data_ai_1, data_aki_1, data_ai_3, data_aki_3, jan_akb, jan_real, 
+                feb_akb, feb_real, mar_akb, mar_real, apr_akb, apr_real, mei_akb, mei_real, jun_akb, jun_real, jul_akb, jul_real,
+                aug_akb, aug_real, sep_akb, sep_real, okt_akb, okt_real, nov_akb, nov_real, des_akb, des_real]
+
+                var reduceColumn = []
+                for (var obj in listColumn){
+                    var data = listColumn[obj];
+                    //console.log(data);
+                    Object.keys(data).forEach(function(key){
+                        if(typeof data[key] === 'string'){
+                            data[key] = intVal(data[key].replaceAll(',',''))
+                        }
+                    })
+                    reduceColumn.push(data.reduce(myFunc))
+                }
+
+                console.log(reduceColumn);
+
+                //USE REPETITION LATER
+                var sum_ai_1 = data_ai_1.reduce(myFunc);
+                var sum_aki_1 = data_aki_1.reduce(myFunc);
+                var sum_ai_3 = data_ai_3.reduce(myFunc);
+                var sum_aki_3 = data_aki_3.reduce(myFunc);
+
+                $('#total_ai_1').html(reduceColumn[0]);
+                $('#total_aki_1').html(reduceColumn[1]);
+                $('#total_ai_3').html(reduceColumn[2]);
+                $('#total_aki_3').html(reduceColumn[3]);
+                $('#jan_akb').html(reduceColumn[4]);
+                $('#jan_real').html(reduceColumn[5]);
+                $('#feb_akb').html(reduceColumn[6]);
+                $('#feb_real').html(reduceColumn[7]);
+                $('#mar_akb').html(reduceColumn[8]);
+                $('#mar_real').html(reduceColumn[9]);
+                $('#apr_akb').html(reduceColumn[10]);
+                $('#apr_real').html(reduceColumn[11]);
+                $('#mei_akb').html(reduceColumn[12]);
+                $('#mei_real').html(reduceColumn[13]);
+                $('#jun_akb').html(reduceColumn[14]);
+                $('#jun_real').html(reduceColumn[15]);
+                $('#jul_akb').html(reduceColumn[16]);
+                $('#jul_real').html(reduceColumn[17]);
+                $('#aug_akb').html(reduceColumn[18]);
+                $('#aug_real').html(reduceColumn[19]);
+                $('#sep_akb').html(reduceColumn[20]);
+                $('#sep_real').html(reduceColumn[21]);
+                $('#okt_akb').html(reduceColumn[22]);
+                $('#okt_real').html(reduceColumn[23]);
+                $('#nov_akb').html(reduceColumn[24]);
+                $('#nov_real').html(reduceColumn[25]);
+                $('#des_akb').html(reduceColumn[26]);
+                $('#des_real').html(reduceColumn[27]);
+
+                
+            }
         });
  
         

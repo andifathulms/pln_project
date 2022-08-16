@@ -89,8 +89,8 @@ class MacroData(models.Model):
     ang_no_kontrak              = models.CharField(max_length=200, blank=True, null=True)
     realisasi_pembayaran        = models.IntegerField(blank=True, null=True)
     prediksi_pembayaran         = models.IntegerField(blank=True, null=True)
-    ai_this_year                = models.IntegerField(blank=True, null=True)
-    aki_this_year               = models.IntegerField(blank=True, null=True)
+    ai_this_year                = models.IntegerField(blank=True, null=True) #Try use FloatField
+    aki_this_year               = models.IntegerField(blank=True, null=True) #Try use FloatField
     aki_n1_year                 = models.IntegerField(blank=True, null=True)
     aki_n2_year                 = models.IntegerField(blank=True, null=True)
     aki_n3_year                 = models.IntegerField(blank=True, null=True)
@@ -124,4 +124,9 @@ class MacroData(models.Model):
     des_progress_fisik          = models.CharField(max_length=100,blank=True, null=True)
     des_rencana_disburse        = models.CharField(max_length=100,blank=True, null=True)
 
+    def real_ai(self):
+        return self.ai_this_year * 1000
+
+    def real_aki(self):
+        return self.aki_this_year * 1000
 
