@@ -132,13 +132,13 @@ class LKAIView(LoginRequiredMixin, View):
 class SKAIComparison(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         context = {}
-        #skai_1 = DocSKAI.objects.get(pk=8) #DEV
-        skai_1 = DocSKAI.objects.get(pk=1) #PROD
+        skai_1 = DocSKAI.objects.get(pk=8) #DEV
+        #skai_1 = DocSKAI.objects.get(pk=1) #PROD
         macro_1 = skai_1.macro.macro_file_1
         macro_data_1 = MacroData.objects.filter(macro_file=macro_1)
 
-        #skai_2 = DocSKAI.objects.get(pk=19) #DEV
-        skai_2 = DocSKAI.objects.get(pk=6) #PROD
+        skai_2 = DocSKAI.objects.get(pk=19) #DEV
+        #skai_2 = DocSKAI.objects.get(pk=6) #PROD
         macro_2 = skai_2.macro.macro_file_1
         macro_data_2 = MacroData.objects.filter(macro_file=macro_2)
 
@@ -148,7 +148,9 @@ class SKAIComparison(LoginRequiredMixin, View):
         list_1 = list(data.no_prk for data in macro_data_1)
         list_2 = list(data.no_prk for data in macro_data_2)
 
+        print(len(list(set(list_2)-set(list_1))))
         print(list(set(list_2)-set(list_1)))
+        print(list(set(list_1)-set(list_2)))
 
         combine_list = []
         #ALL SKIP
@@ -217,7 +219,7 @@ class XLSM_Playground(UserPassesTestMixin, View):
     def get(self, request, *args, **kwargs):
         context = {}
 
-        doc = DocSKAI.objects.get(pk=8)
+        doc = DocSKAI.objects.get(pk=19)
         context["macros"] = doc.macro_doc
         print(doc.macro_doc)
         print("Load Workbook")
@@ -239,6 +241,7 @@ class XLSM_Playground(UserPassesTestMixin, View):
         macro_file = MacroFile()
         macro_file.save()
 
+        exc = []
         for rows in list_rows:
             if ws["AF"][rows].value != None:
                 
@@ -307,6 +310,7 @@ class XLSM_Playground(UserPassesTestMixin, View):
                     macro_data.save()
 
                 except Exception as e:
+                    exc.append(e)
                     print(e)                
             
             else:
@@ -317,6 +321,8 @@ class XLSM_Playground(UserPassesTestMixin, View):
         macro.save()
 
         print("Done!!!")
+        print(len(list_rows))
+        print(exc)
 
         return render(request, 'document/playground.html', context)
 
