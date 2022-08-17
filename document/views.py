@@ -132,13 +132,13 @@ class LKAIView(LoginRequiredMixin, View):
 class SKAIComparison(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         context = {}
-        skai_1 = DocSKAI.objects.get(pk=8) #DEV
-        #skai_1 = DocSKAI.objects.get(pk=1) #PROD
+        #skai_1 = DocSKAI.objects.get(pk=8) #DEV
+        skai_1 = DocSKAI.objects.get(pk=1) #PROD
         macro_1 = skai_1.macro.macro_file_1
         macro_data_1 = MacroData.objects.filter(macro_file=macro_1)
 
-        skai_2 = DocSKAI.objects.get(pk=19) #DEV
-        #skai_2 = DocSKAI.objects.get(pk=6) #PROD
+        #skai_2 = DocSKAI.objects.get(pk=19) #DEV
+        skai_2 = DocSKAI.objects.get(pk=6) #PROD
         macro_2 = skai_2.macro.macro_file_1
         macro_data_2 = MacroData.objects.filter(macro_file=macro_2)
 
@@ -345,11 +345,11 @@ class JSON_Dumps(UserPassesTestMixin, View):
         context = {}
 
         # # TO DUMP JSON #
-        doc = DocSKAI.objects.get(pk=6)
+        doc = DocSKAI.objects.get(pk=1)
         macro = doc.macro
         macro_1 = macro.macro_file_1
 
-        # macro_data = MacroData.objects.filter(macro_file=macro_1)
+        #macro_data = MacroData.objects.filter(macro_file=macro_1)
         # print(len(macro_data))
 
         # BASE_DIR = settings.BASE_DIR
@@ -435,7 +435,7 @@ class JSON_Dumps(UserPassesTestMixin, View):
         macro.save()
 
         # # TO DUMP JSON #
-        # with open("rev.json", 'w', encoding='utf-8') as outfile:
+        # with open("skai_2.json", 'w', encoding='utf-8') as outfile:
         #     print(outfile)
         #     for data in macro_data:
         #         d = json.dumps(data, cls=ExtendedEncoder, indent=4, separators=(',', ': '))

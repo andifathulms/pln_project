@@ -442,7 +442,12 @@
                                 {% else %}
                                 <td class="cell-disabled"> - </td>
                                 {% endif %}
-                                <td></td>
+
+                                {% if d.4 != 0 %}
+                                <td class="currency">{{d.4}}</td>
+                                {% else %}
+                                <td class="cell-disabled"> - </td>
+                                {% endif %}
 
                                 <td></td>
                                 <td></td>
@@ -588,13 +593,15 @@
 
         //find the number of the parent
         let num = $(this).parent().attr("id").slice("id-".length);
-        let elem = $("#id-" + num);
-
+        //let elem = $("#id-" + num);
+        let elem = document.getElementById("id-"+num);
+        
         //copy the text
         let $temp = $("<input>");
         $("body").append($temp);
-        $temp.val(elem.children(":first").text()).select();
+        $temp.val($(elem).children(":first").text()).select();
         document.execCommand("copy");
+        
         $temp.remove();
 
         $(this).children(".tooltip").addClass("appear").delay(1000).queue(function( next ){

@@ -14,13 +14,13 @@ class MonevView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         context = {}
-        skai_1 = DocSKAI.objects.get(pk=8) #DEV
-        #skai_1 = DocSKAI.objects.get(pk=1) #PROD
+        #skai_1 = DocSKAI.objects.get(pk=8) #DEV
+        skai_1 = DocSKAI.objects.get(pk=1) #PROD
         macro_1 = skai_1.macro.macro_file_1
         macro_data_1 = MacroData.objects.filter(macro_file=macro_1).order_by('no_prk')
 
-        skai_2 = DocSKAI.objects.get(pk=19) #DEV
-        #skai_2 = DocSKAI.objects.get(pk=6) #PROD
+        #skai_2 = DocSKAI.objects.get(pk=19) #DEV
+        skai_2 = DocSKAI.objects.get(pk=6) #PROD
         macro_2 = skai_2.macro.macro_file_1
         macro_data_2 = MacroData.objects.filter(macro_file=macro_2)
 
@@ -43,9 +43,13 @@ class MonevView(LoginRequiredMixin, View):
                 
                 #get total realisasi
                 total_realisasi = int(lrpa.jan_realisasi_disburse) + int(lrpa.feb_realisasi_disburse) + int(lrpa.mar_realisasi_disburse) + int(lrpa.apr_realisasi_disburse) + int(lrpa.mei_realisasi_disburse) + int(lrpa.jun_realisasi_disburse) + int(lrpa.jul_realisasi_disburse) + int(lrpa.aug_realisasi_disburse) + int(lrpa.sep_realisasi_disburse) + int(lrpa.okt_realisasi_disburse) + int(lrpa.nov_realisasi_disburse) + int(lrpa.des_realisasi_disburse)
-
+                if temp.real_aki():
+                    sisa_aki = temp.real_aki() - total_realisasi
+                else:
+                    sisa_aki = 0
+                
                 if temp.no_prk != None:
-                    combine_list.append((data,temp,lrpa,total_realisasi))
+                    combine_list.append((data,temp,lrpa,total_realisasi,sisa_aki))
 
                 #print(data.macro_file.pk == temp.macro_file.pk)
             except Exception as e:
@@ -59,8 +63,13 @@ class MonevView(LoginRequiredMixin, View):
                     lrpa = LRPA_Monitoring.objects.get(no_prk=prk, file=last_lrpa)
                     #get total realisasi
                     total_realisasi = int(lrpa.jan_realisasi_disburse) + int(lrpa.feb_realisasi_disburse) + int(lrpa.mar_realisasi_disburse) + int(lrpa.apr_realisasi_disburse) + int(lrpa.mei_realisasi_disburse) + int(lrpa.jun_realisasi_disburse) + int(lrpa.jul_realisasi_disburse) + int(lrpa.aug_realisasi_disburse) + int(lrpa.sep_realisasi_disburse) + int(lrpa.okt_realisasi_disburse) + int(lrpa.nov_realisasi_disburse) + int(lrpa.des_realisasi_disburse)
+                    
+                    if temp.real_aki():
+                        sisa_aki = temp.real_aki() - total_realisasi
+                    else:
+                        sisa_aki = 0
                     if temp.no_prk != None:
-                        combine_list.append((None,temp,lrpa,total_realisasi))
+                        combine_list.append((None,temp,lrpa,total_realisasi,sisa_aki))
                 except Exception as e:
                     print(e)
         
