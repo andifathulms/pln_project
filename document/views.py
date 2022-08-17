@@ -346,8 +346,8 @@ class JSON_Dumps(UserPassesTestMixin, View):
 
         # # TO DUMP JSON #
         doc = DocSKAI.objects.get(pk=1)
-        macro = doc.macro
-        macro_1 = macro.macro_file_1
+        #macro = doc.macro
+        #macro_1 = macro.macro_file_1
 
         #macro_data = MacroData.objects.filter(macro_file=macro_1)
         # print(len(macro_data))
