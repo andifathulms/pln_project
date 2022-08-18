@@ -124,6 +124,12 @@
                         <h6 class="m-0 font-weight-bold" style="color: #fff;">Monev LKAI</h6>
                     </div>
                     <div class="col-4 ">
+                        <button class="btn btn-info btn-icon-split btn-sm float-right" data-toggle="modal" data-target="#dataSource">
+                            <span class="icon text-white-50">
+                                <i class="fa-solid fa-arrow-pointer"></i>
+                            </span>
+                            <span class="text">View Data Source</span>
+                        </button>
                         <a href="{% url 'monev:monev-upload-lrpa' %}" class="btn btn-success btn-icon-split btn-sm float-right mr-1">
                             <span class="icon text-white-50">
                                 <i class="fa-solid fa-file-arrow-up"></i>
@@ -249,9 +255,9 @@
                                 </td>
 
                                 {% if d.0 %}
-                                <td style="min-width: 150px; text-align: justify;">{{d.0.program_utama}}</td>
+                                <td style="min-width: 200px; text-align: justify;">{{d.0.program_utama}}</td>
                                 {% else %}
-                                <td style="min-width: 150px; text-align: justify;">{{d.1.program_utama}}</td>
+                                <td style="min-width: 200px; text-align: justify;">{{d.1.program_utama}}</td>
                                 {% endif %}
 
                                 {% if d.0 %}
@@ -476,6 +482,60 @@
 
     </div>
     
+</div>
+
+<!-- Modal Data Source -->
+<div class="modal fade" id="dataSource" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Data Source</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>File</th>
+                            <th>Name/Keyword</th>
+                            <th>Tanggal Dokumen/File</th>
+                            <th style="background-color: #161616 !important;">Tanggal Upload</th>
+                            <th style="background-color: #161616 !important;">Diupload oleh</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>SKAI</td>
+                            <td>{{document.0.keyword}}</td>
+                            <td>{{document.0.document.published_date}}</td>
+                            <td>{{document.0.document.upload_date}}</td>
+                            <td>{{document.0.document.uploader}}</td>
+                        </tr>
+                        <tr>
+                            <td>SKAI</td>
+                            <td>{{document.1.keyword}}</td>
+                            <td>{{document.1.document.published_date}}</td>
+                            <td>{{document.1.document.upload_date}}</td>
+                            <td>{{document.1.document.uploader}}</td>
+                        </tr>
+                        <tr>
+                            <td>LRPA</td>
+                            <td>LRPA bulan : {{document.2.for_month}}</td>
+                            <td>{{document.2.file_export_date}}</td>
+                            <td>{{document.2.upload_date}}</td>
+                            <td>{{document.2.upload_by}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+        
+      </div>
+    </div>
 </div>
 {% endblock content %}
 

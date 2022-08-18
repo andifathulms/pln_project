@@ -4,7 +4,7 @@ from account.models import Account
 
 class LRPA_File(models.Model):
     lrpa_file               = models.FileField(upload_to='monev/lrpa')
-    upload_date             = models.DateField(auto_now_add=True)
+    upload_date             = models.DateTimeField(auto_now_add=True)
     upload_by               = models.ForeignKey(Account, on_delete=models.CASCADE)
     file_export_date        = models.DateField(default=date.today)
     for_month               = models.IntegerField()

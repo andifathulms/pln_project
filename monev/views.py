@@ -14,13 +14,13 @@ class MonevView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         context = {}
-        #skai_1 = DocSKAI.objects.get(pk=8) #DEV
-        skai_1 = DocSKAI.objects.get(pk=1) #PROD
+        skai_1 = DocSKAI.objects.get(pk=8) #DEV
+        #skai_1 = DocSKAI.objects.get(pk=1) #PROD
         macro_1 = skai_1.macro.macro_file_1
         macro_data_1 = MacroData.objects.filter(macro_file=macro_1).order_by('no_prk')
 
-        #skai_2 = DocSKAI.objects.get(pk=19) #DEV
-        skai_2 = DocSKAI.objects.get(pk=6) #PROD
+        skai_2 = DocSKAI.objects.get(pk=19) #DEV
+        #skai_2 = DocSKAI.objects.get(pk=6) #PROD
         macro_2 = skai_2.macro.macro_file_1
         macro_data_2 = MacroData.objects.filter(macro_file=macro_2)
 
@@ -29,6 +29,10 @@ class MonevView(LoginRequiredMixin, View):
 
         list_1 = list(data.no_prk for data in macro_data_1)
         list_2 = list(data.no_prk for data in macro_data_2)
+
+        #MANUAL!!!
+        document = [skai_1, skai_2, last_lrpa]
+        context["document"] = document
 
         #MANUAL!!!
         residue_1 = list(set(list_1)-set(list_2))
