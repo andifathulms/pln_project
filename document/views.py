@@ -217,6 +217,8 @@ class XLSM_Playground(UserPassesTestMixin, View):
         return self.request.user.is_admin
 
     def get(self, request, *args, **kwargs):
+
+        #MISSING ONE LAST ROW!!!!!!
         context = {}
 
         doc = DocSKAI.objects.get(pk=19)

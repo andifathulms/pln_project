@@ -47,8 +47,8 @@ class MonevView(LoginRequiredMixin, View):
                 
                 #get total realisasi
                 total_realisasi = int(lrpa.jan_realisasi_disburse) + int(lrpa.feb_realisasi_disburse) + int(lrpa.mar_realisasi_disburse) + int(lrpa.apr_realisasi_disburse) + int(lrpa.mei_realisasi_disburse) + int(lrpa.jun_realisasi_disburse) + int(lrpa.jul_realisasi_disburse) + int(lrpa.aug_realisasi_disburse) + int(lrpa.sep_realisasi_disburse) + int(lrpa.okt_realisasi_disburse) + int(lrpa.nov_realisasi_disburse) + int(lrpa.des_realisasi_disburse)
-                if temp.real_aki():
-                    sisa_aki = temp.real_aki() - total_realisasi
+                if lrpa.real_aki():
+                    sisa_aki = lrpa.real_aki() - total_realisasi
                 else:
                     sisa_aki = 0
                 
@@ -68,8 +68,8 @@ class MonevView(LoginRequiredMixin, View):
                     #get total realisasi
                     total_realisasi = int(lrpa.jan_realisasi_disburse) + int(lrpa.feb_realisasi_disburse) + int(lrpa.mar_realisasi_disburse) + int(lrpa.apr_realisasi_disburse) + int(lrpa.mei_realisasi_disburse) + int(lrpa.jun_realisasi_disburse) + int(lrpa.jul_realisasi_disburse) + int(lrpa.aug_realisasi_disburse) + int(lrpa.sep_realisasi_disburse) + int(lrpa.okt_realisasi_disburse) + int(lrpa.nov_realisasi_disburse) + int(lrpa.des_realisasi_disburse)
                     
-                    if temp.real_aki():
-                        sisa_aki = temp.real_aki() - total_realisasi
+                    if lrpa.real_aki():
+                        sisa_aki = lrpa.real_aki() - total_realisasi
                     else:
                         sisa_aki = 0
                     if temp.no_prk != None:
@@ -139,7 +139,9 @@ class UploadLRPA(LoginRequiredMixin, View):
                         nov_realisasi_disburse = row[39],
                         des_rencana_disburse = row[40],
                         des_realisasi_disburse = row[41],
-                        mekanisme_pembayaran = row[14]
+                        mekanisme_pembayaran = row[14],
+                        ai_this_year = row[10],
+                        aki_this_year = row[11]
                     )
 
                     lrpa.save()

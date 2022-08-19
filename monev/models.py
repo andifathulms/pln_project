@@ -39,3 +39,12 @@ class LRPA_Monitoring(models.Model):
     nov_realisasi_disburse  = models.CharField(max_length=100, blank=True, null=True)
     des_rencana_disburse    = models.CharField(max_length=100, blank=True, null=True)
     des_realisasi_disburse  = models.CharField(max_length=100, blank=True, null=True)
+    ai_this_year            = models.FloatField(blank=True, null=True)
+    aki_this_year           = models.FloatField(blank=True, null=True)
+
+    def real_ai(self):
+        return int(self.ai_this_year)
+
+    def real_aki(self):
+        return int(self.aki_this_year)
+

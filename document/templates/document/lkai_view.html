@@ -10,6 +10,17 @@
         color: #161616;
     }
 
+    .currency{
+        text-align: right !important;
+        min-width: 160px;
+    }
+
+    .currency::before{
+        content: "Rp.";
+        float: left;
+        padding-right: 4px;
+    }
+
     .active-td {
         background: #449798 !important;
         opacity: 0.8;
@@ -29,7 +40,7 @@
 
     /* Pagination. */
     .pagination {
-        background: #333;
+        /* background: #333; */
         padding: 1rem;
         margin-bottom: 1rem;
         text-align: center;
@@ -160,7 +171,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTableLKAI" width="100%" cellspacing="0">
+                    <table class="table" id="dataTableLKAI" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th rowspan="3" class="skip-filter">No</th>
@@ -280,7 +291,7 @@
                                 <td style="min-width: 150px;" class="to-hide d-none">{{data.keg_satuan}}</td>
                                 
                                 {% if data.ang_nilai %}
-                                <td style="min-width: 150px;">Rp. {{data.ang_nilai}}</td>
+                                <td class="currency">{{data.real_nilai_ang}}</td>
                                 {% else %}
                                 <td style="min-width: 150px;"> - </td>
                                 {% endif %}
@@ -295,25 +306,25 @@
                                 {% endif %}
                                 
                                 {% if data.realisasi_pembayaran    %}
-                                <td style="min-width: 150px;">Rp. {{data.realisasi_pembayaran}}</td>
+                                <td class="currency">{{data.real_realisasi_pembayaran}}</td>
                                 {% else %}
                                 <td style="min-width: 150px;"> - </td>
                                 {% endif %}
 
                                 {% if data.prediksi_pembayaran    %}
-                                <td style="min-width: 150px;">Rp. {{data.prediksi_pembayaran}}</td>
+                                <td class="currency">{{data.real_prediksi_pembayaran}}</td>
                                 {% else %}
                                 <td style="min-width: 150px;"> - </td>
                                 {% endif %}
 
                                 {% if data.ai_this_year    %}
-                                <td style="min-width: 150px;">Rp. {{data.ai_this_year}}</td>
+                                <td class="currency">{{data.real_ai}}</td>
                                 {% else %}
                                 <td style="min-width: 150px;"> - </td>
                                 {% endif %}
 
                                 {% if data.aki_this_year    %}
-                                <td style="min-width: 150px;">Rp. {{data.aki_this_year}}</td>
+                                <td class="currency">{{data.real_aki}}</td>
                                 {% else %}
                                 <td style="min-width: 150px;"> - </td>
                                 {% endif %}
@@ -344,7 +355,7 @@
                                 {% endif %}
 
                                 {% if data.jan_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">Rp. {{data.jan_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 150px;">{{data.jan_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 150px;"> - </td>
                                 {% endif %}
@@ -356,7 +367,7 @@
                                 {% endif %}
 
                                 {% if data.feb_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">Rp. {{data.feb_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 150px;">{{data.feb_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 150px;"> - </td>
                                 {% endif %}
@@ -368,7 +379,7 @@
                                 {% endif %}
 
                                 {% if data.mar_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">Rp. {{data.mar_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 150px;">{{data.mar_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 150px;"> - </td>
                                 {% endif %}
@@ -380,7 +391,7 @@
                                 {% endif %}
 
                                 {% if data.apr_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">Rp. {{data.apr_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 150px;">{{data.apr_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 150px;"> - </td>
                                 {% endif %}
@@ -392,7 +403,7 @@
                                 {% endif %}
 
                                 {% if data.mei_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">Rp. {{data.mei_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 150px;">{{data.mei_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 150px;"> - </td>
                                 {% endif %}
@@ -404,7 +415,7 @@
                                 {% endif %}
 
                                 {% if data.jun_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">Rp. {{data.jun_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 150px;">{{data.jun_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 150px;"> - </td>
                                 {% endif %}
@@ -416,7 +427,7 @@
                                 {% endif %}
 
                                 {% if data.jul_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">Rp. {{data.jul_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 150px;">{{data.jul_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 150px;"> - </td>
                                 {% endif %}
@@ -428,7 +439,7 @@
                                 {% endif %}
 
                                 {% if data.aug_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">Rp. {{data.aug_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 150px;">{{data.aug_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 150px;"> - </td>
                                 {% endif %}
@@ -440,7 +451,7 @@
                                 {% endif %}
 
                                 {% if data.sep_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">Rp. {{data.sep_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 150px;">{{data.sep_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 150px;"> - </td>
                                 {% endif %}
@@ -452,7 +463,7 @@
                                 {% endif %}
 
                                 {% if data.okt_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">Rp. {{data.okt_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 150px;">{{data.okt_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 150px;"> - </td>
                                 {% endif %}
@@ -464,7 +475,7 @@
                                 {% endif %}
 
                                 {% if data.nov_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">Rp. {{data.nov_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 150px;">{{data.nov_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 150px;"> - </td>
                                 {% endif %}
@@ -476,7 +487,7 @@
                                 {% endif %}
 
                                 {% if data.des_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">Rp. {{data.des_rencana_disburse|floatformat}}</td>
+                                <td style="min-width: 150px;">{{data.des_rencana_disburse|floatformat}}</td>
                                 {% else %}
                                 <td style="min-width: 150px;"> - </td>
                                 {% endif %}
@@ -516,25 +527,26 @@
 <script>
     $(document).ready(function () {
         var table = $('#dataTableLKAI').DataTable({
+            scrollY: 600,
+            scrollX: "100%",
+            paging: true,
+            keys: true,
             "paging": true,
             dom: 'Qlfrtip'
         });
+
+        $.fn.dataTable.tables( { visible: true, api: true } ).scroller.measure();
  
-        
-        //$('#dataTableLKAI').ddTableFilter();
-        // $('#dataTableLKAI').DataTable({
-        //     "paging": true
-        // });
     });
 
     //on clicking the row
-    $("tbody tr").on("click", function() {
-        //loop through all td elements in the row
-        $(this).find("td").each(function(i) {
-            //toggle between adding/removing the 'active' class
-            $(this).toggleClass('active-td');
-        });
-    });
+    // $("tbody tr").on("click", function() {
+    //     //loop through all td elements in the row
+    //     $(this).find("td").each(function(i) {
+    //         //toggle between adding/removing the 'active' class
+    //         $(this).toggleClass('active-td');
+    //     });
+    // });
 
     $('#to-expand').click(function() {
         elements = document.getElementsByClassName("to-hide");

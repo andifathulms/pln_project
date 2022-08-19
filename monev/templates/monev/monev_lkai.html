@@ -130,12 +130,12 @@
                             </span>
                             <span class="text">View Data Source</span>
                         </button>
-                        <a href="{% url 'monev:monev-upload-lrpa' %}" class="btn btn-success btn-icon-split btn-sm float-right mr-1">
+                        <!-- <a href="{% url 'monev:monev-upload-lrpa' %}" class="btn btn-success btn-icon-split btn-sm float-right mr-1">
                             <span class="icon text-white-50">
                                 <i class="fa-solid fa-file-arrow-up"></i>
                             </span>
                             <span class="text">Upload LRPA</span>
-                        </a>
+                        </a> -->
                     </div>
                 </div>
             </div>
@@ -144,7 +144,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTableMonev" width="100%" cellspacing="0">
+                    <table class="table" id="dataTableMonev" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <td style="visibility: hidden;"></td>
@@ -158,6 +158,8 @@
                                 <td></td>
                                 <td class="sum-cell" id="total_ai_3"></td>
                                 <td class="sum-cell" id="total_aki_3"></td>
+                                <td class="sum-cell" id="total_ai_lrpa"></td>
+                                <td class="sum-cell" id="total_aki_lrpa"></td>
                                 <td class="sum-cell" id="jan_akb"></td>
                                 <td class="sum-cell" id="jan_real"></td>
                                 <td class="sum-cell" id="feb_akb"></td>
@@ -182,6 +184,8 @@
                                 <td class="sum-cell" id="nov_real"></td>
                                 <td class="sum-cell" id="des_akb"></td>
                                 <td class="sum-cell" id="des_real"></td>
+                                <td class="sum-cell" id="total_realisasi"></td>
+                                <td class="sum-cell" id="sisa_aki"></td>
                             </tr>
                             <tr>
                                 <th rowspan="2">No</th>
@@ -192,6 +196,7 @@
                                 <th colspan="2">SKAI Tahun 2022</th>
                                 <th colspan="2">SKAI Revisi 1 Tahun 2022</th>
                                 <th colspan="2">SKAI Revisi 2 Tahun 2022</th>
+                                <th colspan="2">LRPA {{document.2.file_export_date}}</th>
                                 <th colspan="25">Rencana/Realisasi 2022</th>
                                 <th rowspan="2">Sisa AKI</th>
                                 <th rowspan="2">Kode PRK</th>
@@ -201,6 +206,8 @@
                                 <th rowspan="2">Mekanisme Pembayaran</th>
                             </tr>
                             <tr>
+                                <th>AI</th>
+                                <th>AKI</th>
                                 <th>AI</th>
                                 <th>AKI</th>
                                 <th>AI</th>
@@ -236,11 +243,11 @@
                             </tr>
                             
                         </thead>
-                        <tbody id="macro-table">
+                        <tbody id="macro-table" class="table-group-divider">
                             {% for d in data %}
                             <tr>
                                 <td>{{forloop.counter}}</td>
-                                <td style="position:relative; grid-row: 3 / 4; grid-column: 2 / 3;">
+                                <td style="position:relative;">
                                     <div id="id-{{d.0.pk}}" class="copy_container">
                                         {% if d.0 %}
                                         <p style="margin: auto;">{{d.0.no_prk}}</p>
@@ -297,6 +304,18 @@
                                 <td class="currency" >{{d.1.real_aki}}</td>
                                 {% else %}
                                 <td class="cell-disabled" > - </td>
+                                {% endif %}
+
+                                {% if d.2.ai_this_year != 0 %}
+                                <td class="currency">{{d.2.real_ai}}</td>
+                                {% else %}
+                                <td class="cell-disabled"> - </td>
+                                {% endif %}
+
+                                {% if d.2.aki_this_year != 0 %}
+                                <td class="currency">{{d.2.real_aki}}</td>
+                                {% else %}
+                                <td class="cell-disabled"> - </td>
                                 {% endif %}
 
                                 {% if d.2.jan_rencana_disburse != "0" %}
@@ -509,14 +528,14 @@
                     <tbody>
                         <tr>
                             <td>SKAI</td>
-                            <td>{{document.0.keyword}}</td>
+                            <td><a href="{% url 'document:doc-view-lkai' document.0.pk %}">{{document.0.keyword}}</a></td>
                             <td>{{document.0.document.published_date}}</td>
                             <td>{{document.0.document.upload_date}}</td>
                             <td>{{document.0.document.uploader}}</td>
                         </tr>
                         <tr>
                             <td>SKAI</td>
-                            <td>{{document.1.keyword}}</td>
+                            <td><a href="{% url 'document:doc-view-lkai' document.1.pk %}">{{document.1.keyword}}</a></td>
                             <td>{{document.1.document.published_date}}</td>
                             <td>{{document.1.document.upload_date}}</td>
                             <td>{{document.1.document.uploader}}</td>
@@ -543,6 +562,10 @@
 <script>
     $(document).ready(function () {
         var table = $('#dataTableMonev').DataTable({
+            scrollY: 600,
+            scrollX: "100%",
+            paging: true,
+            keys: true,
             "paging": true,
             dom: 'Qlfrtip',
             drawCallback: function(){
@@ -558,38 +581,43 @@
                 var data_aki_1 = api.column(6, {search: 'applied'}).data();
 
                 var data_ai_3 = api.column(9, {search: 'applied'}).data();
-                var data_aki_3 = api.column(10).data();
+                var data_aki_3 = api.column(10, {search: 'applied'}).data();
+                var ai_lrpa = api.column(11, {search: 'applied'}).data();
+                var aki_lrpa = api.column(12, {search: 'applied'}).data();
 
-                var jan_akb = api.column(11, {search: 'applied'}).data();
-                var jan_real = api.column(12, {search: 'applied'}).data();
-                var feb_akb = api.column(13, {search: 'applied'}).data();
-                var feb_real = api.column(14, {search: 'applied'}).data();
-                var mar_akb = api.column(15, {search: 'applied'}).data();
-                var mar_real = api.column(16, {search: 'applied'}).data();
-                var apr_akb = api.column(17, {search: 'applied'}).data();
-                var apr_real = api.column(18, {search: 'applied'}).data();
-                var mei_akb = api.column(19, {search: 'applied'}).data();
-                var mei_real = api.column(20, {search: 'applied'}).data();
-                var jun_akb = api.column(21, {search: 'applied'}).data();
-                var jun_real = api.column(22, {search: 'applied'}).data();
-                var jul_akb = api.column(23, {search: 'applied'}).data();
-                var jul_real = api.column(24, {search: 'applied'}).data();
-                var aug_akb = api.column(25, {search: 'applied'}).data();
-                var aug_real = api.column(26, {search: 'applied'}).data();
-                var sep_akb = api.column(27, {search: 'applied'}).data();
-                var sep_real = api.column(28, {search: 'applied'}).data();
-                var okt_akb = api.column(29, {search: 'applied'}).data();
-                var okt_real = api.column(30, {search: 'applied'}).data();
-                var nov_akb = api.column(31, {search: 'applied'}).data();
-                var nov_real = api.column(32, {search: 'applied'}).data();
-                var des_akb = api.column(33, {search: 'applied'}).data();
-                var des_real = api.column(34, {search: 'applied'}).data();
+                var jan_akb = api.column(13, {search: 'applied'}).data();
+                var jan_real = api.column(14, {search: 'applied'}).data();
+                var feb_akb = api.column(15, {search: 'applied'}).data();
+                var feb_real = api.column(16, {search: 'applied'}).data();
+                var mar_akb = api.column(17, {search: 'applied'}).data();
+                var mar_real = api.column(18, {search: 'applied'}).data();
+                var apr_akb = api.column(19, {search: 'applied'}).data();
+                var apr_real = api.column(20, {search: 'applied'}).data();
+                var mei_akb = api.column(21, {search: 'applied'}).data();
+                var mei_real = api.column(22, {search: 'applied'}).data();
+                var jun_akb = api.column(23, {search: 'applied'}).data();
+                var jun_real = api.column(24, {search: 'applied'}).data();
+                var jul_akb = api.column(25, {search: 'applied'}).data();
+                var jul_real = api.column(26, {search: 'applied'}).data();
+                var aug_akb = api.column(27, {search: 'applied'}).data();
+                var aug_real = api.column(28, {search: 'applied'}).data();
+                var sep_akb = api.column(29, {search: 'applied'}).data();
+                var sep_real = api.column(30, {search: 'applied'}).data();
+                var okt_akb = api.column(31, {search: 'applied'}).data();
+                var okt_real = api.column(32, {search: 'applied'}).data();
+                var nov_akb = api.column(33, {search: 'applied'}).data();
+                var nov_real = api.column(34, {search: 'applied'}).data();
+                var des_akb = api.column(35, {search: 'applied'}).data();
+                var des_real = api.column(36, {search: 'applied'}).data();
+
+                var total_realisasi = api.column(37, {search: 'applied'}).data();
+                var sisa_aki = api.column(38, {search: 'applied'}).data();
 
                 //alert( Object.keys(data_ai_1).length );
 
-                var listColumn = [data_ai_1, data_aki_1, data_ai_3, data_aki_3, jan_akb, jan_real, 
+                var listColumn = [data_ai_1, data_aki_1, data_ai_3, data_aki_3, ai_lrpa, aki_lrpa, jan_akb, jan_real, 
                 feb_akb, feb_real, mar_akb, mar_real, apr_akb, apr_real, mei_akb, mei_real, jun_akb, jun_real, jul_akb, jul_real,
-                aug_akb, aug_real, sep_akb, sep_real, okt_akb, okt_real, nov_akb, nov_real, des_akb, des_real]
+                aug_akb, aug_real, sep_akb, sep_real, okt_akb, okt_real, nov_akb, nov_real, des_akb, des_real, total_realisasi, sisa_aki]
 
                 var reduceColumn = []
                 for (var obj in listColumn){
@@ -605,44 +633,44 @@
 
                 console.log(reduceColumn);
 
-                //USE REPETITION LATER
-                var sum_ai_1 = data_ai_1.reduce(myFunc);
-                var sum_aki_1 = data_aki_1.reduce(myFunc);
-                var sum_ai_3 = data_ai_3.reduce(myFunc);
-                var sum_aki_3 = data_aki_3.reduce(myFunc);
-
                 $('#total_ai_1').html(Number(reduceColumn[0]).toLocaleString('id'));
                 $('#total_aki_1').html(Number(reduceColumn[1]).toLocaleString('id'));
                 $('#total_ai_3').html(Number(reduceColumn[2]).toLocaleString('id'));
                 $('#total_aki_3').html(Number(reduceColumn[3]).toLocaleString('id'));
-                $('#jan_akb').html(Number(reduceColumn[4]).toLocaleString('id'));
-                $('#jan_real').html(Number(reduceColumn[5]).toLocaleString('id'));
-                $('#feb_akb').html(Number(reduceColumn[6]).toLocaleString('id'));
-                $('#feb_real').html(Number(reduceColumn[7]).toLocaleString('id'));
-                $('#mar_akb').html(Number(reduceColumn[8]).toLocaleString('id'));
-                $('#mar_real').html(Number(reduceColumn[9]).toLocaleString('id'));
-                $('#apr_akb').html(Number(reduceColumn[10]).toLocaleString('id'));
-                $('#apr_real').html(Number(reduceColumn[11]).toLocaleString('id'));
-                $('#mei_akb').html(Number(reduceColumn[12]).toLocaleString('id'));
-                $('#mei_real').html(Number(reduceColumn[13]).toLocaleString('id'));
-                $('#jun_akb').html(Number(reduceColumn[14]).toLocaleString('id'));
-                $('#jun_real').html(Number(reduceColumn[15]).toLocaleString('id'));
-                $('#jul_akb').html(Number(reduceColumn[16]).toLocaleString('id'));
-                $('#jul_real').html(Number(reduceColumn[17]).toLocaleString('id'));
-                $('#aug_akb').html(Number(reduceColumn[18]).toLocaleString('id'));
-                $('#aug_real').html(Number(reduceColumn[19]).toLocaleString('id'));
-                $('#sep_akb').html(Number(reduceColumn[20]).toLocaleString('id'));
-                $('#sep_real').html(Number(reduceColumn[21]).toLocaleString('id'));
-                $('#okt_akb').html(Number(reduceColumn[22]).toLocaleString('id'));
-                $('#okt_real').html(Number(reduceColumn[23]).toLocaleString('id'));
-                $('#nov_akb').html(Number(reduceColumn[24]).toLocaleString('id'));
-                $('#nov_real').html(Number(reduceColumn[25]).toLocaleString('id'));
-                $('#des_akb').html(Number(reduceColumn[26]).toLocaleString('id'));
-                $('#des_real').html(Number(reduceColumn[27]).toLocaleString('id'));
+                $('#total_ai_lrpa').html(Number(reduceColumn[4]).toLocaleString('id'));
+                $('#total_aki_lrpa').html(Number(reduceColumn[5]).toLocaleString('id'));
+                $('#jan_akb').html(Number(reduceColumn[6]).toLocaleString('id'));
+                $('#jan_real').html(Number(reduceColumn[7]).toLocaleString('id'));
+                $('#feb_akb').html(Number(reduceColumn[8]).toLocaleString('id'));
+                $('#feb_real').html(Number(reduceColumn[9]).toLocaleString('id'));
+                $('#mar_akb').html(Number(reduceColumn[10]).toLocaleString('id'));
+                $('#mar_real').html(Number(reduceColumn[11]).toLocaleString('id'));
+                $('#apr_akb').html(Number(reduceColumn[12]).toLocaleString('id'));
+                $('#apr_real').html(Number(reduceColumn[13]).toLocaleString('id'));
+                $('#mei_akb').html(Number(reduceColumn[14]).toLocaleString('id'));
+                $('#mei_real').html(Number(reduceColumn[15]).toLocaleString('id'));
+                $('#jun_akb').html(Number(reduceColumn[16]).toLocaleString('id'));
+                $('#jun_real').html(Number(reduceColumn[17]).toLocaleString('id'));
+                $('#jul_akb').html(Number(reduceColumn[18]).toLocaleString('id'));
+                $('#jul_real').html(Number(reduceColumn[19]).toLocaleString('id'));
+                $('#aug_akb').html(Number(reduceColumn[20]).toLocaleString('id'));
+                $('#aug_real').html(Number(reduceColumn[21]).toLocaleString('id'));
+                $('#sep_akb').html(Number(reduceColumn[22]).toLocaleString('id'));
+                $('#sep_real').html(Number(reduceColumn[23]).toLocaleString('id'));
+                $('#okt_akb').html(Number(reduceColumn[24]).toLocaleString('id'));
+                $('#okt_real').html(Number(reduceColumn[25]).toLocaleString('id'));
+                $('#nov_akb').html(Number(reduceColumn[26]).toLocaleString('id'));
+                $('#nov_real').html(Number(reduceColumn[27]).toLocaleString('id'));
+                $('#des_akb').html(Number(reduceColumn[28]).toLocaleString('id'));
+                $('#des_real').html(Number(reduceColumn[29]).toLocaleString('id'));
+                $('#total_realisasi').html(Number(reduceColumn[30]).toLocaleString('id'));
+                $('#sisa_aki').html(Number(reduceColumn[31]).toLocaleString('id'));
 
                 
             }
         });
+
+        $.fn.dataTable.tables( { visible: true, api: true } ).scroller.measure();
  
     });
 </script>
