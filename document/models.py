@@ -24,6 +24,7 @@ class DocSKAI(models.Model):
     year            = models.IntegerField()
     type            = models.CharField(max_length=50, default="Penetapan")
     keyword         = models.CharField(max_length=100, default="SKAI")
+    lrpa_include    = models.BooleanField(default=False)
     
     #Macro
     macro           = models.ForeignKey('Macro', on_delete=models.CASCADE, blank=True, null=True)

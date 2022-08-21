@@ -21,7 +21,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from account.views import login_view, DashboardView, logout_view
-from document.views import XLSM_Playground, JSON_Dumps
+from document.views import XLSM_Playground, JSON_Dumps, Assign_PRK
 from notification.views import not_found_404
 
 urlpatterns = [
@@ -37,6 +37,7 @@ urlpatterns = [
     #for dev only
     path('playground/', XLSM_Playground.as_view(), name="playground"),
     path('json-dumps/', JSON_Dumps.as_view(), name="json-dumps"),
+    path('assign-prk/', Assign_PRK.as_view(), name="assign-prk"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

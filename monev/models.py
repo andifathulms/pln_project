@@ -48,3 +48,12 @@ class LRPA_Monitoring(models.Model):
     def real_aki(self):
         return int(self.aki_this_year)
 
+class Assigned_PRK(models.Model):
+    file               = models.FileField(upload_to='monev/prk_code')
+
+class PRK_Lookup(models.Model):
+    file                    = models.ForeignKey('Assigned_PRK', on_delete=models.CASCADE, blank=True, null=True)
+    no_prk                  = models.CharField(max_length=100, blank=True, null=True)
+    kode_prk                = models.CharField(max_length=100, blank=True, null=True)
+    kode_bpo                = models.CharField(max_length=100, blank=True, null=True)
+    rekap_user_induk        = models.CharField(max_length=100, blank=True, null=True)

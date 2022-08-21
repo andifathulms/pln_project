@@ -154,8 +154,8 @@
                                 <td style="visibility: hidden;"></td>
                                 <td class="sum-cell" id="total_ai_1"></td>
                                 <td class="sum-cell" id="total_aki_1"></td>
-                                <td></td>
-                                <td></td>
+                                <td class="sum-cell" id="total_ai_2"></td>
+                                <td class="sum-cell" id="total_aki_2"></td>
                                 <td class="sum-cell" id="total_ai_3"></td>
                                 <td class="sum-cell" id="total_aki_3"></td>
                                 <td class="sum-cell" id="total_ai_lrpa"></td>
@@ -291,8 +291,17 @@
                                 <td class="cell-disabled" > - </td>
                                 {% endif %}
 
-                                <td style="min-width: 140px;" ></td>
-                                <td style="min-width: 140px;" ></td>
+                                {% if d.5.ai_this_year %}
+                                <td class="currency" >{{d.5.real_ai}}</td>
+                                {% else %}
+                                <td class="cell-disabled" > - </td>
+                                {% endif %}
+
+                                {% if d.5.aki_this_year %}
+                                <td class="currency" >{{d.5.real_aki}}</td>
+                                {% else %}
+                                <td class="cell-disabled" > - </td>
+                                {% endif %}
 
                                 {% if d.1.ai_this_year %}
                                 <td class="currency" >{{d.1.real_ai}}</td>
@@ -474,9 +483,15 @@
                                 <td class="cell-disabled"> - </td>
                                 {% endif %}
 
+                                {% if d.6 %}
+                                <td>{{d.6.kode_prk}}</td>
+                                <td>{{d.6.kode_bpo}}</td>
+                                <td>{{d.6.rekap_user_induk}}</td>
+                                {% else %}
                                 <td></td>
                                 <td></td>
                                 <td></td>
+                                {% endif %}
 
                                 {% if d.0 %}
                                 <td>{{d.0.sumber_dana}}</td>
@@ -579,7 +594,8 @@
                 }
                 var data_ai_1 = api.column(5, {search: 'applied'}).data();
                 var data_aki_1 = api.column(6, {search: 'applied'}).data();
-
+                var data_ai_2 = api.column(7, {search: 'applied'}).data();
+                var data_aki_2 = api.column(8, {search: 'applied'}).data();
                 var data_ai_3 = api.column(9, {search: 'applied'}).data();
                 var data_aki_3 = api.column(10, {search: 'applied'}).data();
                 var ai_lrpa = api.column(11, {search: 'applied'}).data();
@@ -615,7 +631,7 @@
 
                 //alert( Object.keys(data_ai_1).length );
 
-                var listColumn = [data_ai_1, data_aki_1, data_ai_3, data_aki_3, ai_lrpa, aki_lrpa, jan_akb, jan_real, 
+                var listColumn = [data_ai_1, data_aki_1, data_ai_2, data_aki_2, data_ai_3, data_aki_3, ai_lrpa, aki_lrpa, jan_akb, jan_real, 
                 feb_akb, feb_real, mar_akb, mar_real, apr_akb, apr_real, mei_akb, mei_real, jun_akb, jun_real, jul_akb, jul_real,
                 aug_akb, aug_real, sep_akb, sep_real, okt_akb, okt_real, nov_akb, nov_real, des_akb, des_real, total_realisasi, sisa_aki]
 
@@ -635,36 +651,38 @@
 
                 $('#total_ai_1').html(Number(reduceColumn[0]).toLocaleString('id'));
                 $('#total_aki_1').html(Number(reduceColumn[1]).toLocaleString('id'));
-                $('#total_ai_3').html(Number(reduceColumn[2]).toLocaleString('id'));
-                $('#total_aki_3').html(Number(reduceColumn[3]).toLocaleString('id'));
-                $('#total_ai_lrpa').html(Number(reduceColumn[4]).toLocaleString('id'));
-                $('#total_aki_lrpa').html(Number(reduceColumn[5]).toLocaleString('id'));
-                $('#jan_akb').html(Number(reduceColumn[6]).toLocaleString('id'));
-                $('#jan_real').html(Number(reduceColumn[7]).toLocaleString('id'));
-                $('#feb_akb').html(Number(reduceColumn[8]).toLocaleString('id'));
-                $('#feb_real').html(Number(reduceColumn[9]).toLocaleString('id'));
-                $('#mar_akb').html(Number(reduceColumn[10]).toLocaleString('id'));
-                $('#mar_real').html(Number(reduceColumn[11]).toLocaleString('id'));
-                $('#apr_akb').html(Number(reduceColumn[12]).toLocaleString('id'));
-                $('#apr_real').html(Number(reduceColumn[13]).toLocaleString('id'));
-                $('#mei_akb').html(Number(reduceColumn[14]).toLocaleString('id'));
-                $('#mei_real').html(Number(reduceColumn[15]).toLocaleString('id'));
-                $('#jun_akb').html(Number(reduceColumn[16]).toLocaleString('id'));
-                $('#jun_real').html(Number(reduceColumn[17]).toLocaleString('id'));
-                $('#jul_akb').html(Number(reduceColumn[18]).toLocaleString('id'));
-                $('#jul_real').html(Number(reduceColumn[19]).toLocaleString('id'));
-                $('#aug_akb').html(Number(reduceColumn[20]).toLocaleString('id'));
-                $('#aug_real').html(Number(reduceColumn[21]).toLocaleString('id'));
-                $('#sep_akb').html(Number(reduceColumn[22]).toLocaleString('id'));
-                $('#sep_real').html(Number(reduceColumn[23]).toLocaleString('id'));
-                $('#okt_akb').html(Number(reduceColumn[24]).toLocaleString('id'));
-                $('#okt_real').html(Number(reduceColumn[25]).toLocaleString('id'));
-                $('#nov_akb').html(Number(reduceColumn[26]).toLocaleString('id'));
-                $('#nov_real').html(Number(reduceColumn[27]).toLocaleString('id'));
-                $('#des_akb').html(Number(reduceColumn[28]).toLocaleString('id'));
-                $('#des_real').html(Number(reduceColumn[29]).toLocaleString('id'));
-                $('#total_realisasi').html(Number(reduceColumn[30]).toLocaleString('id'));
-                $('#sisa_aki').html(Number(reduceColumn[31]).toLocaleString('id'));
+                $('#total_ai_2').html(Number(reduceColumn[2]).toLocaleString('id'));
+                $('#total_aki_2').html(Number(reduceColumn[3]).toLocaleString('id'));
+                $('#total_ai_3').html(Number(reduceColumn[4]).toLocaleString('id'));
+                $('#total_aki_3').html(Number(reduceColumn[5]).toLocaleString('id'));
+                $('#total_ai_lrpa').html(Number(reduceColumn[6]).toLocaleString('id'));
+                $('#total_aki_lrpa').html(Number(reduceColumn[7]).toLocaleString('id'));
+                $('#jan_akb').html(Number(reduceColumn[8]).toLocaleString('id'));
+                $('#jan_real').html(Number(reduceColumn[9]).toLocaleString('id'));
+                $('#feb_akb').html(Number(reduceColumn[10]).toLocaleString('id'));
+                $('#feb_real').html(Number(reduceColumn[11]).toLocaleString('id'));
+                $('#mar_akb').html(Number(reduceColumn[12]).toLocaleString('id'));
+                $('#mar_real').html(Number(reduceColumn[13]).toLocaleString('id'));
+                $('#apr_akb').html(Number(reduceColumn[14]).toLocaleString('id'));
+                $('#apr_real').html(Number(reduceColumn[15]).toLocaleString('id'));
+                $('#mei_akb').html(Number(reduceColumn[16]).toLocaleString('id'));
+                $('#mei_real').html(Number(reduceColumn[17]).toLocaleString('id'));
+                $('#jun_akb').html(Number(reduceColumn[18]).toLocaleString('id'));
+                $('#jun_real').html(Number(reduceColumn[19]).toLocaleString('id'));
+                $('#jul_akb').html(Number(reduceColumn[20]).toLocaleString('id'));
+                $('#jul_real').html(Number(reduceColumn[21]).toLocaleString('id'));
+                $('#aug_akb').html(Number(reduceColumn[22]).toLocaleString('id'));
+                $('#aug_real').html(Number(reduceColumn[23]).toLocaleString('id'));
+                $('#sep_akb').html(Number(reduceColumn[24]).toLocaleString('id'));
+                $('#sep_real').html(Number(reduceColumn[25]).toLocaleString('id'));
+                $('#okt_akb').html(Number(reduceColumn[26]).toLocaleString('id'));
+                $('#okt_real').html(Number(reduceColumn[27]).toLocaleString('id'));
+                $('#nov_akb').html(Number(reduceColumn[28]).toLocaleString('id'));
+                $('#nov_real').html(Number(reduceColumn[29]).toLocaleString('id'));
+                $('#des_akb').html(Number(reduceColumn[30]).toLocaleString('id'));
+                $('#des_real').html(Number(reduceColumn[31]).toLocaleString('id'));
+                $('#total_realisasi').html(Number(reduceColumn[32]).toLocaleString('id'));
+                $('#sisa_aki').html(Number(reduceColumn[33]).toLocaleString('id'));
 
                 
             }

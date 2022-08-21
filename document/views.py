@@ -9,6 +9,7 @@ from django.views.generic.edit import DeleteView
 from django.http import HttpResponseRedirect
 
 from .models import Document, DocSKAI, MacroFile, Macro, MacroData
+from monev.models import Assigned_PRK, PRK_Lookup
 from .forms import DocumentForm
 
 from itertools import chain
@@ -218,10 +219,10 @@ class XLSM_Playground(UserPassesTestMixin, View):
 
     def get(self, request, *args, **kwargs):
 
-        #MISSING ONE LAST ROW!!!!!!
+        #MISSING ONE LAST ROW!!!!!! ??
         context = {}
 
-        doc = DocSKAI.objects.get(pk=19)
+        doc = DocSKAI.objects.get(pk=10)
         context["macros"] = doc.macro_doc
         print(doc.macro_doc)
         print("Load Workbook")
@@ -238,6 +239,12 @@ class XLSM_Playground(UserPassesTestMixin, View):
         end_col_2 = 40
 
         list_rows = [idx for idx,cell in enumerate(ws["AF"]) if cell.value and idx >= 9]
+
+        #TRY ADD ONE LAST ROW
+        last_idx = list_rows[-1]
+        last_idx = last_idx + 1
+        list_rows.append(last_idx)
+
         print(list_rows)
         print(ws['C'][9].value)
         macro_file = MacroFile()
@@ -347,7 +354,7 @@ class JSON_Dumps(UserPassesTestMixin, View):
         context = {}
 
         # # TO DUMP JSON #
-        doc = DocSKAI.objects.get(pk=6)
+        doc = DocSKAI.objects.get(pk=3)
         #macro = doc.macro
         #macro_1 = macro.macro_file_1
 
@@ -452,3 +459,47 @@ class JSON_Dumps(UserPassesTestMixin, View):
         # # TO DUMP JSON #
 
         return render(request, 'document/json_dumps.html', context)
+
+class Assign_PRK(UserPassesTestMixin, View):
+
+    def test_func(self):
+        return self.request.user.is_admin
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        file = Assigned_PRK.objects.get(pk=1)
+        wb = load_workbook(file.file)
+        ws = wb['Sheet1']
+        start_col = 0
+        end_col = 4
+        list_rows = [idx for idx,cell in enumerate(ws["A"]) if cell.value and idx >= 1]
+        print(list_rows)
+        exc = []
+        for rows in list_rows:
+            if ws["A"][rows].value != None:
+                
+                print("Row = " + str(rows))
+                row = [cell.value for cell in ws[rows][start_col:end_col+1]]
+                print(row)
+
+                try:
+                    lookup = PRK_Lookup(file = file,
+                        no_prk = row[0],
+                        kode_prk = row[1],
+                        kode_bpo = row[2],
+                        rekap_user_induk = row[3]
+                    )
+                    lookup.save()
+
+                except Exception as e:
+                    exc.append(e)
+                    print(e)                
+            
+            else:
+                print("continue : " + str(rows))
+                continue
+
+        return render(request, 'document/json_dumps.html', context)
+
+    def post(self, request, *args, **kwargs):
+        pass
