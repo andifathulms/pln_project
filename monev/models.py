@@ -43,10 +43,10 @@ class LRPA_Monitoring(models.Model):
     aki_this_year           = models.FloatField(blank=True, null=True)
 
     def real_ai(self):
-        return int(self.ai_this_year)
+        return int(self.ai_this_year or 0)
 
     def real_aki(self):
-        return int(self.aki_this_year)
+        return int(self.aki_this_year or 0)
 
 class Assigned_PRK(models.Model):
     file               = models.FileField(upload_to='monev/prk_code')
