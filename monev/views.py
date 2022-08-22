@@ -22,18 +22,18 @@ class MonevView(LoginRequiredMixin, View):
         ### TRY TO AUTOMATE LATER ###
         
 
-        skai_1 = DocSKAI.objects.get(pk=8) #DEV
-        #skai_1 = DocSKAI.objects.get(pk=1) #PROD
+        #skai_1 = DocSKAI.objects.get(pk=8) #DEV
+        skai_1 = DocSKAI.objects.get(pk=1) #PROD
         macro_1 = skai_1.macro.macro_file_1
         macro_data_1 = MacroData.objects.filter(macro_file=macro_1).order_by('no_prk')
 
-        skai_3 = DocSKAI.objects.get(pk=10) #DEV
-        #skai_3 = DocSKAI.objects.get(pk=3) #PROD
+        #skai_3 = DocSKAI.objects.get(pk=10) #DEV
+        skai_3 = DocSKAI.objects.get(pk=3) #PROD
         macro_3 = skai_3.macro.macro_file_1
         #macro_data_3 = MacroData.objects.filter(macro_file=macro_3)
 
-        skai_2 = DocSKAI.objects.get(pk=19) #DEV
-        #skai_2 = DocSKAI.objects.get(pk=6) #PROD
+        #skai_2 = DocSKAI.objects.get(pk=19) #DEV
+        skai_2 = DocSKAI.objects.get(pk=6) #PROD
 
         file_lookup = Assigned_PRK.objects.get(pk=1)
         #lookup = PRK_Lookup.objects.get(file=file_lookup)
