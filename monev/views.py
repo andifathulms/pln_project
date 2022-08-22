@@ -22,18 +22,18 @@ class MonevView(LoginRequiredMixin, View):
         ### TRY TO AUTOMATE LATER ###
         
 
-        #skai_1 = DocSKAI.objects.get(pk=8) #DEV
-        skai_1 = DocSKAI.objects.get(pk=1) #PROD
+        skai_1 = DocSKAI.objects.get(pk=8) #DEV
+        #skai_1 = DocSKAI.objects.get(pk=1) #PROD
         macro_1 = skai_1.macro.macro_file_1
         macro_data_1 = MacroData.objects.filter(macro_file=macro_1).order_by('no_prk')
 
-        #skai_3 = DocSKAI.objects.get(pk=10) #DEV
-        skai_3 = DocSKAI.objects.get(pk=3) #PROD
+        skai_3 = DocSKAI.objects.get(pk=10) #DEV
+        #skai_3 = DocSKAI.objects.get(pk=3) #PROD
         macro_3 = skai_3.macro.macro_file_1
         #macro_data_3 = MacroData.objects.filter(macro_file=macro_3)
 
-        #skai_2 = DocSKAI.objects.get(pk=19) #DEV
-        skai_2 = DocSKAI.objects.get(pk=6) #PROD
+        skai_2 = DocSKAI.objects.get(pk=19) #DEV
+        #skai_2 = DocSKAI.objects.get(pk=6) #PROD
 
         file_lookup = Assigned_PRK.objects.get(pk=1)
         #lookup = PRK_Lookup.objects.get(file=file_lookup)
@@ -67,7 +67,8 @@ class MonevView(LoginRequiredMixin, View):
                 lookup_prk = PRK_Lookup.objects.filter(file=file_lookup, no_prk=data.no_prk).first() #return None if there isnt any
                 
                 #get total realisasi
-                total_realisasi = int(lrpa.jan_realisasi_disburse) + int(lrpa.feb_realisasi_disburse) + int(lrpa.mar_realisasi_disburse) + int(lrpa.apr_realisasi_disburse) + int(lrpa.mei_realisasi_disburse) + int(lrpa.jun_realisasi_disburse) + int(lrpa.jul_realisasi_disburse) + int(lrpa.aug_realisasi_disburse) + int(lrpa.sep_realisasi_disburse) + int(lrpa.okt_realisasi_disburse) + int(lrpa.nov_realisasi_disburse) + int(lrpa.des_realisasi_disburse)
+                total_realisasi = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0) + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
+                print(total_realisasi)
                 if lrpa.real_aki():
                     sisa_aki = lrpa.real_aki() - total_realisasi
                 else:
