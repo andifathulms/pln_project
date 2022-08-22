@@ -62,7 +62,7 @@ class MonevView(LoginRequiredMixin, View):
                 temp = MacroData.objects.get(no_prk=data.no_prk, macro_file=macro_2)
                 temp_2 = MacroData.objects.get(no_prk=data.no_prk, macro_file=macro_3)
                 lrpa = LRPA_Monitoring.objects.get(no_prk=data.no_prk, file=last_lrpa)
-
+                print(lrpa)
                 #get prk kode
                 lookup_prk = PRK_Lookup.objects.filter(file=file_lookup, no_prk=data.no_prk).first() #return None if there isnt any
                 
