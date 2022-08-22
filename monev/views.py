@@ -16,9 +16,9 @@ class MonevView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         context = {}
         ### TRY TO AUTOMATE LATER ###
-        doc = DocSKAI.objects.filter(year=2022, lrpa_include=True).order_by('document__published_date')
-        first_macro_file = doc[0].macro.macro_file_1
-        first_macro_data = MacroData.objects.filter(macro_file=first_macro_file).order_by('no_prk')
+        # doc = DocSKAI.objects.filter(year=2022, lrpa_include=True).order_by('document__published_date')
+        # first_macro_file = doc[0].macro.macro_file_1
+        # first_macro_data = MacroData.objects.filter(macro_file=first_macro_file).order_by('no_prk')
         ### TRY TO AUTOMATE LATER ###
         
 
@@ -30,7 +30,7 @@ class MonevView(LoginRequiredMixin, View):
         #skai_3 = DocSKAI.objects.get(pk=10) #DEV
         skai_3 = DocSKAI.objects.get(pk=3) #PROD
         macro_3 = skai_3.macro.macro_file_1
-        macro_data_3 = MacroData.objects.filter(macro_file=macro_3)
+        #macro_data_3 = MacroData.objects.filter(macro_file=macro_3)
 
         #skai_2 = DocSKAI.objects.get(pk=19) #DEV
         skai_2 = DocSKAI.objects.get(pk=6) #PROD
