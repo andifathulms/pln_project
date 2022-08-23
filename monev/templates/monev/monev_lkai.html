@@ -244,7 +244,7 @@
                             <td>{{forloop.counter}}</td>
                             <td style="position:relative;">
                                 <div id="id-{{d.0.pk}}" class="copy_container">
-                                    {% if d.0 %}
+                                    {% if d.0.no_prk %}
                                     <p style="margin: auto;">{{d.0.no_prk}}</p>
                                     {% else %}
                                     <p style="margin: auto;">{{d.1.no_prk}}</p>
@@ -256,19 +256,19 @@
                                 </div>
                             </td>
 
-                            {% if d.0 %}
+                            {% if d.0.no_prk %}
                             <td style="min-width: 200px; text-align: justify;">{{d.0.program_utama}}</td>
                             {% else %}
                             <td style="min-width: 200px; text-align: justify;">{{d.1.program_utama}}</td>
                             {% endif %}
 
-                            {% if d.0 %}
+                            {% if d.0.no_prk %}
                             <td style="min-width: 400px; text-align: justify;">{{d.0.keg_uraian}}</td>
                             {% else %}
                             <td style="min-width: 400px; text-align: justify;">{{d.1.keg_uraian}}</td>
                             {% endif %}
 
-                            {% if d.0 %}
+                            {% if d.0.no_prk %}
                             <td>{{d.0.ang_status}}</td>
                             {% else %}
                             <td>{{d.1.ang_status}}</td>
@@ -488,7 +488,7 @@
                             <td></td>
                             {% endif %}
 
-                            {% if d.0 %}
+                            {% if d.0.no_prk %}
                             <td>{{d.0.sumber_dana}}</td>
                             {% else %}
                             <td>{{d.1.sumber_dana}}</td>

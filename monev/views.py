@@ -12,6 +12,8 @@ from .models import LRPA_Monitoring, LRPA_File
 from monev.models import PRK_Lookup, Assigned_PRK
 from .forms import LRPAFileForm
 
+import sys
+
 def safe_div(x,y):
     if y==0: return 0
     return x/y
@@ -33,6 +35,7 @@ class MonevView(LoginRequiredMixin, View):
         total_aki_bpo = 0
         total_realisasi_bpo = 0
 
+        count_bpo = 0
         sum_ai_temp = 0
         sum_aki_temp = 0
         temp_realisasi = 0
@@ -45,6 +48,7 @@ class MonevView(LoginRequiredMixin, View):
                 sum_aki_temp = sum_aki_temp + lrpa.real_aki()
                 temp_realisasi_temp = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0) + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
                 temp_realisasi = temp_realisasi + temp_realisasi_temp
+                count_bpo = count_bpo + 1
             
             total_ai_bpo = total_ai_bpo + sum_ai_temp
             total_aki_bpo = total_aki_bpo + sum_aki_temp
@@ -53,16 +57,18 @@ class MonevView(LoginRequiredMixin, View):
             temp_sisa = sum_aki_temp-temp_realisasi
             temp_pct = (temp_realisasi/sum_aki_temp)*100
 
-            BPO_list.append((BPO_1[idx],x,sum_ai_temp,sum_aki_temp,temp_realisasi,temp_sisa,temp_pct))
+            BPO_list.append((BPO_1[idx],x,sum_ai_temp,sum_aki_temp,temp_realisasi,temp_sisa,temp_pct,count_bpo))
 
             sum_ai_temp = 0
             sum_aki_temp = 0
             temp_realisasi = 0
+            count_bpo = 0
         
         #COUNT FOR BPO "UPP"
         BPO_UPP_1 = ["UPP KITRING SULSEL","UPP KITRING SULTENG","UPP KITRING SULTRA","UPP KITRING SULUT dan GORONTALO"]
         BPO_UPP_2 = ["UPP 1","UPP 2", "UPP 3", "UPP 4"]
 
+        count_bpo = 0
         sum_ai_temp = 0
         sum_aki_temp = 0
         temp_realisasi = 0
@@ -78,11 +84,12 @@ class MonevView(LoginRequiredMixin, View):
             total_ai_bpo = total_ai_bpo + sum_ai_temp
             total_aki_bpo = total_aki_bpo + sum_aki_temp
             total_realisasi_bpo = total_realisasi_bpo + temp_realisasi
+            count_bpo = count_bpo + 1
 
             temp_sisa = sum_aki_temp-temp_realisasi
             temp_pct = (safe_div(temp_realisasi,sum_aki_temp))*100
 
-            BPO_list.append((BPO_UPP_1[idx],x,sum_ai_temp,sum_aki_temp,temp_realisasi,temp_sisa,temp_pct))
+            BPO_list.append((BPO_UPP_1[idx],x,sum_ai_temp,sum_aki_temp,temp_realisasi,temp_sisa,temp_pct,count_bpo))
 
             sum_ai_temp = 0
             sum_aki_temp = 0
@@ -108,6 +115,7 @@ class MonevView(LoginRequiredMixin, View):
         total_aki_a = 0
         total_realisasi_a = 0
 
+        count_a = 0
         sum_ai_temp = 0
         sum_aki_temp = 0
         temp_realisasi = 0
@@ -120,6 +128,7 @@ class MonevView(LoginRequiredMixin, View):
                 sum_aki_temp = sum_aki_temp + lrpa.real_aki()
                 temp_realisasi_temp = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0) + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
                 temp_realisasi = temp_realisasi + temp_realisasi_temp
+                count_a = count_a + 1
             
             total_ai_a = total_ai_a + sum_ai_temp
             total_aki_a = total_aki_a + sum_aki_temp
@@ -128,12 +137,13 @@ class MonevView(LoginRequiredMixin, View):
             temp_sisa = sum_aki_temp-temp_realisasi
             temp_pct = (temp_realisasi/sum_aki_temp)*100
 
-            A_list.append((A_PRK_1[idx],x,sum_ai_temp,sum_aki_temp,temp_realisasi,temp_sisa,temp_pct))
+            A_list.append((A_PRK_1[idx],x,sum_ai_temp,sum_aki_temp,temp_realisasi,temp_sisa,temp_pct,count_a))
 
             sum_ai_temp = 0
             sum_aki_temp = 0
             temp_realisasi = 0
-        
+            count_a = 0
+
         context["A_list"] = A_list
 
         context["total_ai_a"] = total_ai_a
@@ -153,6 +163,7 @@ class MonevView(LoginRequiredMixin, View):
         total_aki_b = 0
         total_realisasi_b = 0
 
+        count_b = 0
         sum_ai_temp = 0
         sum_aki_temp = 0
         temp_realisasi = 0
@@ -165,6 +176,7 @@ class MonevView(LoginRequiredMixin, View):
                 sum_aki_temp = sum_aki_temp + lrpa.real_aki()
                 temp_realisasi_temp = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0) + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
                 temp_realisasi = temp_realisasi + temp_realisasi_temp
+                count_b = count_b + 1
             
             total_ai_b = total_ai_b + sum_ai_temp
             total_aki_b = total_aki_b + sum_aki_temp
@@ -173,8 +185,9 @@ class MonevView(LoginRequiredMixin, View):
             temp_sisa = sum_aki_temp-temp_realisasi
             temp_pct = (safe_div(temp_realisasi,sum_aki_temp))*100
 
-            B_list.append((B_PRK_1[idx],x,sum_ai_temp,sum_aki_temp,temp_realisasi,temp_sisa,temp_pct))
+            B_list.append((B_PRK_1[idx],x,sum_ai_temp,sum_aki_temp,temp_realisasi,temp_sisa,temp_pct,count_b))
 
+            count_b = 0
             sum_ai_temp = 0
             sum_aki_temp = 0
             temp_realisasi = 0
@@ -198,6 +211,7 @@ class MonevView(LoginRequiredMixin, View):
         total_aki_c = 0
         total_realisasi_c = 0
 
+        count_c = 0
         sum_ai_temp = 0
         sum_aki_temp = 0
         temp_realisasi = 0
@@ -210,6 +224,7 @@ class MonevView(LoginRequiredMixin, View):
                 sum_aki_temp = sum_aki_temp + lrpa.real_aki()
                 temp_realisasi_temp = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0) + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
                 temp_realisasi = temp_realisasi + temp_realisasi_temp
+                count_c = count_c + 1
             
             total_ai_c = total_ai_c + sum_ai_temp
             total_aki_c = total_aki_c + sum_aki_temp
@@ -218,8 +233,9 @@ class MonevView(LoginRequiredMixin, View):
             temp_sisa = sum_aki_temp-temp_realisasi
             temp_pct = (safe_div(temp_realisasi,sum_aki_temp))*100
 
-            C_list.append((C_PRK_1[idx],x,sum_ai_temp,sum_aki_temp,temp_realisasi,temp_sisa,temp_pct))
+            C_list.append((C_PRK_1[idx],x,sum_ai_temp,sum_aki_temp,temp_realisasi,temp_sisa,temp_pct,count_c))
 
+            count_c = 0
             sum_ai_temp = 0
             sum_aki_temp = 0
             temp_realisasi = 0
@@ -260,18 +276,18 @@ class LKAIView(LoginRequiredMixin, View):
         division = request.user.division
         
 
-        #skai_1 = DocSKAI.objects.get(pk=8) #DEV
-        skai_1 = DocSKAI.objects.get(pk=1) #PROD
+        skai_1 = DocSKAI.objects.get(pk=8) #DEV
+        #skai_1 = DocSKAI.objects.get(pk=1) #PROD
         macro_1 = skai_1.macro.macro_file_1
         macro_data_1 = MacroData.objects.filter(macro_file=macro_1).order_by('no_prk')
 
-        #skai_3 = DocSKAI.objects.get(pk=10) #DEV
-        skai_3 = DocSKAI.objects.get(pk=3) #PROD
+        skai_3 = DocSKAI.objects.get(pk=10) #DEV
+        #skai_3 = DocSKAI.objects.get(pk=3) #PROD
         macro_3 = skai_3.macro.macro_file_1
         #macro_data_3 = MacroData.objects.filter(macro_file=macro_3)
 
-        #skai_2 = DocSKAI.objects.get(pk=19) #DEV
-        skai_2 = DocSKAI.objects.get(pk=6) #PROD
+        skai_2 = DocSKAI.objects.get(pk=19) #DEV
+        #skai_2 = DocSKAI.objects.get(pk=6) #PROD
 
         file_lookup = Assigned_PRK.objects.get(pk=1)
         #lookup = PRK_Lookup.objects.get(file=file_lookup)
@@ -301,6 +317,10 @@ class LKAIView(LoginRequiredMixin, View):
         combine_list = []
         
         for data in macro_data_1:
+
+            if data.no_prk == None:
+                continue
+
             try:
                 temp = MacroData.objects.get(no_prk=data.no_prk, macro_file=macro_2)
                 temp_2 = MacroData.objects.get(no_prk=data.no_prk, macro_file=macro_3)
@@ -328,10 +348,13 @@ class LKAIView(LoginRequiredMixin, View):
                 #print(data.macro_file.pk == temp.macro_file.pk)
             except Exception as e:
                 #print("Skip " + str(data.no_prk))
-                print(e)
+                exception_type, exception_object, exception_traceback = sys.exc_info()
+                line_number = exception_traceback.tb_lineno
+                print(e, line_number, data.no_prk)
         
         if len(residue_2) != 0:
             for prk in residue_2:
+                print(prk)
                 try:
                     temp = MacroData.objects.get(no_prk=prk, macro_file=macro_2)
                     temp_2 = MacroData.objects.get(no_prk=data.no_prk, macro_file=macro_3)
@@ -360,7 +383,12 @@ class LKAIView(LoginRequiredMixin, View):
                         if temp.no_prk != None and lookup_prk != None: #CHANGE THIS TO WORK!!
                             combine_list.append((data,temp,lrpa,total_realisasi,sisa_aki,temp_2, lookup_prk))
                 except Exception as e:
-                    print(e)
+                    exception_type, exception_object, exception_traceback = sys.exc_info()
+                    line_number = exception_traceback.tb_lineno
+                    print(e, line_number)
+        
+        # for temp in combine_list:
+        #     print(temp[0].no_prk)
         
         context["data"] = combine_list
         
