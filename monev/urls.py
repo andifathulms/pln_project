@@ -1,7 +1,8 @@
 from django.urls import path
 
 from .views import(
-	MonevView,
+    MonevView,
+	LKAIView,
     UploadLRPA,
     LRPAList,
 )
@@ -9,7 +10,8 @@ from .views import(
 app_name = 'monev'
 
 urlpatterns = [
-    path('monev-view', MonevView.as_view(), name='monev-view'),
+    path('monev-lkai', LKAIView.as_view(), name='lkai-view'),
     path('lrpa-upload', UploadLRPA.as_view(), name='monev-upload-lrpa'),
     path('lrpa-list', LRPAList.as_view(), name='monev-list-lrpa'),
+    path('monev-view', MonevView.as_view(), name='monev-view'),
 ]

@@ -355,10 +355,10 @@ class JSON_Dumps(UserPassesTestMixin, View):
 
         # # TO DUMP JSON #
         doc = DocSKAI.objects.get(pk=3)
-        #macro = doc.macro
-        #macro_1 = macro.macro_file_1
+        # macro = doc.macro
+        # macro_1 = macro.macro_file_1
 
-        #macro_data = MacroData.objects.filter(macro_file=macro_1)
+        # macro_data = MacroData.objects.filter(macro_file=macro_1)
         # print(len(macro_data))
 
         # BASE_DIR = settings.BASE_DIR
@@ -444,8 +444,7 @@ class JSON_Dumps(UserPassesTestMixin, View):
         macro.save()
 
         # # TO DUMP JSON #
-        # with open("skai_2.json", 'w', encoding='utf-8') as outfile:
-        #     print(outfile)
+        # with open("skai_revisi_1_new.json", 'w', encoding='utf-8') as outfile:
         #     for data in macro_data:
         #         d = json.dumps(data, cls=ExtendedEncoder, indent=4, separators=(',', ': '))
         #         outfile.write(',')

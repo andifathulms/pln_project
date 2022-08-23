@@ -112,408 +112,401 @@
 {% block content %}
 <div class="container-fluid">
 
-    <div class="container-fluid">
-    
-        <div class="row" id="div-1">
-        </div>
-        <!-- DataTales Example -->
-        <div class="mb-4 shadow card">
-            <div class="py-3 card-header">
-                <div class="row">
-                    <div class="col-8">
-                        <h6 class="m-0 font-weight-bold" style="color: #fff;">Monev LKAI</h6>
-                    </div>
-                    <div class="col-4 ">
-                        <button class="btn btn-info btn-icon-split btn-sm float-right" data-toggle="modal" data-target="#dataSource">
-                            <span class="icon text-white-50">
-                                <i class="fa-solid fa-arrow-pointer"></i>
-                            </span>
-                            <span class="text">View Data Source</span>
-                        </button>
-                        <!-- <a href="{% url 'monev:monev-upload-lrpa' %}" class="btn btn-success btn-icon-split btn-sm float-right mr-1">
-                            <span class="icon text-white-50">
-                                <i class="fa-solid fa-file-arrow-up"></i>
-                            </span>
-                            <span class="text">Upload LRPA</span>
-                        </a> -->
-                    </div>
+    <div class="row" id="div-1">
+    </div>
+    <!-- DataTales Example -->
+    <div class="mb-4 shadow card">
+        <div class="py-3 card-header">
+            <div class="row">
+                <div class="col-8">
+                    <h6 class="m-0 font-weight-bold" style="color: #fff;">Monev LKAI 2022 (Viewing PRK for {{for_div}})</h6>
+                </div>
+                <div class="col-4 ">
+                    <button class="btn btn-info btn-icon-split btn-sm float-right" data-toggle="modal" data-target="#dataSource">
+                        <span class="icon text-white-50">
+                            <i class="fa-solid fa-arrow-pointer"></i>
+                        </span>
+                        <span class="text">View Data Source</span>
+                    </button>
+                    <!-- <a href="{% url 'monev:monev-upload-lrpa' %}" class="btn btn-success btn-icon-split btn-sm float-right mr-1">
+                        <span class="icon text-white-50">
+                            <i class="fa-solid fa-file-arrow-up"></i>
+                        </span>
+                        <span class="text">Upload LRPA</span>
+                    </a> -->
                 </div>
             </div>
-            <div class="col m-0 p-0">
-                
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table" id="dataTableMonev" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <td style="visibility: hidden;"></td>
-                                <td style="visibility: hidden;"></td>
-                                <td style="visibility: hidden;"></td>
-                                <td style="visibility: hidden;"></td>
-                                <td style="visibility: hidden;"></td>
-                                <td class="sum-cell" id="total_ai_1"></td>
-                                <td class="sum-cell" id="total_aki_1"></td>
-                                <td class="sum-cell" id="total_ai_2"></td>
-                                <td class="sum-cell" id="total_aki_2"></td>
-                                <td class="sum-cell" id="total_ai_3"></td>
-                                <td class="sum-cell" id="total_aki_3"></td>
-                                <td class="sum-cell" id="total_ai_lrpa"></td>
-                                <td class="sum-cell" id="total_aki_lrpa"></td>
-                                <td class="sum-cell" id="jan_akb"></td>
-                                <td class="sum-cell" id="jan_real"></td>
-                                <td class="sum-cell" id="feb_akb"></td>
-                                <td class="sum-cell" id="feb_real"></td>
-                                <td class="sum-cell" id="mar_akb"></td>
-                                <td class="sum-cell" id="mar_real"></td>
-                                <td class="sum-cell" id="apr_akb"></td>
-                                <td class="sum-cell" id="apr_real"></td>
-                                <td class="sum-cell" id="mei_akb"></td>
-                                <td class="sum-cell" id="mei_real"></td>
-                                <td class="sum-cell" id="jun_akb"></td>
-                                <td class="sum-cell" id="jun_real"></td>
-                                <td class="sum-cell" id="jul_akb"></td>
-                                <td class="sum-cell" id="jul_real"></td>
-                                <td class="sum-cell" id="aug_akb"></td>
-                                <td class="sum-cell" id="aug_real"></td>
-                                <td class="sum-cell" id="sep_akb"></td>
-                                <td class="sum-cell" id="sep_real"></td>
-                                <td class="sum-cell" id="okt_akb"></td>
-                                <td class="sum-cell" id="okt_real"></td>
-                                <td class="sum-cell" id="nov_akb"></td>
-                                <td class="sum-cell" id="nov_real"></td>
-                                <td class="sum-cell" id="des_akb"></td>
-                                <td class="sum-cell" id="des_real"></td>
-                                <td class="sum-cell" id="total_realisasi"></td>
-                                <td class="sum-cell" id="sisa_aki"></td>
-                            </tr>
-                            <tr>
-                                <th rowspan="2">No</th>
-                                <th rowspan="2">No PRK</th>
-                                <th rowspan="2">Program Utama/Proyek</th>
-                                <th rowspan="2">Uraian Kegiatan</th>
-                                <th rowspan="2">Status</th>
-                                <th colspan="2">SKAI Tahun 2022</th>
-                                <th colspan="2">SKAI Revisi 1 Tahun 2022</th>
-                                <th colspan="2">SKAI Revisi 2 Tahun 2022</th>
-                                <th colspan="2">LRPA {{document.2.file_export_date}}</th>
-                                <th colspan="25">Rencana/Realisasi 2022</th>
-                                <th rowspan="2">Sisa AKI</th>
-                                <th rowspan="2">Kode PRK</th>
-                                <th rowspan="2">Kode BPO</th>
-                                <th rowspan="2">Rekap User Induk</th>
-                                <th rowspan="2">Sumber Dana</th>
-                                <th rowspan="2">Mekanisme Pembayaran</th>
-                            </tr>
-                            <tr>
-                                <th>AI</th>
-                                <th>AKI</th>
-                                <th>AI</th>
-                                <th>AKI</th>
-                                <th>AI</th>
-                                <th>AKI</th>
-                                <th>AI</th>
-                                <th>AKI</th>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table" id="dataTableMonev" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <td style="visibility: hidden;"></td>
+                            <td style="visibility: hidden;"></td>
+                            <td style="visibility: hidden;"></td>
+                            <td style="visibility: hidden;"></td>
+                            <td style="visibility: hidden;"></td>
+                            <td class="sum-cell" id="total_ai_1"></td>
+                            <td class="sum-cell" id="total_aki_1"></td>
+                            <td class="sum-cell" id="total_ai_2"></td>
+                            <td class="sum-cell" id="total_aki_2"></td>
+                            <td class="sum-cell" id="total_ai_3"></td>
+                            <td class="sum-cell" id="total_aki_3"></td>
+                            <td class="sum-cell" id="total_ai_lrpa"></td>
+                            <td class="sum-cell" id="total_aki_lrpa"></td>
+                            <td class="sum-cell" id="jan_akb"></td>
+                            <td class="sum-cell" id="jan_real"></td>
+                            <td class="sum-cell" id="feb_akb"></td>
+                            <td class="sum-cell" id="feb_real"></td>
+                            <td class="sum-cell" id="mar_akb"></td>
+                            <td class="sum-cell" id="mar_real"></td>
+                            <td class="sum-cell" id="apr_akb"></td>
+                            <td class="sum-cell" id="apr_real"></td>
+                            <td class="sum-cell" id="mei_akb"></td>
+                            <td class="sum-cell" id="mei_real"></td>
+                            <td class="sum-cell" id="jun_akb"></td>
+                            <td class="sum-cell" id="jun_real"></td>
+                            <td class="sum-cell" id="jul_akb"></td>
+                            <td class="sum-cell" id="jul_real"></td>
+                            <td class="sum-cell" id="aug_akb"></td>
+                            <td class="sum-cell" id="aug_real"></td>
+                            <td class="sum-cell" id="sep_akb"></td>
+                            <td class="sum-cell" id="sep_real"></td>
+                            <td class="sum-cell" id="okt_akb"></td>
+                            <td class="sum-cell" id="okt_real"></td>
+                            <td class="sum-cell" id="nov_akb"></td>
+                            <td class="sum-cell" id="nov_real"></td>
+                            <td class="sum-cell" id="des_akb"></td>
+                            <td class="sum-cell" id="des_real"></td>
+                            <td class="sum-cell" id="total_realisasi"></td>
+                            <td class="sum-cell" id="sisa_aki"></td>
+                        </tr>
+                        <tr>
+                            <th rowspan="2">No</th>
+                            <th rowspan="2">No PRK</th>
+                            <th rowspan="2">Program Utama/Proyek</th>
+                            <th rowspan="2">Uraian Kegiatan</th>
+                            <th rowspan="2">Status</th>
+                            <th colspan="2">SKAI Tahun 2022</th>
+                            <th colspan="2">SKAI Revisi 1 Tahun 2022</th>
+                            <th colspan="2">SKAI Revisi 2 Tahun 2022</th>
+                            <th colspan="2">LRPA {{document.2.file_export_date}}</th>
+                            <th colspan="25">Rencana/Realisasi 2022</th>
+                            <th rowspan="2">Sisa AKI</th>
+                            <th rowspan="2">Kode PRK</th>
+                            <th rowspan="2">Kode BPO</th>
+                            <th rowspan="2">Rekap User Induk</th>
+                            <th rowspan="2">Sumber Dana</th>
+                            <th rowspan="2">Mekanisme Pembayaran</th>
+                        </tr>
+                        <tr>
+                            <th>AI</th>
+                            <th>AKI</th>
+                            <th>AI</th>
+                            <th>AKI</th>
+                            <th>AI</th>
+                            <th>AKI</th>
+                            <th>AI</th>
+                            <th>AKI</th>
 
-                                <th>AKB Januari</th>
-                                <th>Januari</th>
-                                <th>AKB Februari</th>
-                                <th>Februari</th>
-                                <th>AKB Maret</th>
-                                <th>Maret</th>
-                                <th>AKB April</th>
-                                <th>April</th>
-                                <th>AKB Mei</th>
-                                <th>Mei</th>
-                                <th>AKB Juni</th>
-                                <th>Juni</th>
-                                <th>AKB Juli</th>
-                                <th>Juli</th>
-                                <th>AKB Agustus</th>
-                                <th>Agustus</th>
-                                <th>AKB September</th>
-                                <th>September</th>
-                                <th>AKB Oktober</th>
-                                <th>Oktober</th>
-                                <th>AKB November</th>
-                                <th>November</th>
-                                <th>AKB Desember</th>
-                                <th>Desember</th>
-                                <th>Total Realisasi</th>
-                            </tr>
-                            
-                        </thead>
-                        <tbody id="macro-table" class="table-group-divider">
-                            {% for d in data %}
-                            <tr>
-                                <td>{{forloop.counter}}</td>
-                                <td style="position:relative;">
-                                    <div id="id-{{d.0.pk}}" class="copy_container">
-                                        {% if d.0 %}
-                                        <p style="margin: auto;">{{d.0.no_prk}}</p>
-                                        {% else %}
-                                        <p style="margin: auto;">{{d.1.no_prk}}</p>
-                                        {% endif %}
-                                        <div id="copy-{{d.0.pk}}" class="copy">
-                                            <span class="tooltip">Copied PRK Number</span>
-                                            <i class="material-icons">content_copy</i>
-                                        </div>
+                            <th>AKB Januari</th>
+                            <th>Januari</th>
+                            <th>AKB Februari</th>
+                            <th>Februari</th>
+                            <th>AKB Maret</th>
+                            <th>Maret</th>
+                            <th>AKB April</th>
+                            <th>April</th>
+                            <th>AKB Mei</th>
+                            <th>Mei</th>
+                            <th>AKB Juni</th>
+                            <th>Juni</th>
+                            <th>AKB Juli</th>
+                            <th>Juli</th>
+                            <th>AKB Agustus</th>
+                            <th>Agustus</th>
+                            <th>AKB September</th>
+                            <th>September</th>
+                            <th>AKB Oktober</th>
+                            <th>Oktober</th>
+                            <th>AKB November</th>
+                            <th>November</th>
+                            <th>AKB Desember</th>
+                            <th>Desember</th>
+                            <th>Total Realisasi</th>
+                        </tr>
+                        
+                    </thead>
+                    <tbody id="macro-table" class="table-group-divider">
+                        {% for d in data %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td style="position:relative;">
+                                <div id="id-{{d.0.pk}}" class="copy_container">
+                                    {% if d.0 %}
+                                    <p style="margin: auto;">{{d.0.no_prk}}</p>
+                                    {% else %}
+                                    <p style="margin: auto;">{{d.1.no_prk}}</p>
+                                    {% endif %}
+                                    <div id="copy-{{d.0.pk}}" class="copy">
+                                        <span class="tooltip">Copied PRK Number</span>
+                                        <i class="material-icons">content_copy</i>
                                     </div>
-                                </td>
+                                </div>
+                            </td>
 
-                                {% if d.0 %}
-                                <td style="min-width: 200px; text-align: justify;">{{d.0.program_utama}}</td>
-                                {% else %}
-                                <td style="min-width: 200px; text-align: justify;">{{d.1.program_utama}}</td>
-                                {% endif %}
+                            {% if d.0 %}
+                            <td style="min-width: 200px; text-align: justify;">{{d.0.program_utama}}</td>
+                            {% else %}
+                            <td style="min-width: 200px; text-align: justify;">{{d.1.program_utama}}</td>
+                            {% endif %}
 
-                                {% if d.0 %}
-                                <td style="min-width: 400px; text-align: justify;">{{d.0.keg_uraian}}</td>
-                                {% else %}
-                                <td style="min-width: 400px; text-align: justify;">{{d.1.keg_uraian}}</td>
-                                {% endif %}
+                            {% if d.0 %}
+                            <td style="min-width: 400px; text-align: justify;">{{d.0.keg_uraian}}</td>
+                            {% else %}
+                            <td style="min-width: 400px; text-align: justify;">{{d.1.keg_uraian}}</td>
+                            {% endif %}
 
-                                {% if d.0 %}
-                                <td>{{d.0.ang_status}}</td>
-                                {% else %}
-                                <td>{{d.1.ang_status}}</td>
-                                {% endif %}
+                            {% if d.0 %}
+                            <td>{{d.0.ang_status}}</td>
+                            {% else %}
+                            <td>{{d.1.ang_status}}</td>
+                            {% endif %}
 
-                                {% if d.0.ai_this_year %}
-                                <td class="currency" >{{d.0.real_ai}}</td>
-                                {% else %}
-                                <td class="cell-disabled" > - </td>
-                                {% endif %}
+                            {% if d.0.ai_this_year %}
+                            <td class="currency" >{{d.0.real_ai}}</td>
+                            {% else %}
+                            <td class="cell-disabled" > - </td>
+                            {% endif %}
 
-                                {% if d.0.aki_this_year %}
-                                <td class="currency" >{{d.0.real_aki}}</td>
-                                {% else %}
-                                <td class="cell-disabled" > - </td>
-                                {% endif %}
+                            {% if d.0.aki_this_year %}
+                            <td class="currency" >{{d.0.real_aki}}</td>
+                            {% else %}
+                            <td class="cell-disabled" > - </td>
+                            {% endif %}
 
-                                {% if d.5.ai_this_year %}
-                                <td class="currency" >{{d.5.real_ai}}</td>
-                                {% else %}
-                                <td class="cell-disabled" > - </td>
-                                {% endif %}
+                            {% if d.5.ai_this_year %}
+                            <td class="currency" >{{d.5.real_ai}}</td>
+                            {% else %}
+                            <td class="cell-disabled" > - </td>
+                            {% endif %}
 
-                                {% if d.5.aki_this_year %}
-                                <td class="currency" >{{d.5.real_aki}}</td>
-                                {% else %}
-                                <td class="cell-disabled" > - </td>
-                                {% endif %}
+                            {% if d.5.aki_this_year %}
+                            <td class="currency" >{{d.5.real_aki}}</td>
+                            {% else %}
+                            <td class="cell-disabled" > - </td>
+                            {% endif %}
 
-                                {% if d.1.ai_this_year %}
-                                <td class="currency" >{{d.1.real_ai}}</td>
-                                {% else %}
-                                <td class="cell-disabled" > - </td>
-                                {% endif %}
+                            {% if d.1.ai_this_year %}
+                            <td class="currency" >{{d.1.real_ai}}</td>
+                            {% else %}
+                            <td class="cell-disabled" > - </td>
+                            {% endif %}
 
-                                {% if d.1.aki_this_year %}
-                                <td class="currency" >{{d.1.real_aki}}</td>
-                                {% else %}
-                                <td class="cell-disabled" > - </td>
-                                {% endif %}
+                            {% if d.1.aki_this_year %}
+                            <td class="currency" >{{d.1.real_aki}}</td>
+                            {% else %}
+                            <td class="cell-disabled" > - </td>
+                            {% endif %}
 
-                                {% if d.2.ai_this_year != 0 %}
-                                <td class="currency">{{d.2.real_ai}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.ai_this_year != 0 %}
+                            <td class="currency">{{d.2.real_ai}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.aki_this_year != 0 %}
-                                <td class="currency">{{d.2.real_aki}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.aki_this_year != 0 %}
+                            <td class="currency">{{d.2.real_aki}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.jan_rencana_disburse != "0" %}
-                                <td class="currency">{{d.2.jan_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.jan_rencana_disburse != "0" %}
+                            <td class="currency">{{d.2.jan_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.jan_realisasi_disburse != "0" %}
-                                <td class="currency">{{d.2.jan_realisasi_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.jan_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.2.jan_realisasi_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.feb_rencana_disburse != "0" %}
-                                <td class="currency">{{d.2.feb_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.feb_rencana_disburse != "0" %}
+                            <td class="currency">{{d.2.feb_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.feb_realisasi_disburse != "0" %}
-                                <td class="currency">{{d.2.feb_realisasi_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.feb_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.2.feb_realisasi_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.mar_rencana_disburse != "0" %}
-                                <td class="currency">{{d.2.mar_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.mar_rencana_disburse != "0" %}
+                            <td class="currency">{{d.2.mar_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.mar_realisasi_disburse != "0" %}
-                                <td class="currency">{{d.2.mar_realisasi_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.mar_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.2.mar_realisasi_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.apr_rencana_disburse != "0" %}
-                                <td class="currency">{{d.2.apr_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.apr_rencana_disburse != "0" %}
+                            <td class="currency">{{d.2.apr_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.apr_realisasi_disburse != "0" %}
-                                <td class="currency">{{d.2.apr_realisasi_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.apr_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.2.apr_realisasi_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.mei_rencana_disburse != "0" %}
-                                <td class="currency">{{d.2.mei_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.mei_rencana_disburse != "0" %}
+                            <td class="currency">{{d.2.mei_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.mei_realisasi_disburse != "0" %}
-                                <td class="currency">{{d.2.mei_realisasi_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.mei_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.2.mei_realisasi_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.jun_rencana_disburse != "0" %}
-                                <td class="currency">{{d.2.jun_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.jun_rencana_disburse != "0" %}
+                            <td class="currency">{{d.2.jun_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.jun_realisasi_disburse != "0" %}
-                                <td class="currency">{{d.2.jun_realisasi_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.jun_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.2.jun_realisasi_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.jul_rencana_disburse != "0" %}
-                                <td class="currency">{{d.2.jul_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.jul_rencana_disburse != "0" %}
+                            <td class="currency">{{d.2.jul_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.jul_realisasi_disburse != "0" %}
-                                <td class="currency">{{d.2.jul_realisasi_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.jul_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.2.jul_realisasi_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.aug_rencana_disburse != "0" %}
-                                <td class="currency">{{d.2.aug_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.aug_rencana_disburse != "0" %}
+                            <td class="currency">{{d.2.aug_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.aug_realisasi_disburse != "0" %}
-                                <td class="currency">{{d.2.aug_realisasi_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.aug_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.2.aug_realisasi_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.sep_rencana_disburse != "0" %}
-                                <td class="currency">{{d.2.sep_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.sep_rencana_disburse != "0" %}
+                            <td class="currency">{{d.2.sep_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.sep_realisasi_disburse != "0" %}
-                                <td class="currency">{{d.2.sep_realisasi_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.sep_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.2.sep_realisasi_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.okt_rencana_disburse != "0" %}
-                                <td class="currency">{{d.2.okt_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.okt_rencana_disburse != "0" %}
+                            <td class="currency">{{d.2.okt_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.okt_realisasi_disburse != "0" %}
-                                <td class="currency">{{d.2.okt_realisasi_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.okt_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.2.okt_realisasi_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.nov_rencana_disburse != "0" %}
-                                <td class="currency">{{d.2.nov_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.nov_rencana_disburse != "0" %}
+                            <td class="currency">{{d.2.nov_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.nov_realisasi_disburse != "0" %}
-                                <td class="currency">{{d.2.nov_realisasi_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.nov_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.2.nov_realisasi_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.des_rencana_disburse != "0" %}
-                                <td class="currency">{{d.2.des_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.des_rencana_disburse != "0" %}
+                            <td class="currency">{{d.2.des_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.2.des_realisasi_disburse != "0" %}
-                                <td class="currency">{{d.2.des_realisasi_disburse|floatformat}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.2.des_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.2.des_realisasi_disburse|floatformat}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.3 != 0 %}
-                                <td class="currency">{{d.3}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.3 != 0 %}
+                            <td class="currency">{{d.3}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.4 != 0 %}
-                                <td class="currency">{{d.4}}</td>
-                                {% else %}
-                                <td class="cell-disabled"> - </td>
-                                {% endif %}
+                            {% if d.4 != 0 %}
+                            <td class="currency">{{d.4}}</td>
+                            {% else %}
+                            <td class="cell-disabled"> - </td>
+                            {% endif %}
 
-                                {% if d.6 %}
-                                <td>{{d.6.kode_prk}}</td>
-                                <td>{{d.6.kode_bpo}}</td>
-                                <td>{{d.6.rekap_user_induk}}</td>
-                                {% else %}
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                {% endif %}
+                            {% if d.6 %}
+                            <td>{{d.6.kode_prk}}</td>
+                            <td>{{d.6.kode_bpo}}</td>
+                            <td>{{d.6.rekap_user_induk}}</td>
+                            {% else %}
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            {% endif %}
 
-                                {% if d.0 %}
-                                <td>{{d.0.sumber_dana}}</td>
-                                {% else %}
-                                <td>{{d.1.sumber_dana}}</td>
-                                {% endif %}
-                                
+                            {% if d.0 %}
+                            <td>{{d.0.sumber_dana}}</td>
+                            {% else %}
+                            <td>{{d.1.sumber_dana}}</td>
+                            {% endif %}
+                            
 
-                                {% if d.2.mekanisme_pembayaran %}
-                                <td>{{d.2.mekanisme_pembayaran}}</td>
-                                {% else %}
-                                <td class="cell-disabled" > - </td>
-                                {% endif %}
-                                
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                            {% if d.2.mekanisme_pembayaran %}
+                            <td>{{d.2.mekanisme_pembayaran}}</td>
+                            {% else %}
+                            <td class="cell-disabled" > - </td>
+                            {% endif %}
+                            
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
-
     </div>
     
 </div>
@@ -544,21 +537,28 @@
                         <tr>
                             <td>SKAI</td>
                             <td><a href="{% url 'document:doc-view-lkai' document.0.pk %}">{{document.0.keyword}}</a></td>
-                            <td>{{document.0.document.published_date}}</td>
+                            <td>{{document.0.document.published_date|date:"d M Y"}}</td>
                             <td>{{document.0.document.upload_date}}</td>
                             <td>{{document.0.document.uploader}}</td>
                         </tr>
                         <tr>
                             <td>SKAI</td>
+                            <td><a href="{% url 'document:doc-view-lkai' document.3.pk %}">{{document.3.keyword}}</a></td>
+                            <td>{{document.3.document.published_date|date:"d M Y"}}</td>
+                            <td>{{document.3.document.upload_date}}</td>
+                            <td>{{document.3.document.uploader}}</td>
+                        </tr>
+                        <tr>
+                            <td>SKAI</td>
                             <td><a href="{% url 'document:doc-view-lkai' document.1.pk %}">{{document.1.keyword}}</a></td>
-                            <td>{{document.1.document.published_date}}</td>
+                            <td>{{document.1.document.published_date|date:"d M Y"}}</td>
                             <td>{{document.1.document.upload_date}}</td>
                             <td>{{document.1.document.uploader}}</td>
                         </tr>
                         <tr>
                             <td>LRPA</td>
                             <td>LRPA bulan : {{document.2.for_month}}</td>
-                            <td>{{document.2.file_export_date}}</td>
+                            <td>{{document.2.file_export_date|date:"d M Y"}}</td>
                             <td>{{document.2.upload_date}}</td>
                             <td>{{document.2.upload_by}}</td>
                         </tr>

@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+<style>
+    td {
+        vertical-align: middle;
+        text-align: center;
+        color: #161616;
+    }
+    .text-uppercase{
+        max-width: 230px;
+    }
+    .currency{
+        text-align: right !important;
+        min-width: 180px;
+    }
+
+    .currency::before{
+        content: "Rp.";
+        float: left;
+        padding-right: 2px;
+    }
+
+    .percentage::after{
+        content: "%";
+    }
+</style>
+{% endblock style%}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="mb-4 shadow card">
+        <div class="py-3 card-header">
+            <div class="row">
+                <div class="col-8">
+                    <h6 class="m-0 font-weight-bold" style="color: #fff;">Status Penyerapan Anggaran Investasi Berdasarkan BPO</h6>
+                </div>
+                <div class="col-4 ">
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>Bidang/Unit</th>
+                            <th>Kode BPO</th>
+                            <th>AI</th>
+                            <th>AKI</th>
+                            <th>Realisasi</th>
+                            <th>Sisa Aki</th>
+                            <th>%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td class="text-uppercase">Perencanaan</td>
+                            <td>REN</td>
+                            <td class="currency">{{ren_ai}}</td>
+                            <td class="currency">{{ren_aki}}</td>
+                            <td class="currency">{{ren_realisasi}}</td>
+                            <td class="currency">{{ren_sisa}}</td>
+                            <td class="percentage">{{ren_pct|stringformat:".2f"}}</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td class="text-uppercase">Perizinan, Pertanahan, dan Komunikasi</td>
+                            <td>PPK</td>
+                            <td class="currency">{{ppk_ai}}</td>
+                            <td class="currency">{{ppk_aki}}</td>
+                            <td class="currency">{{ppk_realisasi}}</td>
+                            <td class="currency">{{ppk_sisa}}</td>
+                            <td class="percentage">{{ppk_pct|stringformat:".2f"}}</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td class="text-uppercase">Operasi Konstruksi 1</td>
+                            <td>OPK 1</td>
+                            <td class="currency">{{opk1_ai}}</td>
+                            <td class="currency">{{opk1_aki}}</td>
+                            <td class="currency">{{opk1_realisasi}}</td>
+                            <td class="currency">{{opk1_sisa}}</td>
+                            <td class="percentage">{{opk1_pct|stringformat:".2f"}}</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td class="text-uppercase">Operasi Konstruksi 2</td>
+                            <td>OPK 2</td>
+                            <td class="currency">{{opk2_ai}}</td>
+                            <td class="currency">{{opk2_aki}}</td>
+                            <td class="currency">{{opk2_realisasi}}</td>
+                            <td class="currency">{{opk2_sisa}}</td>
+                            <td class="percentage">{{opk2_pct|stringformat:".2f"}}</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td class="text-uppercase">K3L</td>
+                            <td>K3L</td>
+                            <td class="currency">{{k3l_ai}}</td>
+                            <td class="currency">{{k3l_aki}}</td>
+                            <td class="currency">{{k3l_realisasi}}</td>
+                            <td class="currency">{{k3l_sisa}}</td>
+                            <td class="percentage">{{k3l_pct|stringformat:".2f"}}</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td class="text-uppercase">UPP Kitring SulSel</td>
+                            <td>UPP 1</td>
+                            <td class="currency">{{upp1_ai}}</td>
+                            <td class="currency">{{upp1_aki}}</td>
+                            <td class="currency">{{upp1_realisasi}}</td>
+                            <td class="currency">{{upp1_sisa}}</td>
+                            <td class="percentage">{{upp1_pct|stringformat:".2f"}}</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td class="text-uppercase">UPP Kitring SulTeng</td>
+                            <td>UPP 2</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td class="text-uppercase">UPP Kitring SulTra</td>
+                            <td>UPP 3</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td class="text-uppercase">UPP Kitring SulUt dan Gorontalo</td>
+                            <td>UPP 4</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+{% endblock script %}

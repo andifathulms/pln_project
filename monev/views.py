@@ -1,3 +1,4 @@
+from cmath import log
 from django.shortcuts import render
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -12,6 +13,155 @@ from monev.models import PRK_Lookup, Assigned_PRK
 from .forms import LRPAFileForm
 
 class MonevView(LoginRequiredMixin, View):
+    def get(self, request, *args, **kwargs):
+        context = {}
+        last_lrpa = LRPA_File.objects.order_by('-file_export_date').first()
+        file_lookup = Assigned_PRK.objects.get(pk=1) #MANUAL
+
+
+        #COUNT FOR "REN"
+        ren_prk = PRK_Lookup.objects.filter(file=file_lookup, kode_bpo="REN")
+        
+        sum_ai_ren = 0
+        sum_aki_ren = 0
+        ren_realisasi = 0
+        for prk in ren_prk:
+            lrpa = LRPA_Monitoring.objects.get(no_prk=prk.no_prk, file=last_lrpa)
+            sum_ai_ren = sum_ai_ren + lrpa.real_ai()
+            sum_aki_ren = sum_aki_ren + lrpa.real_aki()
+            ren_realisasi_temp = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0) + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
+            ren_realisasi = ren_realisasi + ren_realisasi_temp
+
+        ren_sisa = sum_aki_ren-ren_realisasi
+        ren_pct = (ren_realisasi/sum_aki_ren)*100
+
+        context["ren_ai"] = sum_ai_ren
+        context["ren_aki"] = sum_aki_ren
+        context["ren_realisasi"] = ren_realisasi
+        context["ren_sisa"] = ren_sisa
+        context["ren_pct"] = ren_pct
+        #END COUNT FOR "REN"
+
+        #COUNT FOR "PPK"
+        ppk_prk = PRK_Lookup.objects.filter(file=file_lookup, kode_bpo="PPK")
+        
+        sum_ai_ppk = 0
+        sum_aki_ppk = 0
+        ppk_realisasi = 0
+        for prk in ppk_prk:
+            lrpa = LRPA_Monitoring.objects.get(no_prk=prk.no_prk, file=last_lrpa)
+            sum_ai_ppk = sum_ai_ppk + lrpa.real_ai()
+            sum_aki_ppk = sum_aki_ppk + lrpa.real_aki()
+            ppk_realisasi_temp = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0) + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
+            ppk_realisasi = ppk_realisasi + ppk_realisasi_temp
+
+        ppk_sisa = sum_aki_ppk-ppk_realisasi
+        ppk_pct = (ppk_realisasi/sum_aki_ppk)*100
+
+        context["ppk_ai"] = sum_ai_ppk
+        context["ppk_aki"] = sum_aki_ppk
+        context["ppk_realisasi"] = ppk_realisasi
+        context["ppk_sisa"] = ppk_sisa
+        context["ppk_pct"] = ppk_pct
+        #END COUNT FOR "PPK"
+
+        #COUNT FOR "OPK 1"
+        opk1_prk = PRK_Lookup.objects.filter(file=file_lookup, kode_bpo="OPK 1")
+        
+        sum_ai_opk1 = 0
+        sum_aki_opk1 = 0
+        opk1_realisasi = 0
+        for prk in opk1_prk:
+            lrpa = LRPA_Monitoring.objects.get(no_prk=prk.no_prk, file=last_lrpa)
+            sum_ai_opk1 = sum_ai_opk1 + lrpa.real_ai()
+            sum_aki_opk1 = sum_aki_opk1 + lrpa.real_aki()
+            opk1_realisasi_temp = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0) + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
+            opk1_realisasi = opk1_realisasi + opk1_realisasi_temp
+
+        opk1_sisa = sum_aki_opk1-opk1_realisasi
+        opk1_pct = (opk1_realisasi/sum_aki_opk1)*100
+
+        context["opk1_ai"] = sum_ai_opk1
+        context["opk1_aki"] = sum_aki_opk1
+        context["opk1_realisasi"] = opk1_realisasi
+        context["opk1_sisa"] = opk1_sisa
+        context["opk1_pct"] = opk1_pct
+        #END COUNT FOR "OPK 1"
+
+        #COUNT FOR "OPK 2"
+        opk2_prk = PRK_Lookup.objects.filter(file=file_lookup, kode_bpo="OPK 2")
+        
+        sum_ai_opk2 = 0
+        sum_aki_opk2 = 0
+        opk2_realisasi = 0
+        for prk in opk2_prk:
+            lrpa = LRPA_Monitoring.objects.get(no_prk=prk.no_prk, file=last_lrpa)
+            sum_ai_opk2 = sum_ai_opk2 + lrpa.real_ai()
+            sum_aki_opk2 = sum_aki_opk2 + lrpa.real_aki()
+            opk2_realisasi_temp = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0) + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
+            opk2_realisasi = opk2_realisasi + opk2_realisasi_temp
+
+        opk2_sisa = sum_aki_opk2-opk2_realisasi
+        opk2_pct = (opk2_realisasi/sum_aki_opk2)*100
+
+        context["opk2_ai"] = sum_ai_opk2
+        context["opk2_aki"] = sum_aki_opk2
+        context["opk2_realisasi"] = opk2_realisasi
+        context["opk2_sisa"] = opk2_sisa
+        context["opk2_pct"] = opk2_pct
+        #END COUNT FOR "OPK 2"
+
+        #COUNT FOR "K3L"
+        k3l_prk = PRK_Lookup.objects.filter(file=file_lookup, kode_bpo="K3L")
+        
+        sum_ai_k3l = 0
+        sum_aki_k3l = 0
+        k3l_realisasi = 0
+        for prk in k3l_prk:
+            lrpa = LRPA_Monitoring.objects.get(no_prk=prk.no_prk, file=last_lrpa)
+            sum_ai_k3l = sum_ai_k3l + lrpa.real_ai()
+            sum_aki_k3l = sum_aki_k3l + lrpa.real_aki()
+            k3l_realisasi_temp = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0) + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
+            k3l_realisasi = k3l_realisasi + k3l_realisasi_temp
+
+        k3l_sisa = sum_aki_k3l-k3l_realisasi
+        k3l_pct = (k3l_realisasi/sum_aki_k3l)*100
+
+        context["k3l_ai"] = sum_ai_k3l
+        context["k3l_aki"] = sum_aki_k3l
+        context["k3l_realisasi"] = k3l_realisasi
+        context["k3l_sisa"] = k3l_sisa
+        context["k3l_pct"] = k3l_pct
+        #END COUNT FOR "K3L"
+
+        #COUNT FOR "UPP 1"
+        upp1_prk = PRK_Lookup.objects.filter(file=file_lookup, kode_bpo="UPP") #CHANGE LATER
+        
+        sum_ai_upp1 = 0
+        sum_aki_upp1 = 0
+        upp1_realisasi = 0
+        for prk in upp1_prk:
+            print(prk)
+            lrpa = LRPA_Monitoring.objects.get(no_prk=prk.no_prk, file=last_lrpa)
+            sum_ai_upp1 = sum_ai_upp1 + lrpa.real_ai()
+            sum_aki_upp1 = sum_aki_upp1 + lrpa.real_aki()
+            upp1_realisasi_temp = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0) + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
+            upp1_realisasi = upp1_realisasi + upp1_realisasi_temp
+
+        upp1_sisa = sum_aki_upp1-upp1_realisasi
+        upp1_pct = (upp1_realisasi/sum_aki_upp1)*100
+
+        context["upp1_ai"] = sum_ai_upp1
+        context["upp1_aki"] = sum_aki_upp1
+        context["upp1_realisasi"] = upp1_realisasi
+        context["upp1_sisa"] = upp1_sisa
+        context["upp1_pct"] = upp1_pct
+        #END COUNT FOR "UPP 1"
+
+
+        return render(request, 'monev/monev_view.html', context)
+
+class LKAIView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
         context = {}
@@ -20,20 +170,23 @@ class MonevView(LoginRequiredMixin, View):
         # first_macro_file = doc[0].macro.macro_file_1
         # first_macro_data = MacroData.objects.filter(macro_file=first_macro_file).order_by('no_prk')
         ### TRY TO AUTOMATE LATER ###
+
+        #GET USER DIVISION
+        division = request.user.division
         
 
-        #skai_1 = DocSKAI.objects.get(pk=8) #DEV
-        skai_1 = DocSKAI.objects.get(pk=1) #PROD
+        skai_1 = DocSKAI.objects.get(pk=8) #DEV
+        #skai_1 = DocSKAI.objects.get(pk=1) #PROD
         macro_1 = skai_1.macro.macro_file_1
         macro_data_1 = MacroData.objects.filter(macro_file=macro_1).order_by('no_prk')
 
-        #skai_3 = DocSKAI.objects.get(pk=10) #DEV
-        skai_3 = DocSKAI.objects.get(pk=3) #PROD
+        skai_3 = DocSKAI.objects.get(pk=10) #DEV
+        #skai_3 = DocSKAI.objects.get(pk=3) #PROD
         macro_3 = skai_3.macro.macro_file_1
         #macro_data_3 = MacroData.objects.filter(macro_file=macro_3)
 
-        #skai_2 = DocSKAI.objects.get(pk=19) #DEV
-        skai_2 = DocSKAI.objects.get(pk=6) #PROD
+        skai_2 = DocSKAI.objects.get(pk=19) #DEV
+        #skai_2 = DocSKAI.objects.get(pk=6) #PROD
 
         file_lookup = Assigned_PRK.objects.get(pk=1)
         #lookup = PRK_Lookup.objects.get(file=file_lookup)
@@ -55,6 +208,11 @@ class MonevView(LoginRequiredMixin, View):
         residue_1 = list(set(list_1)-set(list_2))
         residue_2 = list(set(list_2)-set(list_1))
 
+        if division == "Super Admin" or division == "ANG":
+            context["for_div"] = "ALL"
+        else:
+            context["for_div"] = division
+        
         combine_list = []
         
         for data in macro_data_1:
@@ -62,20 +220,25 @@ class MonevView(LoginRequiredMixin, View):
                 temp = MacroData.objects.get(no_prk=data.no_prk, macro_file=macro_2)
                 temp_2 = MacroData.objects.get(no_prk=data.no_prk, macro_file=macro_3)
                 lrpa = LRPA_Monitoring.objects.get(no_prk=data.no_prk, file=last_lrpa)
-                print(lrpa)
-                #get prk kode
-                lookup_prk = PRK_Lookup.objects.filter(file=file_lookup, no_prk=data.no_prk).first() #return None if there isnt any
-                
+
                 #get total realisasi
                 total_realisasi = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0) + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
-                print(total_realisasi)
                 if lrpa.real_aki():
                     sisa_aki = lrpa.real_aki() - total_realisasi
                 else:
                     sisa_aki = 0
                 
-                if temp.no_prk != None:
-                    combine_list.append((data,temp,lrpa,total_realisasi,sisa_aki,temp_2, lookup_prk))
+                # Get PRK kode lookup
+                # Determine User View
+
+                if division == "Super Admin" or division == "ANG":
+                    lookup_prk = PRK_Lookup.objects.filter(file=file_lookup, no_prk=data.no_prk).first() #return None if there isnt any
+                    if temp.no_prk != None:
+                        combine_list.append((data,temp,lrpa,total_realisasi,sisa_aki,temp_2, lookup_prk))
+                else:
+                    lookup_prk = PRK_Lookup.objects.filter(file=file_lookup, no_prk=data.no_prk, rekap_user_induk=division).first()
+                    if temp.no_prk != None and lookup_prk != None: #CHANGE THIS TO WORK!!
+                        combine_list.append((data,temp,lrpa,total_realisasi,sisa_aki,temp_2, lookup_prk))
 
                 #print(data.macro_file.pk == temp.macro_file.pk)
             except Exception as e:
@@ -99,8 +262,18 @@ class MonevView(LoginRequiredMixin, View):
                         sisa_aki = lrpa.real_aki() - total_realisasi
                     else:
                         sisa_aki = 0
-                    if temp.no_prk != None:
-                        combine_list.append((None,temp,lrpa,total_realisasi,sisa_aki,temp_2,lookup_prk))
+                    
+                    # Get PRK kode lookup
+                    # Determine User View
+
+                    if division == "Super Admin" or division == "ANG":
+                        lookup_prk = PRK_Lookup.objects.filter(file=file_lookup, no_prk=data.no_prk).first() #return None if there isnt any
+                        if temp.no_prk != None:
+                            combine_list.append((data,temp,lrpa,total_realisasi,sisa_aki,temp_2, lookup_prk))
+                    else:
+                        lookup_prk = PRK_Lookup.objects.filter(file=file_lookup, no_prk=data.no_prk, rekap_user_induk=division).first()
+                        if temp.no_prk != None and lookup_prk != None: #CHANGE THIS TO WORK!!
+                            combine_list.append((data,temp,lrpa,total_realisasi,sisa_aki,temp_2, lookup_prk))
                 except Exception as e:
                     print(e)
         
