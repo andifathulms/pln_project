@@ -151,6 +151,92 @@
             </div>
         </div>
     </div>
+
+    <div class="mb-4 shadow card">
+        <div class="py-3 card-header">
+            <div class="row">
+                <div class="col-8">
+                    <h6 class="m-0 font-weight-bold" style="color: #fff;">Status Penyerapan Anggaran Investasi Berdasarkan PRK</h6>
+                </div>
+                <div class="col-4 ">
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th>PRK</th>
+                            <th>Kode BPO</th>
+                            <th>AI</th>
+                            <th>AKI</th>
+                            <th>Realisasi</th>
+                            <th>Sisa Aki</th>
+                            <th>%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td></td>
+                        </tr>
+                        <tr>
+                            <td><strong>A.</strong></td>
+                            <td><strong>Pekerjaan. Prasarana</strong></td>
+                            <td></td><td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                        {% for prk in A_list %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td class="text-uppercase">{{prk.0}}</td>
+                            <td>{{prk.1}}</td>
+                            <td class="currency">{{prk.2}}</td>
+                            <td class="currency">{{prk.3}}</td>
+                            <td class="currency">{{prk.4}}</td>
+                            <td class="currency">{{prk.5}}</td>
+                            <td class="percentage">{{prk.6|stringformat:".2f"}}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td><strong>B.</strong></td>
+                            <td><strong>Pekerjaan. Utama</strong></td>
+                            <td></td><td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                        {% for prk in B_list %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td class="text-uppercase">{{prk.0}}</td>
+                            <td>{{prk.1}}</td>
+                            <td class="currency">{{prk.2}}</td>
+                            <td class="currency">{{prk.3}}</td>
+                            <td class="currency">{{prk.4}}</td>
+                            <td class="currency">{{prk.5}}</td>
+                            <td class="percentage">{{prk.6|stringformat:".2f"}}</td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td><strong>C.</strong></td>
+                            <td><strong>Pekerjaan. Lainnya</strong></td>
+                            <td></td><td></td><td></td><td></td><td></td><td></td>
+                        </tr>
+                        {% for prk in C_list %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td class="text-uppercase">{{prk.0}}</td>
+                            <td>{{prk.1}}</td>
+                            <td class="currency">{{prk.2}}</td>
+                            <td class="currency">{{prk.3}}</td>
+                            <td class="currency">{{prk.4}}</td>
+                            <td class="currency">{{prk.5}}</td>
+                            <td class="percentage">{{prk.6|stringformat:".2f"}}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock content %}
 

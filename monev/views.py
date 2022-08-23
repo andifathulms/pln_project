@@ -12,6 +12,10 @@ from .models import LRPA_Monitoring, LRPA_File
 from monev.models import PRK_Lookup, Assigned_PRK
 from .forms import LRPAFileForm
 
+def safe_div(x,y):
+    if y==0: return 0
+    return x/y
+
 class MonevView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         context = {}
@@ -141,7 +145,6 @@ class MonevView(LoginRequiredMixin, View):
         sum_aki_upp1 = 0
         upp1_realisasi = 0
         for prk in upp1_prk:
-            print(prk)
             lrpa = LRPA_Monitoring.objects.get(no_prk=prk.no_prk, file=last_lrpa)
             sum_ai_upp1 = sum_ai_upp1 + lrpa.real_ai()
             sum_aki_upp1 = sum_aki_upp1 + lrpa.real_aki()
@@ -158,6 +161,95 @@ class MonevView(LoginRequiredMixin, View):
         context["upp1_pct"] = upp1_pct
         #END COUNT FOR "UPP 1"
 
+        #COUNT FOR ALL PRK IN "Pekerjaan. Prasarana"
+        A_PRK_1 = ["Survey dan Soil Investigasi", "Perijinan", "Studi Lingkungan/AMDAL/UKL-UPL/LARAP", "Jasa Konsultasi Pembebasan tanah & ROW", "Inventarisasi, Pembebasan tanah & ROW"]
+        A_PRK_2 = ["SV", "IZ", "LH", "JP", "TN"]
+
+        A_list = []
+
+        sum_ai_temp = 0
+        sum_aki_temp = 0
+        temp_realisasi = 0
+        for idx,x in enumerate(A_PRK_2):
+            prk = PRK_Lookup.objects.filter(file=file_lookup, kode_prk=x)
+            for p in prk:
+                lrpa = LRPA_Monitoring.objects.get(no_prk=p.no_prk, file=last_lrpa)
+                sum_ai_temp = sum_ai_temp + lrpa.real_ai()
+                sum_aki_temp = sum_aki_temp + lrpa.real_aki()
+                temp_realisasi_temp = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0) + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
+                temp_realisasi = temp_realisasi + temp_realisasi_temp
+            
+            temp_sisa = sum_aki_temp-temp_realisasi
+            temp_pct = (temp_realisasi/sum_aki_temp)*100
+
+            A_list.append((A_PRK_1[idx],x,sum_ai_temp,sum_aki_temp,temp_realisasi,temp_sisa,temp_pct))
+
+            sum_ai_temp = 0
+            sum_aki_temp = 0
+            temp_realisasi = 0
+        
+        context["A_list"] = A_list
+        #END COUNT FOR ALL PRK IN "Pekerjaan. Prasarana"
+
+        #COUNT FOR ALL PRK IN "Pekerjaan. Utama"
+        B_PRK_1 = ["Pembangunan KIT/TL/GI ", "Pengadaan KIT/TL/GI/Trafo", "Jasa konsultasi Enginering dan Konstruksi (KIT)", "Pemantauan & Pengelolaan Lingkungan Thp Kons", "Pengadaan Tower/Konduktor/MTU/HV/Trafo (TL dan GI)","Pek. Penyempurnaan KIT/Biaya Pra COD","Pek. Penyempurnaan TL dan GI"]
+        B_PRK_2 = ["PB", "PD", "JS", "PL", "SWA","PP KIT","PP TL/GI"]
+
+        B_list = []
+
+        sum_ai_temp = 0
+        sum_aki_temp = 0
+        temp_realisasi = 0
+        for idx,x in enumerate(B_PRK_2):
+            prk = PRK_Lookup.objects.filter(file=file_lookup, kode_prk=x)
+            for p in prk:
+                lrpa = LRPA_Monitoring.objects.get(no_prk=p.no_prk, file=last_lrpa)
+                sum_ai_temp = sum_ai_temp + lrpa.real_ai()
+                sum_aki_temp = sum_aki_temp + lrpa.real_aki()
+                temp_realisasi_temp = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0) + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
+                temp_realisasi = temp_realisasi + temp_realisasi_temp
+            
+            temp_sisa = sum_aki_temp-temp_realisasi
+            temp_pct = (safe_div(temp_realisasi,sum_aki_temp))*100
+
+            B_list.append((B_PRK_1[idx],x,sum_ai_temp,sum_aki_temp,temp_realisasi,temp_sisa,temp_pct))
+
+            sum_ai_temp = 0
+            sum_aki_temp = 0
+            temp_realisasi = 0
+
+        context["B_list"] = B_list
+        #END COUNT FOR ALL PRK IN "Pekerjaan. Utama"
+
+        #COUNT FOR ALL PRK IN "Pekerjaan. Lainnya"
+        C_PRK_1 = ["IPPKH", "Jasa Bantuan Hukum & Manajemen Stakholder", "Jasa terkait SLO/Kommisioning (KIT)", "Jasa terkait SLO/Kommisioning (TL dan GI)", "Jasa Konstruksi & QA/QC oleh PMK (KIT)","Jasa Konstruksi & QA/QC oleh PMK (TL dan GI)","Biaya Sertifikat","Jasa Penyusunan Bid Doc dan HPE"]
+        C_PRK_2 = ["KH", "KUM", "SER KIT", "SER TL/GI", "PMK KIT","PMK TL/GI","BS","PLIS"]
+
+        C_list = []
+
+        sum_ai_temp = 0
+        sum_aki_temp = 0
+        temp_realisasi = 0
+        for idx,x in enumerate(C_PRK_2):
+            prk = PRK_Lookup.objects.filter(file=file_lookup, kode_prk=x)
+            for p in prk:
+                lrpa = LRPA_Monitoring.objects.get(no_prk=p.no_prk, file=last_lrpa)
+                sum_ai_temp = sum_ai_temp + lrpa.real_ai()
+                sum_aki_temp = sum_aki_temp + lrpa.real_aki()
+                temp_realisasi_temp = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0) + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
+                temp_realisasi = temp_realisasi + temp_realisasi_temp
+            
+            temp_sisa = sum_aki_temp-temp_realisasi
+            temp_pct = (safe_div(temp_realisasi,sum_aki_temp))*100
+
+            C_list.append((C_PRK_1[idx],x,sum_ai_temp,sum_aki_temp,temp_realisasi,temp_sisa,temp_pct))
+
+            sum_ai_temp = 0
+            sum_aki_temp = 0
+            temp_realisasi = 0
+
+        context["C_list"] = C_list
+        #END COUNT FOR ALL PRK IN "Pekerjaan. Lainnya"
 
         return render(request, 'monev/monev_view.html', context)
 
