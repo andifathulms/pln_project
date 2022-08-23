@@ -470,7 +470,7 @@ class Assign_PRK(UserPassesTestMixin, View):
         wb = load_workbook(file.file)
         ws = wb['Sheet1']
         start_col = 0
-        end_col = 4
+        end_col = 5
         list_rows = [idx for idx,cell in enumerate(ws["A"]) if cell.value and idx >= 1]
         print(list_rows)
         exc = []
@@ -486,7 +486,8 @@ class Assign_PRK(UserPassesTestMixin, View):
                         no_prk = row[0],
                         kode_prk = row[1],
                         kode_bpo = row[2],
-                        rekap_user_induk = row[3]
+                        upp = row[3],
+                        rekap_user_induk = row[4]
                     )
                     lookup.save()
 

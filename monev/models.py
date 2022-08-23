@@ -57,3 +57,4 @@ class PRK_Lookup(models.Model):
     kode_prk                = models.CharField(max_length=100, blank=True, null=True)
     kode_bpo                = models.CharField(max_length=100, blank=True, null=True)
     rekap_user_induk        = models.CharField(max_length=100, blank=True, null=True)
+    upp                     = models.CharField(max_length=100, blank=True, null=True)

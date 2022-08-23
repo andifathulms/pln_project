@@ -22,6 +22,15 @@
         padding-right: 2px;
     }
 
+    .total{
+        font-weight: 700;
+        color: #fff !important;
+    }
+
+    .tr-total{
+        background-color: #161616;
+    }
+
     .percentage::after{
         content: "%";
     }
@@ -30,210 +39,182 @@
 
 {% block content %}
 <div class="container-fluid">
-    <div class="mb-4 shadow card">
-        <div class="py-3 card-header">
-            <div class="row">
-                <div class="col-8">
-                    <h6 class="m-0 font-weight-bold" style="color: #fff;">Status Penyerapan Anggaran Investasi Berdasarkan BPO</h6>
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-bpo" type="button" role="tab" aria-controls="pills-home" aria-selected="true">Monitoring Realisasi per BPO</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-prk" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Monitoring Realisasi per PRK</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-bpo" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+            <div class="mb-4 shadow card">
+                <div class="py-3 card-header">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="m-0 font-weight-bold" style="color: #fff;">Status Penyerapan Anggaran Investasi Berdasarkan BPO</h6>
+                        </div>
+                        <div class="col-4 ">
+                        </div>
+                    </div>
                 </div>
-                <div class="col-4 ">
-                </div>
-            </div>
-        </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>Bidang/Unit</th>
-                            <th>Kode BPO</th>
-                            <th>AI</th>
-                            <th>AKI</th>
-                            <th>Realisasi</th>
-                            <th>Sisa Aki</th>
-                            <th>%</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td class="text-uppercase">Perencanaan</td>
-                            <td>REN</td>
-                            <td class="currency">{{ren_ai}}</td>
-                            <td class="currency">{{ren_aki}}</td>
-                            <td class="currency">{{ren_realisasi}}</td>
-                            <td class="currency">{{ren_sisa}}</td>
-                            <td class="percentage">{{ren_pct|stringformat:".2f"}}</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td class="text-uppercase">Perizinan, Pertanahan, dan Komunikasi</td>
-                            <td>PPK</td>
-                            <td class="currency">{{ppk_ai}}</td>
-                            <td class="currency">{{ppk_aki}}</td>
-                            <td class="currency">{{ppk_realisasi}}</td>
-                            <td class="currency">{{ppk_sisa}}</td>
-                            <td class="percentage">{{ppk_pct|stringformat:".2f"}}</td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td class="text-uppercase">Operasi Konstruksi 1</td>
-                            <td>OPK 1</td>
-                            <td class="currency">{{opk1_ai}}</td>
-                            <td class="currency">{{opk1_aki}}</td>
-                            <td class="currency">{{opk1_realisasi}}</td>
-                            <td class="currency">{{opk1_sisa}}</td>
-                            <td class="percentage">{{opk1_pct|stringformat:".2f"}}</td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td class="text-uppercase">Operasi Konstruksi 2</td>
-                            <td>OPK 2</td>
-                            <td class="currency">{{opk2_ai}}</td>
-                            <td class="currency">{{opk2_aki}}</td>
-                            <td class="currency">{{opk2_realisasi}}</td>
-                            <td class="currency">{{opk2_sisa}}</td>
-                            <td class="percentage">{{opk2_pct|stringformat:".2f"}}</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td class="text-uppercase">K3L</td>
-                            <td>K3L</td>
-                            <td class="currency">{{k3l_ai}}</td>
-                            <td class="currency">{{k3l_aki}}</td>
-                            <td class="currency">{{k3l_realisasi}}</td>
-                            <td class="currency">{{k3l_sisa}}</td>
-                            <td class="percentage">{{k3l_pct|stringformat:".2f"}}</td>
-                        </tr>
-                        <tr>
-                            <td>6</td>
-                            <td class="text-uppercase">UPP Kitring SulSel</td>
-                            <td>UPP 1</td>
-                            <td class="currency">{{upp1_ai}}</td>
-                            <td class="currency">{{upp1_aki}}</td>
-                            <td class="currency">{{upp1_realisasi}}</td>
-                            <td class="currency">{{upp1_sisa}}</td>
-                            <td class="percentage">{{upp1_pct|stringformat:".2f"}}</td>
-                        </tr>
-                        <tr>
-                            <td>7</td>
-                            <td class="text-uppercase">UPP Kitring SulTeng</td>
-                            <td>UPP 2</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td class="text-uppercase">UPP Kitring SulTra</td>
-                            <td>UPP 3</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>9</td>
-                            <td class="text-uppercase">UPP Kitring SulUt dan Gorontalo</td>
-                            <td>UPP 4</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
-    <div class="mb-4 shadow card">
-        <div class="py-3 card-header">
-            <div class="row">
-                <div class="col-8">
-                    <h6 class="m-0 font-weight-bold" style="color: #fff;">Status Penyerapan Anggaran Investasi Berdasarkan PRK</h6>
-                </div>
-                <div class="col-4 ">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>Bidang/Unit</th>
+                                    <th>Kode BPO</th>
+                                    <th>AI</th>
+                                    <th>AKI</th>
+                                    <th>Realisasi</th>
+                                    <th>Sisa Aki</th>
+                                    <th>%</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for prk in BPO_list %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td class="text-left" style="max-width: 230px;">{{prk.0}}</td>
+                                    <td>{{prk.1}}</td>
+                                    <td class="currency">{{prk.2}}</td>
+                                    <td class="currency">{{prk.3}}</td>
+                                    <td class="currency">{{prk.4}}</td>
+                                    <td class="currency">{{prk.5}}</td>
+                                    <td class="percentage">{{prk.6|stringformat:".2f"}}</td>
+                                </tr>
+                                {% endfor %}
+                                <tr class="tr-total">
+                                    <td colspan="3" class="total">Total</td>
+                                    <td class="currency total">{{total_ai_bpo}}</td>
+                                    <td class="currency total">{{total_aki_bpo}}</td>
+                                    <td class="currency total">{{total_realisasi_bpo}}</td>
+                                    <td class="currency total">{{total_sisa_aki_bpo}}</td>
+                                    <td class="percentage total">{{total_pct_bpo|stringformat:".2f"}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>No.</th>
-                            <th>PRK</th>
-                            <th>Kode BPO</th>
-                            <th>AI</th>
-                            <th>AKI</th>
-                            <th>Realisasi</th>
-                            <th>Sisa Aki</th>
-                            <th>%</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td><td></td>
-                        </tr>
-                        <tr>
-                            <td><strong>A.</strong></td>
-                            <td><strong>Pekerjaan. Prasarana</strong></td>
-                            <td></td><td></td><td></td><td></td><td></td><td></td>
-                        </tr>
-                        {% for prk in A_list %}
-                        <tr>
-                            <td>{{forloop.counter}}</td>
-                            <td class="text-uppercase">{{prk.0}}</td>
-                            <td>{{prk.1}}</td>
-                            <td class="currency">{{prk.2}}</td>
-                            <td class="currency">{{prk.3}}</td>
-                            <td class="currency">{{prk.4}}</td>
-                            <td class="currency">{{prk.5}}</td>
-                            <td class="percentage">{{prk.6|stringformat:".2f"}}</td>
-                        </tr>
-                        {% endfor %}
-                        <tr>
-                            <td><strong>B.</strong></td>
-                            <td><strong>Pekerjaan. Utama</strong></td>
-                            <td></td><td></td><td></td><td></td><td></td><td></td>
-                        </tr>
-                        {% for prk in B_list %}
-                        <tr>
-                            <td>{{forloop.counter}}</td>
-                            <td class="text-uppercase">{{prk.0}}</td>
-                            <td>{{prk.1}}</td>
-                            <td class="currency">{{prk.2}}</td>
-                            <td class="currency">{{prk.3}}</td>
-                            <td class="currency">{{prk.4}}</td>
-                            <td class="currency">{{prk.5}}</td>
-                            <td class="percentage">{{prk.6|stringformat:".2f"}}</td>
-                        </tr>
-                        {% endfor %}
-                        <tr>
-                            <td><strong>C.</strong></td>
-                            <td><strong>Pekerjaan. Lainnya</strong></td>
-                            <td></td><td></td><td></td><td></td><td></td><td></td>
-                        </tr>
-                        {% for prk in C_list %}
-                        <tr>
-                            <td>{{forloop.counter}}</td>
-                            <td class="text-uppercase">{{prk.0}}</td>
-                            <td>{{prk.1}}</td>
-                            <td class="currency">{{prk.2}}</td>
-                            <td class="currency">{{prk.3}}</td>
-                            <td class="currency">{{prk.4}}</td>
-                            <td class="currency">{{prk.5}}</td>
-                            <td class="percentage">{{prk.6|stringformat:".2f"}}</td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+        <div class="tab-pane fade" id="pills-prk" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
+            <div class="mb-4 shadow card">
+                <div class="py-3 card-header">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="m-0 font-weight-bold" style="color: #fff;">Status Penyerapan Anggaran Investasi Berdasarkan PRK</h6>
+                        </div>
+                        <div class="col-4 ">
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>No.</th>
+                                    <th>PRK</th>
+                                    <th>Kode PRK</th>
+                                    <th>AI</th>
+                                    <th>AKI</th>
+                                    <th>Realisasi</th>
+                                    <th>Sisa Aki</th>
+                                    <th>%</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="bg-secondary">
+                                    <td><strong>A.</strong></td>
+                                    <td><strong>Pekerjaan. Prasarana</strong></td>
+                                    <td></td><td></td><td></td><td></td><td></td><td></td>
+                                </tr>
+                                {% for prk in A_list %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td class="text-left" style="max-width: 230px;">{{prk.0}}</td>
+                                    <td>{{prk.1}}</td>
+                                    <td class="currency">{{prk.2}}</td>
+                                    <td class="currency">{{prk.3}}</td>
+                                    <td class="currency">{{prk.4}}</td>
+                                    <td class="currency">{{prk.5}}</td>
+                                    <td class="percentage">{{prk.6|stringformat:".2f"}}</td>
+                                </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td colspan="3"><strong>Total A</strong></td>
+                                    <td class="currency"><strong>{{total_ai_a}}</strong></td>
+                                    <td class="currency"><strong>{{total_aki_a}}</strong></td>
+                                    <td class="currency"><strong>{{total_realisasi_a}}</strong></td>
+                                    <td class="currency"><strong>{{total_sisa_aki_a}}</strong></td>
+                                    <td class="percentage"><strong>{{total_pct_a|stringformat:".2f"}}</strong></td>
+                                </tr>
+                                <tr class="bg-secondary">
+                                    <td><strong>B.</strong></td>
+                                    <td><strong>Pekerjaan. Utama</strong></td>
+                                    <td></td><td></td><td></td><td></td><td></td><td></td>
+                                </tr>
+                                {% for prk in B_list %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td class="text-left" style="max-width: 230px;">{{prk.0}}</td>
+                                    <td>{{prk.1}}</td>
+                                    <td class="currency">{{prk.2}}</td>
+                                    <td class="currency">{{prk.3}}</td>
+                                    <td class="currency">{{prk.4}}</td>
+                                    <td class="currency">{{prk.5}}</td>
+                                    <td class="percentage">{{prk.6|stringformat:".2f"}}</td>
+                                </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td colspan="3"><strong>Total B</strong></td>
+                                    <td class="currency"><strong>{{total_ai_b}}</strong></td>
+                                    <td class="currency"><strong>{{total_aki_b}}</strong></td>
+                                    <td class="currency"><strong>{{total_realisasi_b}}</strong></td>
+                                    <td class="currency"><strong>{{total_sisa_aki_b}}</strong></td>
+                                    <td class="percentage"><strong>{{total_pct_b|stringformat:".2f"}}</strong></td>
+                                </tr>
+                                <tr class="bg-secondary">
+                                    <td><strong>C.</strong></td>
+                                    <td><strong>Pekerjaan. Lainnya</strong></td>
+                                    <td></td><td></td><td></td><td></td><td></td><td></td>
+                                </tr>
+                                {% for prk in C_list %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td class="text-left" style="max-width: 230px;">{{prk.0}}</td>
+                                    <td>{{prk.1}}</td>
+                                    <td class="currency">{{prk.2}}</td>
+                                    <td class="currency">{{prk.3}}</td>
+                                    <td class="currency">{{prk.4}}</td>
+                                    <td class="currency">{{prk.5}}</td>
+                                    <td class="percentage">{{prk.6|stringformat:".2f"}}</td>
+                                </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td colspan="3"><strong>Total C</strong></td>
+                                    <td class="currency"><strong>{{total_ai_c}}</strong></td>
+                                    <td class="currency"><strong>{{total_aki_c}}</strong></td>
+                                    <td class="currency"><strong>{{total_realisasi_c}}</strong></td>
+                                    <td class="currency"><strong>{{total_sisa_aki_c}}</strong></td>
+                                    <td class="percentage"><strong>{{total_pct_c|stringformat:".2f"}}</strong></td>
+                                </tr>
+                                <tr class="tr-total">
+                                    <td colspan="3" class="total">Total</td>
+                                    <td class="currency total">{{total_ai_prk}}</td>
+                                    <td class="currency total">{{total_aki_prk}}</td>
+                                    <td class="currency total">{{total_realisasi_prk}}</td>
+                                    <td class="currency total">{{total_sisa_aki_prk}}</td>
+                                    <td class="percentage total">{{total_pct_prk|stringformat:".2f"}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
