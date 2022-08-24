@@ -134,392 +134,386 @@
 
 {% block content %}
 <div class="container-fluid">
-
-    <div class="container-fluid">
-    
-        <div class="row" id="div-1">
+    <div class="row" id="div-1">
+    </div>
+    <!-- DataTales Example -->
+    <div class="mb-4 shadow card">
+        <div class="py-3 card-header">
+            <h6 class="m-0 font-weight-bold">LKAI Macro untuk {{skai.document.regarding}}</h6>
         </div>
-        <!-- DataTales Example -->
-        <div class="mb-4 shadow card">
-            <div class="py-3 card-header">
-                <h6 class="m-0 font-weight-bold">LKAI Macro untuk {{skai.document.regarding}}</h6>
+        <div class="col m-0 p-0">
+            <div class="row d-none" id="div-2">
+                <div class="col-12">
+                    <button id="to-unexpand" class="btn mb-3 w-100" style="background-color: #449798; color: white;">Downsize Table  <span><i class="fa-solid fa-minimize"></i></span></button>
+                </div>
             </div>
-            <div class="col m-0 p-0">
-                <div class="row d-none" id="div-2">
-                    <div class="col-12">
-                        <button id="to-unexpand" class="btn mb-3 w-100" style="background-color: #449798; color: white;">Downsize Table  <span><i class="fa-solid fa-minimize"></i></span></button>
-                    </div>
+            <div class="row" id="div-3">
+                <div class="col-12">
+                    <button id="to-expand" class="btn mb-3 w-100" style="background-color: #449798; color: white;">Expand Table  <span><i class="fa-solid fa-up-right-and-down-left-from-center"></i></span></button>
                 </div>
-                <div class="row" id="div-3">
-                    <div class="col-12">
-                        <button id="to-expand" class="btn mb-3 w-100" style="background-color: #449798; color: white;">Expand Table  <span><i class="fa-solid fa-up-right-and-down-left-from-center"></i></span></button>
-                    </div>
+            </div>
+            <!-- <div class="form-group">
+                <select class  ="form-control" name="state" id="maxRows">
+                    <option value="5000">Show ALL Rows</option>
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                    <option value="50">50</option>
+                    <option value="70">70</option>
+                    <option value="100">100</option>
+                    </select>
                 </div>
-                <!-- <div class="form-group">
-                    <select class  ="form-control" name="state" id="maxRows">
-                        <option value="5000">Show ALL Rows</option>
-                        <option value="10" selected>10</option>
-                        <option value="20">20</option>
-                        <option value="50">50</option>
-                        <option value="70">70</option>
-                        <option value="100">100</option>
-                       </select>
-                 </div>
-                 <div class="pagination">
-                    <ol id="numbers"></ol>
+                <div class="pagination">
+                <ol id="numbers"></ol>
+            </div> -->
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table" id="dataTableLKAI" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th rowspan="3" class="skip-filter">No</th>
+                            <th rowspan="3">No PRK</th>
+                            <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">No Program</th>
+                            <th rowspan="3">No RUPTL</th>
+                            <th rowspan="3">Cluster</th>
+                            <th rowspan="3">Fungsi</th>
+                            <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">Sub Fungsi</th>
+                            <th rowspan="3" >Program Utama/Proyek</th>
+                            <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">Score</th>
+                            <th rowspan="3">Jenis Program</th>
+                            <th class="skip-filter" colspan="2" id="th-kegiatan">Uraian Kegiatan</th>
+                            <th class="skip-filter" colspan="4">Anggaran/Kontrak</th>
+                            <th class="skip-filter" rowspan="3">Realisasi Pembayaran s/d 2020</th>
+                            <th class="skip-filter" rowspan="3">Prediksi Pembayaran 2021</th>
+                            <th class="skip-filter" rowspan="3">AI Tahun 2022</th>
+                            <th class="skip-filter" rowspan="3">AKI Tahun 2022</th>
+                            <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">AKI Tahun 2023</th>
+                            <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">AKI Tahun 2024</th>
+                            <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">AKI Tahun 2025</th>
+                            <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">AKI Tahun 2026</th>
+                            <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">AKI Setelah Tahun 2023</th>
+                            <th rowspan="3">Sumber Dana</th>
+
+                            <th class="skip-filter" rowspan="3" class="idr2">Rencana Terkontrak</th>
+                            <th rowspan="3" class="idr2 skip-filter">Rencana COD (dd/mm/yy)</th>
+                            <th colspan="24" class="skip-filter">Progress Fisik dan Rencana Disburse Tahun 2022</th>
+                        </tr>
+                        <tr>
+                            <th rowspan="2" class="to-hide d-none" style="background-color: #C8AD7F;">No Aktivitas</th>
+                            <th rowspan="2" style="min-width: 500px;">Uraian</th>
+                            <th rowspan="2">Target Fisik</th>
+                            <th rowspan="2" class="to-hide d-none" style="background-color: #C8AD7F;">Satuan</th>
+                            <th class="skip-filter" rowspan="2">Nilai Anggaran</th>
+                            <th rowspan="2">Status</th>
+                            <th rowspan="2">Jenis Kontrak</th>
+                            <th rowspan="2">Nomor Kontrak</th>
+
+                            <th colspan="2">Januari</th>
+                            <th colspan="2">Februari</th>
+                            <th colspan="2">Maret</th>
+                            <th colspan="2">April</th>
+                            <th colspan="2" class="skip-filter">Mei</th>
+                            <th colspan="2">Juni</th>
+                            <th colspan="2">Juli</th>
+                            <th colspan="2">Agustus</th>
+                            <th colspan="2">September</th>
+                            <th colspan="2">Oktober</th>
+                            <th colspan="2">November</th>
+                            <th colspan="2">December</th>
+                        </tr>
+                        <tr>
+                            <th>Progress Fisik (%)</th>
+                            <th>Rencana Disburse</th>
+                            <th>Progress Fisik (%)</th>
+                            <th>Rencana Disburse</th>
+                            <th>Progress Fisik (%)</th>
+                            <th>Rencana Disburse</th>
+                            <th>Progress Fisik (%)</th>
+                            <th>Rencana Disburse</th>
+                            <th>Progress Fisik (%)</th>
+                            <th>Rencana Disburse</th>
+                            <th>Progress Fisik (%)</th>
+                            <th>Rencana Disburse</th>
+                            <th>Progress Fisik (%)</th>
+                            <th>Rencana Disburse</th>
+                            <th>Progress Fisik (%)</th>
+                            <th>Rencana Disburse</th>
+                            <th>Progress Fisik (%)</th>
+                            <th>Rencana Disburse</th>
+                            <th>Progress Fisik (%)</th>
+                            <th>Rencana Disburse</th>
+                            <th>Progress Fisik (%)</th>
+                            <th>Rencana Disburse</th>
+                            <th>Progress Fisik (%)</th>
+                            <th>Rencana Disburse</th>
+                        </tr>
+                    </thead>
+                    <tbody id="macro-table">
+                        {% for data in macros %}
+                        {% if data.no_prk %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td style="position:relative;">
+                                <div id="id-{{data.pk}}" class="copy_container">
+                                    <p style="margin: auto;">{{data.no_prk}}</p>
+                                    <div id="copy-{{data.pk}}" class="copy">
+                                        <span class="tooltip">Copied PRK Number</span>
+                                        <i class="material-icons">content_copy</i>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="to-hide d-none">{{data.no_program}}</td>
+
+                            {% if data.no_ruptl == None or data.no_ruptl == "0" %}
+                            <td> - </td>
+                            {% else %}
+                            <td style="min-width: 150px;">{{data.no_ruptl}}</td>
+                            {% endif %}
+
+                            <td style="min-width: 150px;">{{data.cluster}}</td>
+                            <td style="min-width: 150px;">{{data.fungsi}}</td>
+                            <td class="to-hide d-none">{{data.sub_fungsi}}</td>
+                            <td style="min-width: 180px; text-align: justify;">{{data.program_utama}}</td>
+                            <td class="to-hide d-none">{{data.score}}</td>
+                            <td>{{data.jenis_program}}</td>
+                            <td class="to-hide d-none">{{data.keg_no}}</td>
+                            <td style="min-width: 500px; text-align: justify;">{{data.keg_uraian}}</td>
+                            
+                            {% if data.keg_target_fisik == None %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% else %}
+                            <td style="min-width: 150px;">{{data.keg_target_fisik}}</td>
+                            {% endif %}
+                            
+                            <td style="min-width: 150px;" class="to-hide d-none">{{data.keg_satuan}}</td>
+                            
+                            {% if data.ang_nilai %}
+                            <td class="currency">{{data.real_nilai_ang}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            <td style="min-width: 150px;">{{data.ang_status}}</td>
+                            <td style="min-width: 150px;">{{data.ang_jenis_kontrak}}</td>
+
+                            {% if data.ang_no_kontrak    %}
+                            <td style="min-width: 150px;">{{data.ang_no_kontrak}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+                            
+                            {% if data.realisasi_pembayaran    %}
+                            <td class="currency">{{data.real_realisasi_pembayaran}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.prediksi_pembayaran    %}
+                            <td class="currency">{{data.real_prediksi_pembayaran}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.ai_this_year    %}
+                            <td class="currency">{{data.real_ai}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.aki_this_year    %}
+                            <td class="currency">{{data.real_aki}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            <td style="min-width: 150px;" class="to-hide d-none">{{data.aki_n1_year}}</td>
+                            <td style="min-width: 150px;" class="to-hide d-none">{{data.aki_n2_year}}</td>
+                            <td style="min-width: 150px;" class="to-hide d-none">{{data.aki_n3_year}}</td>
+                            <td style="min-width: 150px;" class="to-hide d-none">{{data.aki_n4_year}}</td>
+                            <td style="min-width: 150px;" class="to-hide d-none">{{data.aki_after_n1_year}}</td>
+                            <td>{{data.sumber_dana}}</td>
+
+                            {% if data.rencana_terkontrak    %}
+                            <td style="min-width: 150px;">{{data.rencana_terkontrak}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+                            
+                            {% if data.rencana_COD    %}
+                            <td style="min-width: 150px;">{{data.rencana_COD}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.jan_progress_fisik != "0" %}
+                            <td style="min-width: 150px;">{{data.jan_progress_fisik|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.jan_rencana_disburse != "0" %}
+                            <td style="min-width: 150px;">{{data.jan_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.feb_progress_fisik != "0" %}
+                            <td style="min-width: 150px;">{{data.feb_progress_fisik|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.feb_rencana_disburse != "0" %}
+                            <td style="min-width: 150px;">{{data.feb_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.mar_progress_fisik != "0" %}
+                            <td style="min-width: 150px;">{{data.mar_progress_fisik|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.mar_rencana_disburse != "0" %}
+                            <td style="min-width: 150px;">{{data.mar_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.apr_progress_fisik != "0" %}
+                            <td style="min-width: 150px;">{{data.apr_progress_fisik|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.apr_rencana_disburse != "0" %}
+                            <td style="min-width: 150px;">{{data.apr_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.mei_progress_fisik != "0" %}
+                            <td style="min-width: 150px;">{{data.mei_progress_fisik|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.mei_rencana_disburse != "0" %}
+                            <td style="min-width: 150px;">{{data.mei_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.jun_progress_fisik != "0" %}
+                            <td style="min-width: 150px;">{{data.jun_progress_fisik|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.jun_rencana_disburse != "0" %}
+                            <td style="min-width: 150px;">{{data.jun_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.jul_progress_fisik != "0" %}
+                            <td style="min-width: 150px;">{{data.jul_progress_fisik|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.jul_rencana_disburse != "0" %}
+                            <td style="min-width: 150px;">{{data.jul_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.aug_progress_fisik != "0" %}
+                            <td style="min-width: 150px;">{{data.aug_progress_fisik|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.aug_rencana_disburse != "0" %}
+                            <td style="min-width: 150px;">{{data.aug_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.sep_progress_fisik != "0" %}
+                            <td style="min-width: 150px;">{{data.sep_progress_fisik|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.sep_rencana_disburse != "0" %}
+                            <td style="min-width: 150px;">{{data.sep_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.okt_progress_fisik != "0" %}
+                            <td style="min-width: 150px;">{{data.okt_progress_fisik|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.okt_rencana_disburse != "0" %}
+                            <td style="min-width: 150px;">{{data.okt_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.nov_progress_fisik != "0" %}
+                            <td style="min-width: 150px;">{{data.nov_progress_fisik|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.nov_rencana_disburse != "0" %}
+                            <td style="min-width: 150px;">{{data.nov_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.des_progress_fisik != "0" %}
+                            <td style="min-width: 150px;">{{data.des_progress_fisik|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+                            {% if data.des_rencana_disburse != "0" %}
+                            <td style="min-width: 150px;">{{data.des_rencana_disburse|floatformat}}</td>
+                            {% else %}
+                            <td style="min-width: 150px;"> - </td>
+                            {% endif %}
+
+
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                        
+                        
+                    </tbody>
+                </table>
+                <!--		Start Pagination -->
+                <!-- <div class='pagination-container' >
+                    <nav>
+                        <ul class="pagination">
+                            <li data-page="prev" >
+                                <span> < <span class="sr-only">(current)</span></span>
+                            </li>
+                                    
+                            <li data-page="next" id="prev">
+                                <span> > <span class="sr-only">(current)</span></span>
+                            </li>
+                        </ul>
+                    </nav>
                 </div> -->
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table" id="dataTableLKAI" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th rowspan="3" class="skip-filter">No</th>
-                                <th rowspan="3">No PRK</th>
-                                <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">No Program</th>
-                                <th rowspan="3">No RUPTL</th>
-                                <th rowspan="3">Cluster</th>
-                                <th rowspan="3">Fungsi</th>
-                                <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">Sub Fungsi</th>
-                                <th rowspan="3" >Program Utama/Proyek</th>
-                                <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">Score</th>
-                                <th rowspan="3">Jenis Program</th>
-                                <th class="skip-filter" colspan="2" id="th-kegiatan">Uraian Kegiatan</th>
-                                <th class="skip-filter" colspan="4">Anggaran/Kontrak</th>
-                                <th class="skip-filter" rowspan="3">Realisasi Pembayaran s/d 2020</th>
-                                <th class="skip-filter" rowspan="3">Prediksi Pembayaran 2021</th>
-                                <th class="skip-filter" rowspan="3">AI Tahun 2022</th>
-                                <th class="skip-filter" rowspan="3">AKI Tahun 2022</th>
-                                <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">AKI Tahun 2023</th>
-                                <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">AKI Tahun 2024</th>
-                                <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">AKI Tahun 2025</th>
-                                <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">AKI Tahun 2026</th>
-                                <th rowspan="3" class="to-hide d-none" style="background-color: #C8AD7F;">AKI Setelah Tahun 2023</th>
-                                <th rowspan="3">Sumber Dana</th>
-
-                                <th class="skip-filter" rowspan="3" class="idr2">Rencana Terkontrak</th>
-                                <th rowspan="3" class="idr2 skip-filter">Rencana COD (dd/mm/yy)</th>
-                                <th colspan="24" class="skip-filter">Progress Fisik dan Rencana Disburse Tahun 2022</th>
-                            </tr>
-                            <tr>
-                                <th rowspan="2" class="to-hide d-none" style="background-color: #C8AD7F;">No Aktivitas</th>
-                                <th rowspan="2" style="min-width: 500px;">Uraian</th>
-                                <th rowspan="2">Target Fisik</th>
-                                <th rowspan="2" class="to-hide d-none" style="background-color: #C8AD7F;">Satuan</th>
-                                <th class="skip-filter" rowspan="2">Nilai Anggaran</th>
-                                <th rowspan="2">Status</th>
-                                <th rowspan="2">Jenis Kontrak</th>
-                                <th rowspan="2">Nomor Kontrak</th>
-
-                                <th colspan="2">Januari</th>
-                                <th colspan="2">Februari</th>
-                                <th colspan="2">Maret</th>
-                                <th colspan="2">April</th>
-                                <th colspan="2" class="skip-filter">Mei</th>
-                                <th colspan="2">Juni</th>
-                                <th colspan="2">Juli</th>
-                                <th colspan="2">Agustus</th>
-                                <th colspan="2">September</th>
-                                <th colspan="2">Oktober</th>
-                                <th colspan="2">November</th>
-                                <th colspan="2">December</th>
-                            </tr>
-                            <tr>
-                                <th>Progress Fisik (%)</th>
-                                <th>Rencana Disburse</th>
-                                <th>Progress Fisik (%)</th>
-                                <th>Rencana Disburse</th>
-                                <th>Progress Fisik (%)</th>
-                                <th>Rencana Disburse</th>
-                                <th>Progress Fisik (%)</th>
-                                <th>Rencana Disburse</th>
-                                <th>Progress Fisik (%)</th>
-                                <th>Rencana Disburse</th>
-                                <th>Progress Fisik (%)</th>
-                                <th>Rencana Disburse</th>
-                                <th>Progress Fisik (%)</th>
-                                <th>Rencana Disburse</th>
-                                <th>Progress Fisik (%)</th>
-                                <th>Rencana Disburse</th>
-                                <th>Progress Fisik (%)</th>
-                                <th>Rencana Disburse</th>
-                                <th>Progress Fisik (%)</th>
-                                <th>Rencana Disburse</th>
-                                <th>Progress Fisik (%)</th>
-                                <th>Rencana Disburse</th>
-                                <th>Progress Fisik (%)</th>
-                                <th>Rencana Disburse</th>
-                            </tr>
-                        </thead>
-                        <tbody id="macro-table">
-                            {% for data in macros %}
-                            {% if data.no_prk %}
-                            <tr>
-                                <td>{{forloop.counter}}</td>
-                                <td style="position:relative;">
-                                    <div id="id-{{data.pk}}" class="copy_container">
-                                        <p style="margin: auto;">{{data.no_prk}}</p>
-                                        <div id="copy-{{data.pk}}" class="copy">
-                                            <span class="tooltip">Copied PRK Number</span>
-                                            <i class="material-icons">content_copy</i>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="to-hide d-none">{{data.no_program}}</td>
-
-                                {% if data.no_ruptl == None or data.no_ruptl == "0" %}
-                                <td> - </td>
-                                {% else %}
-                                <td style="min-width: 150px;">{{data.no_ruptl}}</td>
-                                {% endif %}
-
-                                <td style="min-width: 150px;">{{data.cluster}}</td>
-                                <td style="min-width: 150px;">{{data.fungsi}}</td>
-                                <td class="to-hide d-none">{{data.sub_fungsi}}</td>
-                                <td style="min-width: 180px; text-align: justify;">{{data.program_utama}}</td>
-                                <td class="to-hide d-none">{{data.score}}</td>
-                                <td>{{data.jenis_program}}</td>
-                                <td class="to-hide d-none">{{data.keg_no}}</td>
-                                <td style="min-width: 500px; text-align: justify;">{{data.keg_uraian}}</td>
-                                
-                                {% if data.keg_target_fisik == None %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% else %}
-                                <td style="min-width: 150px;">{{data.keg_target_fisik}}</td>
-                                {% endif %}
-                                
-                                <td style="min-width: 150px;" class="to-hide d-none">{{data.keg_satuan}}</td>
-                                
-                                {% if data.ang_nilai %}
-                                <td class="currency">{{data.real_nilai_ang}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                <td style="min-width: 150px;">{{data.ang_status}}</td>
-                                <td style="min-width: 150px;">{{data.ang_jenis_kontrak}}</td>
-
-                                {% if data.ang_no_kontrak    %}
-                                <td style="min-width: 150px;">{{data.ang_no_kontrak}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-                                
-                                {% if data.realisasi_pembayaran    %}
-                                <td class="currency">{{data.real_realisasi_pembayaran}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.prediksi_pembayaran    %}
-                                <td class="currency">{{data.real_prediksi_pembayaran}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.ai_this_year    %}
-                                <td class="currency">{{data.real_ai}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.aki_this_year    %}
-                                <td class="currency">{{data.real_aki}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                <td style="min-width: 150px;" class="to-hide d-none">{{data.aki_n1_year}}</td>
-                                <td style="min-width: 150px;" class="to-hide d-none">{{data.aki_n2_year}}</td>
-                                <td style="min-width: 150px;" class="to-hide d-none">{{data.aki_n3_year}}</td>
-                                <td style="min-width: 150px;" class="to-hide d-none">{{data.aki_n4_year}}</td>
-                                <td style="min-width: 150px;" class="to-hide d-none">{{data.aki_after_n1_year}}</td>
-                                <td>{{data.sumber_dana}}</td>
-
-                                {% if data.rencana_terkontrak    %}
-                                <td style="min-width: 150px;">{{data.rencana_terkontrak}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-                                
-                                {% if data.rencana_COD    %}
-                                <td style="min-width: 150px;">{{data.rencana_COD}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.jan_progress_fisik != "0" %}
-                                <td style="min-width: 150px;">{{data.jan_progress_fisik|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.jan_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">{{data.jan_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.feb_progress_fisik != "0" %}
-                                <td style="min-width: 150px;">{{data.feb_progress_fisik|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.feb_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">{{data.feb_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.mar_progress_fisik != "0" %}
-                                <td style="min-width: 150px;">{{data.mar_progress_fisik|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.mar_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">{{data.mar_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.apr_progress_fisik != "0" %}
-                                <td style="min-width: 150px;">{{data.apr_progress_fisik|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.apr_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">{{data.apr_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.mei_progress_fisik != "0" %}
-                                <td style="min-width: 150px;">{{data.mei_progress_fisik|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.mei_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">{{data.mei_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.jun_progress_fisik != "0" %}
-                                <td style="min-width: 150px;">{{data.jun_progress_fisik|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.jun_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">{{data.jun_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.jul_progress_fisik != "0" %}
-                                <td style="min-width: 150px;">{{data.jul_progress_fisik|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.jul_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">{{data.jul_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.aug_progress_fisik != "0" %}
-                                <td style="min-width: 150px;">{{data.aug_progress_fisik|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.aug_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">{{data.aug_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.sep_progress_fisik != "0" %}
-                                <td style="min-width: 150px;">{{data.sep_progress_fisik|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.sep_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">{{data.sep_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.okt_progress_fisik != "0" %}
-                                <td style="min-width: 150px;">{{data.okt_progress_fisik|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.okt_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">{{data.okt_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.nov_progress_fisik != "0" %}
-                                <td style="min-width: 150px;">{{data.nov_progress_fisik|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.nov_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">{{data.nov_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.des_progress_fisik != "0" %}
-                                <td style="min-width: 150px;">{{data.des_progress_fisik|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-                                {% if data.des_rencana_disburse != "0" %}
-                                <td style="min-width: 150px;">{{data.des_rencana_disburse|floatformat}}</td>
-                                {% else %}
-                                <td style="min-width: 150px;"> - </td>
-                                {% endif %}
-
-
-                            </tr>
-                            {% endif %}
-                            {% endfor %}
-                            
-                            
-                        </tbody>
-                    </table>
-                    <!--		Start Pagination -->
-                    <!-- <div class='pagination-container' >
-                        <nav>
-                            <ul class="pagination">
-                                <li data-page="prev" >
-                                    <span> < <span class="sr-only">(current)</span></span>
-                                </li>
-                                        
-                                <li data-page="next" id="prev">
-                                    <span> > <span class="sr-only">(current)</span></span>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div> -->
-                </div>
-            </div>
         </div>
-
     </div>
-    
 </div>
 {% endblock content %}
 

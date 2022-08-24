@@ -58,3 +58,31 @@ class PRK_Lookup(models.Model):
     kode_bpo                = models.CharField(max_length=100, blank=True, null=True)
     rekap_user_induk        = models.CharField(max_length=100, blank=True, null=True)
     upp                     = models.CharField(max_length=100, blank=True, null=True)
+
+class FileMouPengalihan(models.Model):
+    mou_file                = models.FileField(upload_to='monev/mou_pengalihan')
+    upload_date             = models.DateTimeField(auto_now_add=True)
+    upload_by               = models.ForeignKey(Account, on_delete=models.CASCADE)
+    file_export_date        = models.DateField(default=date.today)
+    for_month               = models.IntegerField()
+    for_year                = models.IntegerField()
+
+class MouPengalihanData(models.Model):
+    file                    = models.ForeignKey('FileMouPengalihan', on_delete=models.CASCADE, blank=True, null=True)
+    no_prk                  = models.CharField(max_length=100, blank=True, null=True)
+    mou                     = models.CharField(max_length=255, blank=True, null=True)
+    ai_this_year            = models.FloatField(blank=True, null=True)
+    aki_this_year           = models.FloatField(blank=True, null=True)
+    jan                     = models.CharField(max_length=100, blank=True, null=True)
+    feb                     = models.CharField(max_length=100, blank=True, null=True)
+    mar                     = models.CharField(max_length=100, blank=True, null=True)
+    apr                     = models.CharField(max_length=100, blank=True, null=True)
+    mei                     = models.CharField(max_length=100, blank=True, null=True)
+    jun                     = models.CharField(max_length=100, blank=True, null=True)
+    jul                     = models.CharField(max_length=100, blank=True, null=True)
+    aug                     = models.CharField(max_length=100, blank=True, null=True)
+    sep                     = models.CharField(max_length=100, blank=True, null=True)
+    okt                     = models.CharField(max_length=100, blank=True, null=True)
+    nov                     = models.CharField(max_length=100, blank=True, null=True)
+    des                     = models.CharField(max_length=100, blank=True, null=True)
+    

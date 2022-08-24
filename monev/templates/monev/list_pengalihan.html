@@ -17,7 +17,7 @@
         <div class="py-3 card-header">
             <div class="row">
                 <div class="col-8">
-                    <h6 class="m-0 font-weight-bold" style="color: #fff;">Daftar LRPA</h6>
+                    <h6 class="m-0 font-weight-bold" style="color: #fff;">Daftar File MOU Pengalihan</h6>
                 </div>
                 <div class="col-4 ">
                     <!-- <button class="btn btn-info btn-icon-split btn-sm float-right" data-toggle="modal" data-target="#skaiModal">
@@ -26,11 +26,11 @@
                         </span>
                         <span class="text">LRPA Tahun</span>
                     </button> -->
-                    <a href="{% url 'monev:monev-upload-lrpa' %}" class="btn btn-success btn-icon-split btn-sm float-right mr-1">
+                    <a href="{% url 'monev:monev-upload-mou' %}" class="btn btn-success btn-icon-split btn-sm float-right mr-1">
                         <span class="icon text-white-50">
                             <i class="fa-solid fa-file-arrow-up"></i>
                         </span>
-                        <span class="text">Upload LRPA</span>
+                        <span class="text">Upload MOU Pengalihan</span>
                     </a>
                 </div>
             </div>
@@ -44,17 +44,17 @@
                             <th>Filename</th>
                             <th>Bulan</th>
                             <th>Tahun</th>
-                            <th>LRPA Export Date</th>
+                            <th>Tanggal Dokumen</th>
                             <th style="background-color: #161616;">Tanggal Upload</th>
                             <th style="background-color: #161616;">Diupload oleh</th>
                         </tr>
                         
                     </thead>
                     <tbody>
-                        {% for doc in lrpa %}
+                        {% for doc in docs %}
                         <tr>
                             <td>{{forloop.counter}}</td>
-                            <td>{{doc.lrpa_file}}</td>
+                            <td>{{doc.mou_file}}</td>
                             <td>{{doc.for_month}}</td>
                             <td>{{doc.for_year}}</td>
                             <td>{{doc.file_export_date}}</td>

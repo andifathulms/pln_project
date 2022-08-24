@@ -90,7 +90,8 @@
                                 </tr>
                                 {% endfor %}
                                 <tr class="tr-total">
-                                    <td colspan="4" class="total">Total</td>
+                                    <td colspan="3" class="total">Total</td>
+                                    <td class="total">{{count_bpo_total}}</td>
                                     <td class="currency total">{{total_ai_bpo}}</td>
                                     <td class="currency total">{{total_aki_bpo}}</td>
                                     <td class="currency total">{{total_realisasi_bpo}}</td>
@@ -150,7 +151,8 @@
                                 </tr>
                                 {% endfor %}
                                 <tr>
-                                    <td colspan="4"><strong>Total A</strong></td>
+                                    <td colspan="3"><strong>Total A</strong></td>
+                                    <td><strong>{{count_a_total}}</strong></td>
                                     <td class="currency"><strong>{{total_ai_a}}</strong></td>
                                     <td class="currency"><strong>{{total_aki_a}}</strong></td>
                                     <td class="currency"><strong>{{total_realisasi_a}}</strong></td>
@@ -176,7 +178,8 @@
                                 </tr>
                                 {% endfor %}
                                 <tr>
-                                    <td colspan="4"><strong>Total B</strong></td>
+                                    <td colspan="3"><strong>Total B</strong></td>
+                                    <td><strong>{{count_b_total}}</strong></td>
                                     <td class="currency"><strong>{{total_ai_b}}</strong></td>
                                     <td class="currency"><strong>{{total_aki_b}}</strong></td>
                                     <td class="currency"><strong>{{total_realisasi_b}}</strong></td>
@@ -202,7 +205,8 @@
                                 </tr>
                                 {% endfor %}
                                 <tr>
-                                    <td colspan="4"><strong>Total C</strong></td>
+                                    <td colspan="3"><strong>Total C</strong></td>
+                                    <td><strong>{{count_c_total}}</strong></td>
                                     <td class="currency"><strong>{{total_ai_c}}</strong></td>
                                     <td class="currency"><strong>{{total_aki_c}}</strong></td>
                                     <td class="currency"><strong>{{total_realisasi_c}}</strong></td>
@@ -210,7 +214,8 @@
                                     <td class="percentage"><strong>{{total_pct_c|stringformat:".2f"}}</strong></td>
                                 </tr>
                                 <tr class="tr-total">
-                                    <td colspan="4" class="total">Total</td>
+                                    <td colspan="3" class="total">Total</td>
+                                    <td class="total">{{total_count_prk}}</td>
                                     <td class="currency total">{{total_ai_prk}}</td>
                                     <td class="currency total">{{total_aki_prk}}</td>
                                     <td class="currency total">{{total_realisasi_prk}}</td>
