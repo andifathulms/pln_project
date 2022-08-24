@@ -364,7 +364,7 @@ class LKAIView(LoginRequiredMixin, View):
         list_2 = list(data.no_prk for data in macro_data_2)
 
         #MANUAL!!!
-        document = [skai_1, skai_2, last_lrpa, skai_3]
+        document = [skai_1, skai_2, last_lrpa, skai_3, last_mou]
         context["document"] = document
 
         #MANUAL!!!
@@ -444,7 +444,7 @@ class LKAIView(LoginRequiredMixin, View):
                     # Get PRK kode lookup
                     # Determine User View
 
-                    if division == "Super Admin" or division == "ANG":
+                    if division == "Super Admin" or division == "ANG" or request.user.is_staff:
                         lookup_prk = PRK_Lookup.objects.filter(file=file_lookup, no_prk=data.no_prk).first() #return None if there isnt any
                         if temp.no_prk != None:
                             combine_list.append((data,temp,lrpa,total_realisasi,sisa_aki,temp_2, lookup_prk, mou))

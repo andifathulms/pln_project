@@ -662,6 +662,13 @@
                             <td>{{document.2.upload_date}}</td>
                             <td>{{document.2.upload_by}}</td>
                         </tr>
+                        <tr>
+                            <td>Daftar MOU Pengalihan</td>
+                            <td>Tarikan FIX bulan : {{document.4.for_month}}</td>
+                            <td>{{document.4.file_export_date|date:"d M Y"}}</td>
+                            <td>{{document.4.upload_date}}</td>
+                            <td>{{document.4.upload_by}}</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -682,7 +689,13 @@
             paging: true,
             keys: true,
             "paging": true,
-            dom: 'Qlfrtip',
+            // dom: '<"top"Qlfrtip<"clear">>rt<"bottom"Bfrtip<"clear">>',
+            dom: 'BQlfrtip',
+            // dom: "<'row'<'col-sm-6'Bl><'col-sm-6'f>>" +"<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            // dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
             drawCallback: function(){
                 var api = this.api();
                 var intVal = function (i) {

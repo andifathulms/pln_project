@@ -61,7 +61,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered" width="100%" cellspacing="0">
+                        <table class="table table-bordered" width="100%" cellspacing="0" id="BPO">
                             <thead>
                                 <tr>
                                     <th>No.</th>
@@ -233,4 +233,16 @@
 {% endblock content %}
 
 {% block script %}
+<!-- <script>
+    $(document).ready(function () {
+        var table = $('#BPO').DataTable({
+            "paging": true,
+            dom: 'BQlfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+        });
+
+    });
+</script> -->
 {% endblock script %}
