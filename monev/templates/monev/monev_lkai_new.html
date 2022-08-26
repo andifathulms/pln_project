@@ -7,13 +7,7 @@
     td {
         vertical-align: middle;
         text-align: center;
-        color: #161616;
-        
-    }
-
-    .active-td {
-        background: #449798 !important;
-        color: aliceblue;
+        color: #161616; 
     }
 
     table#dataTableLKAI{
@@ -247,11 +241,7 @@
                             <td>{{forloop.counter}}</td>
                             <td style="position:relative;">
                                 <div id="id-{{d.0.pk}}" class="copy_container">
-                                    {% if d.0.no_prk %}
                                     <p style="margin: auto;">{{d.0.no_prk}}</p>
-                                    {% else %}
-                                    <p style="margin: auto;">{{d.1.no_prk}}</p>
-                                    {% endif %}
                                     <div id="copy-{{d.0.pk}}" class="copy">
                                         <span class="tooltip">Copied PRK Number</span>
                                         <i class="material-icons">content_copy</i>
@@ -259,46 +249,22 @@
                                 </div>
                             </td>
 
-                            {% if d.0.no_prk %}
-                            <td style="min-width: 200px; text-align: justify;">{{d.0.program_utama}}</td>
-                            {% else %}
+                            {% if d.1.no_prk %}
                             <td style="min-width: 200px; text-align: justify;">{{d.1.program_utama}}</td>
+                            {% else %}
+                            <td style="min-width: 200px; text-align: justify;">{{d.3.program_utama}}</td>
                             {% endif %}
 
-                            {% if d.0.no_prk %}
-                            <td style="min-width: 400px; text-align: justify;">{{d.0.keg_uraian}}</td>
-                            {% else %}
+                            {% if d.1.no_prk %}
                             <td style="min-width: 400px; text-align: justify;">{{d.1.keg_uraian}}</td>
+                            {% else %}
+                            <td style="min-width: 400px; text-align: justify;">{{d.3.keg_uraian}}</td>
                             {% endif %}
 
-                            {% if d.0.no_prk %}
-                            <td>{{d.0.ang_status}}</td>
-                            {% else %}
+                            {% if d.1.no_prk %}
                             <td>{{d.1.ang_status}}</td>
-                            {% endif %}
-
-                            {% if d.0.ai_this_year %}
-                            <td class="currency" >{{d.0.real_ai}}</td>
                             {% else %}
-                            <td class="cell-disabled" > - </td>
-                            {% endif %}
-
-                            {% if d.0.aki_this_year %}
-                            <td class="currency" >{{d.0.real_aki}}</td>
-                            {% else %}
-                            <td class="cell-disabled" > - </td>
-                            {% endif %}
-
-                            {% if d.5.ai_this_year %}
-                            <td class="currency" >{{d.5.real_ai}}</td>
-                            {% else %}
-                            <td class="cell-disabled" > - </td>
-                            {% endif %}
-
-                            {% if d.5.aki_this_year %}
-                            <td class="currency" >{{d.5.real_aki}}</td>
-                            {% else %}
-                            <td class="cell-disabled" > - </td>
+                            <td>{{d.3.ang_status}}</td>
                             {% endif %}
 
                             {% if d.1.ai_this_year %}
@@ -313,240 +279,264 @@
                             <td class="cell-disabled" > - </td>
                             {% endif %}
 
-                            {% if d.2.ai_this_year != 0 %}
-                            <td class="currency">{{d.2.real_ai}}</td>
+                            {% if d.2.ai_this_year %}
+                            <td class="currency" >{{d.2.real_ai}}</td>
+                            {% else %}
+                            <td class="cell-disabled" > - </td>
+                            {% endif %}
+
+                            {% if d.2.aki_this_year %}
+                            <td class="currency" >{{d.2.real_aki}}</td>
+                            {% else %}
+                            <td class="cell-disabled" > - </td>
+                            {% endif %}
+
+                            {% if d.3.ai_this_year %}
+                            <td class="currency" >{{d.3.real_ai}}</td>
+                            {% else %}
+                            <td class="cell-disabled" > - </td>
+                            {% endif %}
+
+                            {% if d.3.aki_this_year %}
+                            <td class="currency" >{{d.3.real_aki}}</td>
+                            {% else %}
+                            <td class="cell-disabled" > - </td>
+                            {% endif %}
+
+                            {% if d.0.ai_this_year != 0 %}
+                            <td class="currency">{{d.0.real_ai}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.2.aki_this_year != 0 %}
-                            <td class="currency">{{d.2.real_aki}}</td>
+                            {% if d.0.aki_this_year != 0 %}
+                            <td class="currency">{{d.0.real_aki}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
                             
-                            {% if d.2.jan_rencana_disburse != "0" %}
-                            <td class="currency">{{d.2.jan_rencana_disburse|floatformat}}</td>
+                            {% if d.0.jan_rencana_disburse != "0" %}
+                            <td class="currency">{{d.0.jan_rencana_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month == 1 %}
-                            <td class="currency mou">{{d.7.jan|floatformat}}</td>
-                            {% elif d.2.jan_realisasi_disburse != "0" %}
-                            <td class="currency">{{d.2.jan_realisasi_disburse|floatformat}}</td>
+                            {% if d.4 and month == 1 %}
+                            <td class="currency mou">{{d.4.jan|floatformat}}</td>
+                            {% elif d.0.jan_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.0.jan_realisasi_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
                             
-                            {% if d.7 and month < 2 %}
-                            <td class="currency mou">{{d.7.feb|floatformat}}</td>
-                            {% elif d.2.feb_rencana_disburse != "0" %}
-                            <td class="currency">{{d.2.feb_rencana_disburse|floatformat}}</td>
+                            {% if d.4 and month < 2 %}
+                            <td class="currency mou">{{d.4.feb|floatformat}}</td>
+                            {% elif d.0.feb_rencana_disburse != "0" %}
+                            <td class="currency">{{d.0.feb_rencana_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month == 2 %}
-                            <td class="currency mou">{{d.7.feb|floatformat}}</td>
-                            {% elif d.2.feb_realisasi_disburse != "0" %}
-                            <td class="currency">{{d.2.feb_realisasi_disburse|floatformat}}</td>
+                            {% if d.4 and month == 2 %}
+                            <td class="currency mou">{{d.4.feb|floatformat}}</td>
+                            {% elif d.0.feb_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.0.feb_realisasi_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month < 3 %}
-                            <td class="currency mou">{{d.7.mar|floatformat}}</td>
-                            {% elif d.2.mar_rencana_disburse != "0" %}
-                            <td class="currency">{{d.2.mar_rencana_disburse|floatformat}}</td>
+                            {% if d.4 and month < 3 %}
+                            <td class="currency mou">{{d.4.mar|floatformat}}</td>
+                            {% elif d.0.mar_rencana_disburse != "0" %}
+                            <td class="currency">{{d.0.mar_rencana_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month == 3 %}
-                            <td class="currency mou">{{d.7.mar|floatformat}}</td>
-                            {% elif d.2.mar_realisasi_disburse != "0" %}
-                            <td class="currency">{{d.2.mar_realisasi_disburse|floatformat}}</td>
+                            {% if d.4 and month == 3 %}
+                            <td class="currency mou">{{d.4.mar|floatformat}}</td>
+                            {% elif d.0.mar_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.0.mar_realisasi_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month < 4 %}
-                            <td class="currency mou">{{d.7.apr|floatformat}}</td>
-                            {% elif d.2.apr_rencana_disburse != "0" %}
-                            <td class="currency">{{d.2.apr_rencana_disburse|floatformat}}</td>
+                            {% if d.4 and month < 4 %}
+                            <td class="currency mou">{{d.4.apr|floatformat}}</td>
+                            {% elif d.0.apr_rencana_disburse != "0" %}
+                            <td class="currency">{{d.0.apr_rencana_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month == 4 %}
-                            <td class="currency mou">{{d.7.apr|floatformat}}</td>
-                            {% elif d.2.apr_realisasi_disburse != "0" %}
-                            <td class="currency">{{d.2.apr_realisasi_disburse|floatformat}}</td>
+                            {% if d.4 and month == 4 %}
+                            <td class="currency mou">{{d.4.apr|floatformat}}</td>
+                            {% elif d.0.apr_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.0.apr_realisasi_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
                             
-                            {% if d.7 and month < 5 %}
-                            <td class="currency mou">{{d.7.mei|floatformat}}</td>
-                            {% elif d.2.mei_rencana_disburse != "0" %}
-                            <td class="currency">{{d.2.mei_rencana_disburse|floatformat}}</td>
+                            {% if d.4 and month < 5 %}
+                            <td class="currency mou">{{d.4.mei|floatformat}}</td>
+                            {% elif d.0.mei_rencana_disburse != "0" %}
+                            <td class="currency">{{d.0.mei_rencana_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month == 5 %}
-                            <td class="currency mou">{{d.7.mei|floatformat}}</td>
-                            {% elif d.2.mei_realisasi_disburse != "0" %}
-                            <td class="currency">{{d.2.mei_realisasi_disburse|floatformat}}</td>
+                            {% if d.4 and month == 5 %}
+                            <td class="currency mou">{{d.4.mei|floatformat}}</td>
+                            {% elif d.0.mei_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.0.mei_realisasi_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month < 6 %}
-                            <td class="currency mou">{{d.7.jun|floatformat}}</td>
-                            {% elif d.2.jun_rencana_disburse != "0" %}
-                            <td class="currency">{{d.2.jun_rencana_disburse|floatformat}}</td>
+                            {% if d.4 and month < 6 %}
+                            <td class="currency mou">{{d.4.jun|floatformat}}</td>
+                            {% elif d.0.jun_rencana_disburse != "0" %}
+                            <td class="currency">{{d.0.jun_rencana_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month == 6 %}
-                            <td class="currency mou">{{d.7.jun|floatformat}}</td>
-                            {% elif d.2.jun_realisasi_disburse != "0" %}
-                            <td class="currency">{{d.2.jun_realisasi_disburse|floatformat}}</td>
+                            {% if d.4 and month == 6 %}
+                            <td class="currency mou">{{d.4.jun|floatformat}}</td>
+                            {% elif d.0.jun_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.0.jun_realisasi_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month < 7 %}
-                            <td class="currency mou">{{d.7.jul|floatformat}}</td>
-                            {% elif d.2.jul_rencana_disburse != "0" %}
-                            <td class="currency">{{d.2.jul_rencana_disburse|floatformat}}</td>
+                            {% if d.4 and month < 7 %}
+                            <td class="currency mou">{{d.4.jul|floatformat}}</td>
+                            {% elif d.0.jul_rencana_disburse != "0" %}
+                            <td class="currency">{{d.0.jul_rencana_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month == 7 %}
-                            <td class="currency mou">{{d.7.jul|floatformat}}</td>
-                            {% elif d.2.jul_realisasi_disburse != "0" %}
-                            <td class="currency">{{d.2.jul_realisasi_disburse|floatformat}}</td>
+                            {% if d.4 and month == 7 %}
+                            <td class="currency mou">{{d.4.jul|floatformat}}</td>
+                            {% elif d.0.jul_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.0.jul_realisasi_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
                             
-                            {% if d.7 and month < 8 %}
-                            <td class="currency mou">{{d.7.aug|floatformat}}</td>
-                            {% elif d.2.aug_rencana_disburse != "0" %}
-                            <td class="currency">{{d.2.aug_rencana_disburse|floatformat}}</td>
+                            {% if d.4 and month < 8 %}
+                            <td class="currency mou">{{d.4.aug|floatformat}}</td>
+                            {% elif d.0.aug_rencana_disburse != "0" %}
+                            <td class="currency">{{d.0.aug_rencana_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month == 8 %}
-                            <td class="currency mou">{{d.7.aug|floatformat}}</td>
-                            {% elif d.2.aug_realisasi_disburse != "0" %}
-                            <td class="currency">{{d.2.aug_realisasi_disburse|floatformat}}</td>
+                            {% if d.4 and month == 8 %}
+                            <td class="currency mou">{{d.4.aug|floatformat}}</td>
+                            {% elif d.0.aug_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.0.aug_realisasi_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month < 9 %}
-                            <td class="currency mou">{{d.7.sep|floatformat}}</td>
-                            {% elif d.2.sep_rencana_disburse != "0" %}
-                            <td class="currency">{{d.2.sep_rencana_disburse|floatformat}}</td>
+                            {% if d.4 and month < 9 %}
+                            <td class="currency mou">{{d.4.sep|floatformat}}</td>
+                            {% elif d.0.sep_rencana_disburse != "0" %}
+                            <td class="currency">{{d.0.sep_rencana_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month == 9 %}
-                            <td class="currency mou">{{d.7.sep|floatformat}}</td>
-                            {% elif d.2.sep_realisasi_disburse != "0" %}
-                            <td class="currency">{{d.2.sep_realisasi_disburse|floatformat}}</td>
+                            {% if d.4 and month == 9 %}
+                            <td class="currency mou">{{d.4.sep|floatformat}}</td>
+                            {% elif d.0.sep_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.0.sep_realisasi_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month < 10 %}
-                            <td class="currency mou">{{d.7.okt|floatformat}}</td>
-                            {% elif d.2.okt_rencana_disburse != "0" %}
-                            <td class="currency">{{d.2.okt_rencana_disburse|floatformat}}</td>
+                            {% if d.4 and month < 10 %}
+                            <td class="currency mou">{{d.4.okt|floatformat}}</td>
+                            {% elif d.0.okt_rencana_disburse != "0" %}
+                            <td class="currency">{{d.0.okt_rencana_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month == 10 %}
-                            <td class="currency mou">{{d.7.okt|floatformat}}</td>
-                            {% elif d.2.okt_realisasi_disburse != "0" %}
-                            <td class="currency">{{d.2.okt_realisasi_disburse|floatformat}}</td>
+                            {% if d.4 and month == 10 %}
+                            <td class="currency mou">{{d.4.okt|floatformat}}</td>
+                            {% elif d.0.okt_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.0.okt_realisasi_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month < 11 %}
-                            <td class="currency mou">{{d.7.nov|floatformat}}</td>
-                            {% elif d.2.nov_rencana_disburse != "0" %}
-                            <td class="currency">{{d.2.nov_rencana_disburse|floatformat}}</td>
+                            {% if d.4 and month < 11 %}
+                            <td class="currency mou">{{d.4.nov|floatformat}}</td>
+                            {% elif d.0.nov_rencana_disburse != "0" %}
+                            <td class="currency">{{d.0.nov_rencana_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month == 11 %}
-                            <td class="currency mou">{{d.7.nov|floatformat}}</td>
-                            {% elif d.2.nov_realisasi_disburse != "0" %}
-                            <td class="currency">{{d.2.nov_realisasi_disburse|floatformat}}</td>
+                            {% if d.4 and month == 11 %}
+                            <td class="currency mou">{{d.4.nov|floatformat}}</td>
+                            {% elif d.0.nov_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.0.nov_realisasi_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month < 12 %}
-                            <td class="currency mou">{{d.7.des|floatformat}}</td>
-                            {% elif d.2.des_rencana_disburse != "0" %}
-                            <td class="currency">{{d.2.des_rencana_disburse|floatformat}}</td>
+                            {% if d.4 and month < 12 %}
+                            <td class="currency mou">{{d.4.des|floatformat}}</td>
+                            {% elif d.0.des_rencana_disburse != "0" %}
+                            <td class="currency">{{d.0.des_rencana_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.7 and month == 12 %}
-                            <td class="currency mou">{{d.7.des|floatformat}}</td>
-                            {% elif d.2.des_realisasi_disburse != "0" %}
-                            <td class="currency">{{d.2.des_realisasi_disburse|floatformat}}</td>
+                            {% if d.4 and month == 12 %}
+                            <td class="currency mou">{{d.4.des|floatformat}}</td>
+                            {% elif d.0.des_realisasi_disburse != "0" %}
+                            <td class="currency">{{d.0.des_realisasi_disburse|floatformat}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.3 != 0 %}
-                            <td class="currency">{{d.3}}</td>
+                            {% if d.5 != 0 %}
+                            <td class="currency">{{d.5}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.4 != 0 %}
-                            <td class="currency">{{d.4}}</td>
+                            {% if d.6 != 0 %}
+                            <td class="currency">{{d.6}}</td>
                             {% else %}
                             <td class="cell-disabled"> - </td>
                             {% endif %}
 
-                            {% if d.6 %}
-                            <td data-toggle="modal" data-target="#edit-{{d.2.pk_to_hex}}">{{d.6.kode_prk}}</td>
-                            <td data-toggle="modal" data-target="#edit-{{d.2.pk_to_hex}}">{{d.6.kode_bpo}}</td>
-                            <td data-toggle="modal" data-target="#edit-{{d.2.pk_to_hex}}">{{d.6.rekap_user_induk}}</td>
+                            {% if d.7 %}
+                            <td data-toggle="modal" data-target="#edit-{{d.0.pk_to_hex}}">{{d.7.kode_prk}}</td>
+                            <td data-toggle="modal" data-target="#edit-{{d.0.pk_to_hex}}">{{d.7.kode_bpo}}</td>
+                            <td data-toggle="modal" data-target="#edit-{{d.0.pk_to_hex}}">{{d.7.rekap_user_induk}}</td>
                             {% else %}
-                            <td data-toggle="modal" data-target="#edit-{{d.2.pk_to_hex}}"></td>
-                            <td data-toggle="modal" data-target="#edit-{{d.2.pk_to_hex}}"></td>
-                            <td data-toggle="modal" data-target="#edit-{{d.2.pk_to_hex}}"></td>
+                            <td data-toggle="modal" data-target="#edit-{{d.0.pk_to_hex}}"></td>
+                            <td data-toggle="modal" data-target="#edit-{{d.0.pk_to_hex}}"></td>
+                            <td data-toggle="modal" data-target="#edit-{{d.0.pk_to_hex}}"></td>
                             {% endif %}
 
-                            {% if d.0.no_prk %}
-                            <td>{{d.0.sumber_dana}}</td>
-                            {% else %}
+                            {% if d.1.no_prk %}
                             <td>{{d.1.sumber_dana}}</td>
+                            {% else %}
+                            <td>{{d.3.sumber_dana}}</td>
                             {% endif %}
                             
 
-                            {% if d.2.mekanisme_pembayaran %}
-                            <td>{{d.2.mekanisme_pembayaran}}</td>
+                            {% if d.0.mekanisme_pembayaran %}
+                            <td>{{d.0.mekanisme_pembayaran}}</td>
                             {% else %}
                             <td class="cell-disabled" > - </td>
                             {% endif %}
@@ -586,21 +576,21 @@
                     <tbody>
                         <tr>
                             <td>SKAI</td>
-                            <td><a href="{% url 'document:doc-view-lkai' document.0.pk %}">{{document.0.keyword}}</a></td>
+                            <td><a href="">{{document.0.keyword}}</a></td>
                             <td>{{document.0.document.published_date|date:"d M Y"}}</td>
                             <td>{{document.0.document.upload_date}}</td>
                             <td>{{document.0.document.uploader}}</td>
                         </tr>
                         <tr>
                             <td>SKAI</td>
-                            <td><a href="{% url 'document:doc-view-lkai' document.3.pk %}">{{document.3.keyword}}</a></td>
+                            <td><a href="">{{document.3.keyword}}</a></td>
                             <td>{{document.3.document.published_date|date:"d M Y"}}</td>
                             <td>{{document.3.document.upload_date}}</td>
                             <td>{{document.3.document.uploader}}</td>
                         </tr>
                         <tr>
                             <td>SKAI</td>
-                            <td><a href="{% url 'document:doc-view-lkai' document.1.pk %}">{{document.1.keyword}}</a></td>
+                            <td><a href="">{{document.1.keyword}}</a></td>
                             <td>{{document.1.document.published_date|date:"d M Y"}}</td>
                             <td>{{document.1.document.upload_date}}</td>
                             <td>{{document.1.document.uploader}}</td>
@@ -631,7 +621,7 @@
 
 <!-- Modal Edit Data -->
 {% for d in data %}
-<div class="modal fade" id="edit-{{d.2.pk_to_hex}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="edit-{{d.0.pk_to_hex}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -652,22 +642,22 @@
                     <div class="form-group">
                         <label for="formGroupExampleInput">Kode PRK</label>
                         <input type="text" class="form-control" name="kode_prk" id="formGroupExampleInput" 
-                        {% if d.6 %} value="{{d.6.kode_prk}}" {% else %} value=""{% endif %}/>
+                        {% if d.7 %} value="{{d.7.kode_prk}}" {% else %} value=""{% endif %}/>
                     </div>
                     <div class="form-group">
                         <label for="formGroupExampleInput">Kode BPO</label>
                         <input type="text" class="form-control" name="kode_bpo" id="formGroupExampleInput" 
-                        {% if d.6 %} value="{{d.6.kode_bpo}}" {% else %} value=""{% endif %}/>
+                        {% if d.7 %} value="{{d.7.kode_bpo}}" {% else %} value=""{% endif %}/>
                     </div>
                     <div class="form-group">
                         <label for="formGroupExampleInput">UPP</label>
                         <input type="text" class="form-control" name="upp" id="formGroupExampleInput" 
-                        {% if d.6 %} value="{{d.6.upp}}" {% else %} value=""{% endif %}/>
+                        {% if d.7 %} value="{{d.7.upp}}" {% else %} value=""{% endif %}/>
                     </div>
                     <div class="form-group">
                         <label for="formGroupExampleInput">Rekap User Induk</label>
                         <input type="text" class="form-control" name="rekap_user_induk" id="formGroupExampleInput" 
-                        {% if d.6 %} value="{{d.6.rekap_user_induk}}" {% else %} value=""{% endif %}/>
+                        {% if d.7 %} value="{{d.7.rekap_user_induk}}" {% else %} value=""{% endif %}/>
                     </div>
                 </form>
             </div>

@@ -407,143 +407,66 @@ class MonevView(LoginRequiredMixin, View):
 
 class LKAIView(LoginRequiredMixin, View):
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         context = {}
         context["month"] = this_month()
 
-        ### TRY TO AUTOMATE LATER ###
-        # doc = DocSKAI.objects.filter(year=2022, lrpa_include=True).order_by('document__published_date')
-        # first_macro_file = doc[0].macro.macro_file_1
-        # first_macro_data = MacroData.objects.filter(macro_file=first_macro_file).order_by('no_prk')
-        ### TRY TO AUTOMATE LATER ###
-
-        #GET USER DIVISION
-        division = request.user.division
-        
+        # ALL DOCUMENT NEEDED
         if is_production():
             skai_1 = DocSKAI.objects.get(pk=1)
-            skai_3 = DocSKAI.objects.get(pk=3)
-            skai_2 = DocSKAI.objects.get(pk=6)
+            skai_2 = DocSKAI.objects.get(pk=3)
+            skai_3 = DocSKAI.objects.get(pk=6)
         else:
             skai_1 = DocSKAI.objects.get(pk=8)
-            skai_3 = DocSKAI.objects.get(pk=10)
-            skai_2 = DocSKAI.objects.get(pk=19)
-
+            skai_2 = DocSKAI.objects.get(pk=10)
+            skai_3 = DocSKAI.objects.get(pk=19)
+        
         macro_1 = skai_1.macro.macro_file_1
-        macro_data_1 = MacroData.objects.filter(macro_file=macro_1).order_by('no_prk')
-
-        macro_3 = skai_3.macro.macro_file_1
-
-        file_lookup = Assigned_PRK.objects.get(pk=1)
         macro_2 = skai_2.macro.macro_file_1
-        macro_data_2 = MacroData.objects.filter(macro_file=macro_2)
-
+        macro_3 = skai_3.macro.macro_file_1
+        
         last_lrpa = LRPA_File.objects.order_by('-file_export_date').first()
         last_mou = FileMouPengalihan.objects.order_by('file_export_date').first()
+        file_lookup = Assigned_PRK.objects.get(pk=1)
 
-        list_1 = list(data.no_prk for data in macro_data_1)
-        list_2 = list(data.no_prk for data in macro_data_2)
-
-        #MANUAL!!!
         document = [skai_1, skai_2, last_lrpa, skai_3, last_mou]
         context["document"] = document
 
-        #MANUAL!!!
-        residue_1 = list(set(list_1)-set(list_2))
-        residue_2 = list(set(list_2)-set(list_1))
+        #GET USER DIVISION
+        division = request.user.division
 
         if division == "Super Admin" or division == "ANG":
             context["for_div"] = "ALL"
         else:
             context["for_div"] = division
-        
+
+        macro_data_1 = MacroData.objects.filter(macro_file=macro_1).order_by('no_prk')
+        macro_data_2 = MacroData.objects.filter(macro_file=macro_2).order_by('no_prk')
+        macro_data_3 = MacroData.objects.filter(macro_file=macro_3).order_by('no_prk')
+        mou_data = MouPengalihanData.objects.filter(file=last_mou)
         combine_list = []
+
+        lrpa_data = LRPA_Monitoring.objects.filter(file=last_lrpa)
         
-        for data in macro_data_1:
+        for data in lrpa_data:
+            data_1 = macro_data_1.filter(no_prk=data.no_prk).first()
+            data_2 = macro_data_2.filter(no_prk=data.no_prk).first()
+            data_3 = macro_data_3.filter(no_prk=data.no_prk).first()
+            data_mou = mou_data.filter(no_prk=data.no_prk).first()
+            total_realisasi = data.sum_realisasi()
+            sisa_aki = data.sisa_aki()
 
-            if data.no_prk == None:
-                continue
+            if division == "Super Admin" or division == "ANG" or request.user.is_staff:
+                lookup_prk = PRK_Lookup.objects.filter(file=file_lookup, no_prk=data.no_prk).first()
+                combine_list.append((data,data_1,data_2,data_3,data_mou,total_realisasi,sisa_aki,lookup_prk))
+            else:
+                lookup_prk = PRK_Lookup.objects.filter(file=file_lookup, no_prk=data.no_prk, rekap_user_induk=division).first()
+                if lookup_prk != None:
+                    combine_list.append((data,data_1,data_2,data_3,data_mou,total_realisasi,sisa_aki,lookup_prk))
 
-            try:
-                temp = MacroData.objects.get(no_prk=data.no_prk, macro_file=macro_2)
-                temp_2 = MacroData.objects.get(no_prk=data.no_prk, macro_file=macro_3)
-                lrpa = LRPA_Monitoring.objects.get(no_prk=data.no_prk, file=last_lrpa)
-                try:
-                    mou = MouPengalihanData.objects.get(no_prk=data.no_prk, file=last_mou)
-                except MouPengalihanData.DoesNotExist:
-                    mou = None
-
-                #get total realisasi
-                total_realisasi = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0) + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
-                if lrpa.real_aki():
-                    sisa_aki = lrpa.real_aki() - total_realisasi
-                else:
-                    sisa_aki = 0
-                
-                # Get PRK kode lookup
-                # Determine User View
-
-                if division == "Super Admin" or division == "ANG" or request.user.is_staff:
-                    lookup_prk = PRK_Lookup.objects.filter(file=file_lookup, no_prk=data.no_prk).first() #return None if there isnt any
-                    if temp.no_prk != None:
-                        combine_list.append((data,temp,lrpa,total_realisasi,sisa_aki,temp_2, lookup_prk, mou))
-                else:
-                    lookup_prk = PRK_Lookup.objects.filter(file=file_lookup, no_prk=data.no_prk, rekap_user_induk=division).first()
-                    if temp.no_prk != None and lookup_prk != None:
-                        combine_list.append((data,temp,lrpa,total_realisasi,sisa_aki,temp_2, lookup_prk, mou))
-
-                #print(data.macro_file.pk == temp.macro_file.pk)
-            except Exception as e:
-                #print("Skip " + str(data.no_prk))
-                exception_type, exception_object, exception_traceback = sys.exc_info()
-                line_number = exception_traceback.tb_lineno
-                print(e, line_number, data.no_prk)
-        
-        if len(residue_2) != 0:
-            for prk in residue_2:
-                print(prk)
-                try:
-                    temp = MacroData.objects.get(no_prk=prk, macro_file=macro_2)
-                    temp_2 = MacroData.objects.get(no_prk=data.no_prk, macro_file=macro_3)
-                    lrpa = LRPA_Monitoring.objects.get(no_prk=prk, file=last_lrpa)
-                    try:
-                        mou = MouPengalihanData.objects.get(no_prk=data.no_prk, file=last_mou)
-                    except MouPengalihanData.DoesNotExist:
-                        mou = None
-
-                    #get prk kode
-                    lookup_prk = PRK_Lookup.objects.filter(file=file_lookup, no_prk=data.no_prk).first() #return None if there isnt any
-
-                    #get total realisasi
-                    total_realisasi = int(lrpa.jan_realisasi_disburse) + int(lrpa.feb_realisasi_disburse) + int(lrpa.mar_realisasi_disburse) + int(lrpa.apr_realisasi_disburse) + int(lrpa.mei_realisasi_disburse) + int(lrpa.jun_realisasi_disburse) + int(lrpa.jul_realisasi_disburse) + int(lrpa.aug_realisasi_disburse) + int(lrpa.sep_realisasi_disburse) + int(lrpa.okt_realisasi_disburse) + int(lrpa.nov_realisasi_disburse) + int(lrpa.des_realisasi_disburse)
-                    
-                    if lrpa.real_aki():
-                        sisa_aki = lrpa.real_aki() - total_realisasi
-                    else:
-                        sisa_aki = 0
-                    
-                    # Get PRK kode lookup
-                    # Determine User View
-
-                    if division == "Super Admin" or division == "ANG" or request.user.is_staff:
-                        lookup_prk = PRK_Lookup.objects.filter(file=file_lookup, no_prk=data.no_prk).first() #return None if there isnt any
-                        if temp.no_prk != None:
-                            combine_list.append((data,temp,lrpa,total_realisasi,sisa_aki,temp_2, lookup_prk, mou))
-                    else:
-                        lookup_prk = PRK_Lookup.objects.filter(file=file_lookup, no_prk=data.no_prk, rekap_user_induk=division).first()
-                        if temp.no_prk != None and lookup_prk != None: #CHANGE THIS TO WORK!!
-                            combine_list.append((data,temp,lrpa,total_realisasi,sisa_aki,temp_2, lookup_prk, mou))
-                except Exception as e:
-                    exception_type, exception_object, exception_traceback = sys.exc_info()
-                    line_number = exception_traceback.tb_lineno
-                    print(e, line_number)
-        
-        # for temp in combine_list:
-        #     print(temp[0].no_prk)
-        
         context["data"] = combine_list
-        
-        return render(request, 'monev/monev_lkai.html', context)
+
+        return render(request, 'monev/monev_lkai_new.html', context)
 
 class UploadLRPA(LoginRequiredMixin, View):
     

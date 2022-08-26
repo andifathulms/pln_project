@@ -51,6 +51,9 @@ class LRPA_Monitoring(models.Model):
     def sum_realisasi(self):
         return int(self.jan_realisasi_disburse) + int(self.feb_realisasi_disburse) + int(self.mar_realisasi_disburse) + int(self.apr_realisasi_disburse) + int(self.mei_realisasi_disburse) + int(self.jun_realisasi_disburse) + int(self.jul_realisasi_disburse) + int(self.aug_realisasi_disburse) + int(self.sep_realisasi_disburse) + int(self.okt_realisasi_disburse) + int(self.nov_realisasi_disburse) + int(self.des_realisasi_disburse)
 
+    def sisa_aki(self):
+        return int(self.real_aki() - self.sum_realisasi())
+    
     def get_rencana_bulan(self, month):
         switch = {
             1: int(self.jan_rencana_disburse),2: int(self.feb_rencana_disburse),3: int(self.mar_rencana_disburse),

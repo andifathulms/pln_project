@@ -125,9 +125,11 @@ class MacroData(models.Model):
     des_progress_fisik          = models.CharField(max_length=255,blank=True, null=True)
     des_rencana_disburse        = models.CharField(max_length=255,blank=True, null=True)
 
+    @property
     def real_ai(self):
         return round(self.ai_this_year * 1000)
 
+    @property
     def real_aki(self):
         return round(self.aki_this_year * 1000)
     
