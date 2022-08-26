@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block style %}
+<style>
+    td {
+        vertical-align: middle;
+        text-align: center;
+        color: #161616;
+        
+    }
+</style>
+{% endblock style%}
+
+{% block content %}
+<div class="container-fluid">
+    <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+        <li class="col nav-item" role="presentation">
+            <button class="nav-link active w-100" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-lrpa" type="button" role="tab" aria-controls="pills-home" aria-selected="true">File LRPA</button>
+        </li>
+        <li class="col nav-item" role="presentation">
+            <button class="nav-link w-100" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-mou" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">File MOU Pengalihan</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-lrpa" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
+            <div class="mb-4 shadow card">
+                <div class="py-3 card-header">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="m-0 font-weight-bold" style="color: #fff;">Daftar LRPA</h6>
+                        </div>
+                        <div class="col-4 ">
+                            <a href="{% url 'monev:monev-upload-lrpa' %}" class="btn btn-success btn-icon-split btn-sm float-right mr-1">
+                                <span class="icon text-white-50">
+                                    <i class="fa-solid fa-file-arrow-up"></i>
+                                </span>
+                                <span class="text">Upload LRPA</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Filename</th>
+                                    <th>Bulan</th>
+                                    <th>Tahun</th>
+                                    <th>LRPA Export Date</th>
+                                    <th style="background-color: #161616;">Tanggal Upload</th>
+                                    <th style="background-color: #161616;">Diupload oleh</th>
+                                </tr>
+                                
+                            </thead>
+                            <tbody>
+                                {% for doc in lrpa %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{doc.lrpa_file}}</td>
+                                    <td>{{doc.for_month}}</td>
+                                    <td>{{doc.for_year}}</td>
+                                    <td>{{doc.file_export_date}}</td>
+                                    <td>{{doc.upload_date}}</td>
+                                    <td>{{doc.upload_by}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="pills-mou" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
+            <div class="mb-4 shadow card">
+                <div class="py-3 card-header">
+                    <div class="row">
+                        <div class="col-8">
+                            <h6 class="m-0 font-weight-bold" style="color: #fff;">Daftar File MOU Pengalihan</h6>
+                        </div>
+                        <div class="col-4 ">
+                            <a href="{% url 'monev:monev-upload-mou' %}" class="btn btn-success btn-icon-split btn-sm float-right mr-1">
+                                <span class="icon text-white-50">
+                                    <i class="fa-solid fa-file-arrow-up"></i>
+                                </span>
+                                <span class="text">Upload MOU Pengalihan</span>
+                            </a>
+                            <a href="{#% url 'monev:monev-upload-mou' %#}" class="btn btn-info btn-icon-split btn-sm float-right mr-1">
+                                <span class="icon text-white-50">
+                                    <i class="fa-solid fa-download"></i>
+                                </span>
+                                <span class="text">Download Template</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Filename</th>
+                                    <th>Bulan</th>
+                                    <th>Tahun</th>
+                                    <th>Tanggal Dokumen</th>
+                                    <th style="background-color: #161616;">Tanggal Upload</th>
+                                    <th style="background-color: #161616;">Diupload oleh</th>
+                                </tr>
+                                
+                            </thead>
+                            <tbody>
+                                {% for doc in docs %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{doc.mou_file}}</td>
+                                    <td>{{doc.for_month}}</td>
+                                    <td>{{doc.for_year}}</td>
+                                    <td>{{doc.file_export_date}}</td>
+                                    <td>{{doc.upload_date}}</td>
+                                    <td>{{doc.upload_by}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block script %}
+<script>
+    
+</script>
+
+
+{% endblock script %}

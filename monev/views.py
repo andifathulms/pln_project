@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import View
+from django.db.models import Sum
 
 from document.models import DocSKAI, MacroData
 
@@ -20,6 +21,60 @@ def safe_div(x,y):
 def this_month():
     return datetime.now().month
 
+def is_production():
+    return False
+
+class DashboardView(LoginRequiredMixin, View):
+    def get(self, request):
+        context = {}
+
+        last_lrpa = LRPA_File.objects.order_by('-file_export_date').first()
+        last_mou = FileMouPengalihan.objects.order_by('file_export_date').first()
+        file_lookup = Assigned_PRK.objects.get(pk=1) #MANUAL
+
+        pembayaran = ["Unit", "Pusat", "Pengalihan"]
+        data_1 = []
+        for idx,x in enumerate(pembayaran):
+            sum_ai = int(LRPA_Monitoring.objects.filter(file=last_lrpa,mekanisme_pembayaran=x).aggregate(Sum('ai_this_year'))['ai_this_year__sum'])
+            sum_aki = int(LRPA_Monitoring.objects.filter(file=last_lrpa,mekanisme_pembayaran=x).aggregate(Sum('aki_this_year'))['aki_this_year__sum'])
+            sum_realisasi = int(sum([m.sum_realisasi() for m in LRPA_Monitoring.objects.filter(file=last_lrpa,mekanisme_pembayaran=x)]))
+            pct = (sum_realisasi*100)/sum_aki
+            sisa = sum_aki - sum_realisasi
+            
+            data_1.append((pembayaran[idx],sum_ai,sum_aki,sum_realisasi,pct,sisa))
+
+        context["data_1"] = data_1
+        
+        bpo = ["REN", "PPK", "OPK 1", "OPK 2", "K3L"]
+        data_2 = []
+        for idx,x in enumerate(bpo):
+            prk = PRK_Lookup.objects.filter(file=file_lookup, kode_bpo=x).values_list('no_prk')
+            prk_1 = LRPA_Monitoring.objects.filter(file=last_lrpa,mekanisme_pembayaran="Pengalihan").values_list('no_prk')
+            prk_list = [p[0] for p in prk]
+            prk_list_1 = [p[0] for p in prk_1]
+
+            not_union = [p for p in prk_list if p not in prk_list_1]
+            union = list(set(prk_list).intersection(prk_list_1)) # intersection between pengalihan and bpo
+            
+            #ADD IF PENGALIHAN
+            sum_of_akb = int(sum([p.get_rencana_bulan(this_month()) for p in LRPA_Monitoring.objects.filter(no_prk__in=prk_list,file=last_lrpa)]))
+            sum_of_realisasi_0 = int(sum([p.get_realisasi_bulan(this_month()) for p in LRPA_Monitoring.objects.filter(no_prk__in=not_union,file=last_lrpa)]))
+            mou = MouPengalihanData.objects.filter(no_prk__in=union,file=last_mou)
+            #print(x)
+            #for p in mou: print(p.get_realisasi_bulan(this_month()),x)
+            sum_of_realisasi_1 = int(sum([p.get_realisasi_bulan(this_month()) if p else 0 for p in mou]))
+            sum_of_realisasi = sum_of_realisasi_0 + sum_of_realisasi_1
+            sisa = sum_of_akb - sum_of_realisasi
+            try:
+                pct = (sisa*100)/sum_of_akb
+            except:
+                pct = 0
+            data_2.append((x, sum_of_akb, sum_of_realisasi,sisa,pct))
+
+        
+        context["data_2"] = data_2
+        return render(request, 'account/dashboard.html', context)
+
 class MonevView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         context = {}
@@ -27,6 +82,8 @@ class MonevView(LoginRequiredMixin, View):
         last_lrpa = LRPA_File.objects.order_by('-file_export_date').first()
         last_mou = FileMouPengalihan.objects.order_by('file_export_date').first()
         file_lookup = Assigned_PRK.objects.get(pk=1) #MANUAL
+
+        month = this_month() #CHANGE LATER TO LAST MOU MONTH
 
         #START COMPUTE FOR MONEV BY BPO
         #COUNT FOR BPO BESIDE "UPP"
@@ -51,15 +108,18 @@ class MonevView(LoginRequiredMixin, View):
                 lrpa = LRPA_Monitoring.objects.get(no_prk=p.no_prk, file=last_lrpa)
                 sum_ai_temp = sum_ai_temp + lrpa.real_ai()
                 sum_aki_temp = sum_aki_temp + lrpa.real_aki()
+                lrpa_realisasi = [int(lrpa.jan_realisasi_disburse or 0), int(lrpa.feb_realisasi_disburse or 0), int(lrpa.mar_realisasi_disburse or 0), int(lrpa.apr_realisasi_disburse or 0), int(lrpa.mei_realisasi_disburse or 0), int(lrpa.jun_realisasi_disburse or 0), int(lrpa.jul_realisasi_disburse or 0), int(lrpa.aug_realisasi_disburse or 0), int(lrpa.sep_realisasi_disburse or 0), int(lrpa.okt_realisasi_disburse or 0), int(lrpa.nov_realisasi_disburse or 0), int(lrpa.des_realisasi_disburse or 0)]
                 try:
                     mou = MouPengalihanData.objects.get(no_prk=p.no_prk, file=last_mou)
-                    temp_realisasi_temp = int(mou.jan or 0) + int(mou.feb or 0) + int(mou.mar or 0) + int(mou.apr or 0) + int(mou.mei or 0) + int(mou.jun or 0) + int(mou.jul or 0) + int(mou.aug or 0)# + int(mou.sep or 0) + int(mou.okt or 0) + int(mou.nov or 0) + int(mou.des or 0)
-                    print(mou, temp_realisasi_temp)
+                    mou_realisasi = [int(mou.jan or 0), int(mou.feb or 0), int(mou.mar or 0), int(mou.apr or 0), int(mou.mei or 0), int(mou.jun or 0), int(mou.jul or 0), int(mou.aug or 0), int(mou.sep or 0), int(mou.okt or 0), int(mou.nov or 0), int(mou.des or 0)]
+                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
+                    print(sum(lrpa_realisasi), " - ", lrpa_realisasi[month-1], " + ", mou_realisasi[month+1])
                 except ValueError:
-                    temp_realisasi_temp = int(float(mou.jan or 0)) + int(float(mou.feb or 0)) + int(float(mou.mar or 0)) + int(float(mou.apr or 0)) + int(float(mou.mei or 0)) + int(float(mou.jun or 0)) + int(float(mou.jul or 0)) + int(float(mou.aug or 0))# + int(float(mou.sep or 0)) + int(float(mou.okt or 0)) + int(float(mou.nov or 0)) + int(float(mou.des or 0))
-                    print(mou, temp_realisasi_temp,"float")
+                    mou_realisasi = [int(float(mou.jan) or 0), int(float(mou.feb) or 0), int(float(mou.mar) or 0), int(float(mou.apr) or 0), int(float(mou.mei) or 0), int(float(mou.jun) or 0), int(float(mou.jul) or 0), int(float(mou.aug) or 0), int(float(mou.sep) or 0), int(float(mou.okt) or 0), int(float(mou.nov) or 0), int(float(mou.des) or 0)]
+                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
+                    print("FLOAT")
                 except MouPengalihanData.DoesNotExist:
-                    temp_realisasi_temp = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0)# + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
+                    temp_realisasi_temp = sum(lrpa_realisasi)
                 
                 temp_realisasi = temp_realisasi + temp_realisasi_temp
                 count_bpo = count_bpo + 1
@@ -94,16 +154,20 @@ class MonevView(LoginRequiredMixin, View):
                 lrpa = LRPA_Monitoring.objects.get(no_prk=p.no_prk, file=last_lrpa)
                 sum_ai_temp = sum_ai_temp + lrpa.real_ai()
                 sum_aki_temp = sum_aki_temp + lrpa.real_aki()
+                lrpa_realisasi = [int(lrpa.jan_realisasi_disburse or 0), int(lrpa.feb_realisasi_disburse or 0), int(lrpa.mar_realisasi_disburse or 0), int(lrpa.apr_realisasi_disburse or 0), int(lrpa.mei_realisasi_disburse or 0), int(lrpa.jun_realisasi_disburse or 0), int(lrpa.jul_realisasi_disburse or 0), int(lrpa.aug_realisasi_disburse or 0), int(lrpa.sep_realisasi_disburse or 0), int(lrpa.okt_realisasi_disburse or 0), int(lrpa.nov_realisasi_disburse or 0), int(lrpa.des_realisasi_disburse or 0)]
+                    
                 try:
                     mou = MouPengalihanData.objects.get(no_prk=p.no_prk, file=last_mou)
-                    temp_realisasi_temp = int(mou.jan or 0) + int(mou.feb or 0) + int(mou.mar or 0) + int(mou.apr or 0) + int(mou.mei or 0) + int(mou.jun or 0) + int(mou.jul or 0) + int(mou.aug or 0)# + int(mou.sep or 0) + int(mou.okt or 0) + int(mou.nov or 0) + int(mou.des or 0)
-                    print(mou, temp_realisasi_temp)
+                    mou_realisasi = [int(mou.jan or 0), int(mou.feb or 0), int(mou.mar or 0), int(mou.apr or 0), int(mou.mei or 0), int(mou.jun or 0), int(mou.jul or 0), int(mou.aug or 0), int(mou.sep or 0), int(mou.okt or 0), int(mou.nov or 0), int(mou.des or 0)]
+                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
+                    print(sum(lrpa_realisasi), " - ", lrpa_realisasi[month-1], " + ", mou_realisasi[month+1])
                 except ValueError:
-                    temp_realisasi_temp = int(float(mou.jan or 0)) + int(float(mou.feb or 0)) + int(float(mou.mar or 0)) + int(float(mou.apr or 0)) + int(float(mou.mei or 0)) + int(float(mou.jun or 0)) + int(float(mou.jul or 0)) + int(float(mou.aug or 0))# + int(float(mou.sep or 0)) + int(float(mou.okt or 0)) + int(float(mou.nov or 0)) + int(float(mou.des or 0))
-                    print(mou, temp_realisasi_temp,"float")
+                    mou_realisasi = [int(float(mou.jan) or 0), int(float(mou.feb) or 0), int(float(mou.mar) or 0), int(float(mou.apr) or 0), int(float(mou.mei) or 0), int(float(mou.jun) or 0), int(float(mou.jul) or 0), int(float(mou.aug) or 0), int(float(mou.sep) or 0), int(float(mou.okt) or 0), int(float(mou.nov) or 0), int(float(mou.des) or 0)]
+                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
+                    print("FLOAT")
                 except MouPengalihanData.DoesNotExist:
-                    temp_realisasi_temp = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0)# + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
-                
+                    temp_realisasi_temp = sum(lrpa_realisasi)
+
                 temp_realisasi = temp_realisasi + temp_realisasi_temp
                 count_bpo = count_bpo + 1
             
@@ -156,16 +220,19 @@ class MonevView(LoginRequiredMixin, View):
                 lrpa = LRPA_Monitoring.objects.get(no_prk=p.no_prk, file=last_lrpa)
                 sum_ai_temp = sum_ai_temp + lrpa.real_ai()
                 sum_aki_temp = sum_aki_temp + lrpa.real_aki()
+                lrpa_realisasi = [int(lrpa.jan_realisasi_disburse or 0), int(lrpa.feb_realisasi_disburse or 0), int(lrpa.mar_realisasi_disburse or 0), int(lrpa.apr_realisasi_disburse or 0), int(lrpa.mei_realisasi_disburse or 0), int(lrpa.jun_realisasi_disburse or 0), int(lrpa.jul_realisasi_disburse or 0), int(lrpa.aug_realisasi_disburse or 0), int(lrpa.sep_realisasi_disburse or 0), int(lrpa.okt_realisasi_disburse or 0), int(lrpa.nov_realisasi_disburse or 0), int(lrpa.des_realisasi_disburse or 0)]
                 try:
                     mou = MouPengalihanData.objects.get(no_prk=p.no_prk, file=last_mou)
-                    temp_realisasi_temp = int(mou.jan or 0) + int(mou.feb or 0) + int(mou.mar or 0) + int(mou.apr or 0) + int(mou.mei or 0) + int(mou.jun or 0) + int(mou.jul or 0) + int(mou.aug or 0)# + int(mou.sep or 0) + int(mou.okt or 0) + int(mou.nov or 0) + int(mou.des or 0)
-                    print(mou, temp_realisasi_temp)
+                    mou_realisasi = [int(mou.jan or 0), int(mou.feb or 0), int(mou.mar or 0), int(mou.apr or 0), int(mou.mei or 0), int(mou.jun or 0), int(mou.jul or 0), int(mou.aug or 0), int(mou.sep or 0), int(mou.okt or 0), int(mou.nov or 0), int(mou.des or 0)]
+                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
+                    print(sum(lrpa_realisasi), " - ", lrpa_realisasi[month-1], " + ", mou_realisasi[month+1])
                 except ValueError:
-                    temp_realisasi_temp = int(float(mou.jan or 0)) + int(float(mou.feb or 0)) + int(float(mou.mar or 0)) + int(float(mou.apr or 0)) + int(float(mou.mei or 0)) + int(float(mou.jun or 0)) + int(float(mou.jul or 0)) + int(float(mou.aug or 0))# + int(float(mou.sep or 0)) + int(float(mou.okt or 0)) + int(float(mou.nov or 0)) + int(float(mou.des or 0))
-                    print(mou, temp_realisasi_temp,"float")
+                    mou_realisasi = [int(float(mou.jan) or 0), int(float(mou.feb) or 0), int(float(mou.mar) or 0), int(float(mou.apr) or 0), int(float(mou.mei) or 0), int(float(mou.jun) or 0), int(float(mou.jul) or 0), int(float(mou.aug) or 0), int(float(mou.sep) or 0), int(float(mou.okt) or 0), int(float(mou.nov) or 0), int(float(mou.des) or 0)]
+                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
+                    print("FLOAT")
                 except MouPengalihanData.DoesNotExist:
-                    temp_realisasi_temp = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0)# + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
-                
+                    temp_realisasi_temp = sum(lrpa_realisasi)
+
                 temp_realisasi = temp_realisasi + temp_realisasi_temp
                 count_a = count_a + 1
             
@@ -209,6 +276,7 @@ class MonevView(LoginRequiredMixin, View):
         sum_ai_temp = 0
         sum_aki_temp = 0
         temp_realisasi = 0
+        
 
         for idx,x in enumerate(B_PRK_2):
             prk = PRK_Lookup.objects.filter(file=file_lookup, kode_prk=x)
@@ -216,16 +284,20 @@ class MonevView(LoginRequiredMixin, View):
                 lrpa = LRPA_Monitoring.objects.get(no_prk=p.no_prk, file=last_lrpa)
                 sum_ai_temp = sum_ai_temp + lrpa.real_ai()
                 sum_aki_temp = sum_aki_temp + lrpa.real_aki()
+                lrpa_realisasi = [int(lrpa.jan_realisasi_disburse or 0), int(lrpa.feb_realisasi_disburse or 0), int(lrpa.mar_realisasi_disburse or 0), int(lrpa.apr_realisasi_disburse or 0), int(lrpa.mei_realisasi_disburse or 0), int(lrpa.jun_realisasi_disburse or 0), int(lrpa.jul_realisasi_disburse or 0), int(lrpa.aug_realisasi_disburse or 0), int(lrpa.sep_realisasi_disburse or 0), int(lrpa.okt_realisasi_disburse or 0), int(lrpa.nov_realisasi_disburse or 0), int(lrpa.des_realisasi_disburse or 0)]
+                
                 try:
                     mou = MouPengalihanData.objects.get(no_prk=p.no_prk, file=last_mou)
-                    temp_realisasi_temp = int(mou.jan or 0) + int(mou.feb or 0) + int(mou.mar or 0) + int(mou.apr or 0) + int(mou.mei or 0) + int(mou.jun or 0) + int(mou.jul or 0) + int(mou.aug or 0)# + int(mou.sep or 0) + int(mou.okt or 0) + int(mou.nov or 0) + int(mou.des or 0)
-                    print(mou, temp_realisasi_temp)
+                    mou_realisasi = [int(mou.jan or 0), int(mou.feb or 0), int(mou.mar or 0), int(mou.apr or 0), int(mou.mei or 0), int(mou.jun or 0), int(mou.jul or 0), int(mou.aug or 0), int(mou.sep or 0), int(mou.okt or 0), int(mou.nov or 0), int(mou.des or 0)]
+                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
+                    print(sum(lrpa_realisasi), " - ", lrpa_realisasi[month-1], " + ", mou_realisasi[month+1])
                 except ValueError:
-                    temp_realisasi_temp = int(float(mou.jan or 0)) + int(float(mou.feb or 0)) + int(float(mou.mar or 0)) + int(float(mou.apr or 0)) + int(float(mou.mei or 0)) + int(float(mou.jun or 0)) + int(float(mou.jul or 0)) + int(float(mou.aug or 0))# + int(float(mou.sep or 0)) + int(float(mou.okt or 0)) + int(float(mou.nov or 0)) + int(float(mou.des or 0))
-                    print(mou, temp_realisasi_temp,"float")
+                    mou_realisasi = [int(float(mou.jan) or 0), int(float(mou.feb) or 0), int(float(mou.mar) or 0), int(float(mou.apr) or 0), int(float(mou.mei) or 0), int(float(mou.jun) or 0), int(float(mou.jul) or 0), int(float(mou.aug) or 0), int(float(mou.sep) or 0), int(float(mou.okt) or 0), int(float(mou.nov) or 0), int(float(mou.des) or 0)]
+                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
+                    print("FLOAT")
                 except MouPengalihanData.DoesNotExist:
-                    temp_realisasi_temp = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0)# + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
-                
+                    temp_realisasi_temp = sum(lrpa_realisasi)
+
                 temp_realisasi = temp_realisasi + temp_realisasi_temp
                 count_b = count_b + 1
             
@@ -276,16 +348,20 @@ class MonevView(LoginRequiredMixin, View):
                 lrpa = LRPA_Monitoring.objects.get(no_prk=p.no_prk, file=last_lrpa)
                 sum_ai_temp = sum_ai_temp + lrpa.real_ai()
                 sum_aki_temp = sum_aki_temp + lrpa.real_aki()
+                lrpa_realisasi = [int(lrpa.jan_realisasi_disburse or 0), int(lrpa.feb_realisasi_disburse or 0), int(lrpa.mar_realisasi_disburse or 0), int(lrpa.apr_realisasi_disburse or 0), int(lrpa.mei_realisasi_disburse or 0), int(lrpa.jun_realisasi_disburse or 0), int(lrpa.jul_realisasi_disburse or 0), int(lrpa.aug_realisasi_disburse or 0), int(lrpa.sep_realisasi_disburse or 0), int(lrpa.okt_realisasi_disburse or 0), int(lrpa.nov_realisasi_disburse or 0), int(lrpa.des_realisasi_disburse or 0)]
+                
                 try:
                     mou = MouPengalihanData.objects.get(no_prk=p.no_prk, file=last_mou)
-                    temp_realisasi_temp = int(mou.jan or 0) + int(mou.feb or 0) + int(mou.mar or 0) + int(mou.apr or 0) + int(mou.mei or 0) + int(mou.jun or 0) + int(mou.jul or 0) + int(mou.aug or 0)# + int(mou.sep or 0) + int(mou.okt or 0) + int(mou.nov or 0) + int(mou.des or 0)
-                    print(mou, temp_realisasi_temp)
+                    mou_realisasi = [int(mou.jan or 0), int(mou.feb or 0), int(mou.mar or 0), int(mou.apr or 0), int(mou.mei or 0), int(mou.jun or 0), int(mou.jul or 0), int(mou.aug or 0), int(mou.sep or 0), int(mou.okt or 0), int(mou.nov or 0), int(mou.des or 0)]
+                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
+                    print(sum(lrpa_realisasi), " - ", lrpa_realisasi[month-1], " + ", mou_realisasi[month+1])
                 except ValueError:
-                    temp_realisasi_temp = int(float(mou.jan or 0)) + int(float(mou.feb or 0)) + int(float(mou.mar or 0)) + int(float(mou.apr or 0)) + int(float(mou.mei or 0)) + int(float(mou.jun or 0)) + int(float(mou.jul or 0)) + int(float(mou.aug or 0))# + int(float(mou.sep or 0)) + int(float(mou.okt or 0)) + int(float(mou.nov or 0)) + int(float(mou.des or 0))
-                    print(mou, temp_realisasi_temp,"float")
+                    mou_realisasi = [int(float(mou.jan) or 0), int(float(mou.feb) or 0), int(float(mou.mar) or 0), int(float(mou.apr) or 0), int(float(mou.mei) or 0), int(float(mou.jun) or 0), int(float(mou.jul) or 0), int(float(mou.aug) or 0), int(float(mou.sep) or 0), int(float(mou.okt) or 0), int(float(mou.nov) or 0), int(float(mou.des) or 0)]
+                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
+                    print("FLOAT")
                 except MouPengalihanData.DoesNotExist:
-                    temp_realisasi_temp = int(lrpa.jan_realisasi_disburse or 0) + int(lrpa.feb_realisasi_disburse or 0) + int(lrpa.mar_realisasi_disburse or 0) + int(lrpa.apr_realisasi_disburse or 0) + int(lrpa.mei_realisasi_disburse or 0) + int(lrpa.jun_realisasi_disburse or 0) + int(lrpa.jul_realisasi_disburse or 0) + int(lrpa.aug_realisasi_disburse or 0)# + int(lrpa.sep_realisasi_disburse or 0) + int(lrpa.okt_realisasi_disburse or 0) + int(lrpa.nov_realisasi_disburse or 0) + int(lrpa.des_realisasi_disburse or 0)
-                
+                    temp_realisasi_temp = sum(lrpa_realisasi)
+
                 temp_realisasi = temp_realisasi + temp_realisasi_temp
                 count_c = count_c + 1
             
@@ -344,18 +420,26 @@ class LKAIView(LoginRequiredMixin, View):
         #GET USER DIVISION
         division = request.user.division
         
+        if is_production():
+            skai_1 = DocSKAI.objects.get(pk=1)
+            skai_3 = DocSKAI.objects.get(pk=3)
+            skai_2 = DocSKAI.objects.get(pk=6)
+        else:
+            skai_1 = DocSKAI.objects.get(pk=8)
+            skai_3 = DocSKAI.objects.get(pk=10)
+            skai_2 = DocSKAI.objects.get(pk=19)
 
-        skai_1 = DocSKAI.objects.get(pk=8) #DEV
+        #skai_1 = DocSKAI.objects.get(pk=8) #DEV
         #skai_1 = DocSKAI.objects.get(pk=1) #PROD
         macro_1 = skai_1.macro.macro_file_1
         macro_data_1 = MacroData.objects.filter(macro_file=macro_1).order_by('no_prk')
 
-        skai_3 = DocSKAI.objects.get(pk=10) #DEV
+        #skai_3 = DocSKAI.objects.get(pk=10) #DEV
         #skai_3 = DocSKAI.objects.get(pk=3) #PROD
         macro_3 = skai_3.macro.macro_file_1
         #macro_data_3 = MacroData.objects.filter(macro_file=macro_3)
 
-        skai_2 = DocSKAI.objects.get(pk=19) #DEV
+        #skai_2 = DocSKAI.objects.get(pk=19) #DEV
         #skai_2 = DocSKAI.objects.get(pk=6) #PROD
 
         file_lookup = Assigned_PRK.objects.get(pk=1)
@@ -607,25 +691,18 @@ class UploadMouPengalihan(LoginRequiredMixin, View):
 
         return render(request, 'monev/upload_mou.html', context)
 
-class LRPAList(LoginRequiredMixin, View):
 
-    def get(self, request, *args, **kwargs):
-        context = {}
+class FileMonevList(LoginRequiredMixin, View):
 
-        lrpa = LRPA_File.objects.all()
-        context["lrpa"] = lrpa
-
-        return render(request, 'monev/list_lrpa.html', context)
-
-class PengalihanList(LoginRequiredMixin, View):
-
-    def get(self, request, *args, **kwargs):
+    def get(self, request):
         context = {}
 
         doc = FileMouPengalihan.objects.all().order_by('file_export_date')
+        lrpa = LRPA_File.objects.all().order_by('file_export_date')
         context["docs"] = doc
+        context["lrpa"] = lrpa
 
-        return render(request, 'monev/list_pengalihan.html', context)
+        return render(request, 'monev/file_monev.html', context)
 
 class ReferenceLookup(LoginRequiredMixin, View):
 

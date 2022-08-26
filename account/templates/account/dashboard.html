@@ -1,6 +1,29 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block style %}
+<style>
+    td {
+        vertical-align: middle;
+        text-align: center;
+        color: #161616;
+    }
+    .currency{
+        text-align: right !important;
+        min-width: 160px;
+    }
+
+    .currency::before{
+        content: "Rp.";
+        float: left;
+        padding-right: 4px;
+    }
+    .percentage::after{
+        content: "%";
+    }
+</style>
+{% endblock style %}
+
 {% block content %}
 <div class="container-fluid">
 
@@ -9,114 +32,97 @@
         <h1 class="mb-0 text-gray-800 h3">Dashboard</h1>
     </div>
 
-    <!-- Content Row -->
-    <div class="row">
-        <div class="mb-4 col-xl-4 col-md-6">
-            <div class="py-2 shadow card border-left-primary h-100">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="mr-2 col">
-                            <div class="mb-1 text-xs font-weight-bold text-primary text-uppercase">Jumlah User
-                            </div>
-                            <div class="mb-0 text-gray-800 h5 font-weight-bold">
-                                {{count_account}}
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <i class="text-gray-300 fas fa-users fa-2x"></i>
-                        </div>
+    
+        <div class="mb-4 shadow card">
+            <div class="py-3 card-header">
+                <div class="row">
+                    <div class="col-8">
+                        <h6 class="m-0 font-weight-bold" style="color: #fff;">Rekap MONEV Anggaran Investasi Non Rutin 2022</h6>
+                    </div>
+                    <div class="col-4 ">
+                        
                     </div>
                 </div>
             </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Uraian</th>
+                                <th colspan="2">SKAI Terbit</th>
+                                <th>Realisasi</th>
+                                <th rowspan="2">% Realisasi terhadap AKI</th>
+                                <th rowspan="2">Sisa AKI</th>
+                            </tr>
+                            <tr>
+                                <th>AI</th>
+                                <th>AKI</th>
+                                <th>AKI</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            {% for d in data_1 %}
+                            <tr>
+                                <td>{{d.0}}</td>
+                                <td class="currency">{{d.1}}</td>
+                                <td class="currency">{{d.2}}</td>
+                                <td class="currency">{{d.3}}</td>
+                                <td class="percentage">{{d.4|stringformat:".2f"}}</td>
+                                <td class="currency">{{d.5}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <a href="{% url 'document:doc-list-skai' 3 %}"  class="mb-4 col-xl-4 col-md-6">
-            <div class="py-2 shadow card border-left-primary h-100">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="mr-2 col">
-                            <div class="mb-1 text-xs font-weight-bold text-primary text-uppercase">Jumlah SKAI Upload 
-                            </div>
-                            <div class="mb-0 text-gray-800 h5 font-weight-bold">
-                                {{count_skai}}
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-file-text-fill" viewBox="0 0 16 16">
-                                <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5 4h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zM5 8h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1zm0 2h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1z"/>
-                            </svg>
-                        </div>
+    
+    
+        <div class="mb-4 shadow card">
+            <div class="py-3 card-header">
+                <div class="row">
+                    <div class="col-8">
+                        <h6 class="m-0 font-weight-bold" style="color: #fff;">AKB vs Realisasi Non Rutin Agustus 2022</h6>
+                    </div>
+                    <div class="col-4 ">
+                        
                     </div>
                 </div>
             </div>
-        </a>
-        <a href="#"  class="mb-4 col-xl-4 col-md-6">
-            <div class="py-2 shadow card border-left-primary h-100">
-                <div class="card-body">
-                    <div class="row no-gutters align-items-center">
-                        <div class="mr-2 col">
-                            <div class="mb-1 text-xs font-weight-bold text-primary text-uppercase">Jumlah Laporan 
-                            </div>
-                            <div class="mb-0 text-gray-800 h5 font-weight-bold" id="text-ws">
-                                300
-                            </div>
-                        </div>
-                        <div class="col-auto">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-file-text-fill" viewBox="0 0 16 16">
-                                <path d="M12 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM5 4h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1zm-.5 2.5A.5.5 0 0 1 5 6h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5zM5 8h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1zm0 2h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1z"/>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </a>
-    </div>
-    <!--Link-->
-
-    <div class="row">
-        <div class="mt-4 col-12 col-md-4">
-            <div class="p-4 shadow card">
-                <div class="m-4 card-body">
-                    Teks
-                </div>
-            </div>
-        </div>
-        <div class="mt-4 col-12 col-md-4">
-            <div class="p-4 shadow card">
-                <div class="m-4 card-body">
-                    Teks
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">BPO</th>
+                                <th rowspan="2">AKB</th>
+                                <th rowspan="2">Realisasi</th>
+                                <th rowspan="2">Rencana Bayar Minggu IV</th>
+                                <th colspan="2">Selisih</th>
+                            </tr>
+                            <tr>
+                                <th>Rp.</th>
+                                <th>%</th>
+                            </tr>
+                        </thead>
+                        <tbody class="table-group-divider">
+                            {% for d in data_2 %}
+                            <tr>
+                                <td>{{d.0}}</td>
+                                <td class="currency">{{d.1}}</td>
+                                <td class="currency">{{d.2}}</td>
+                                <td>-</td>
+                                <td class="currency">{{d.3}}</td>
+                                <td class="percentage">{{d.4|stringformat:".2f"}}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        <div class="mt-4 col-12 col-md-4">
-            <div class="p-4 shadow card">
-                <div class="m-4 card-body">
-                    Teks
-                </div>
-            </div>
-        </div>
-        <div class="mt-4 col-12 col-md-4">
-            <div class="p-4 shadow card">
-                <div class="m-4 card-body">
-                    Teks
-                </div>
-            </div>
-        </div>
-        <div class="mt-4 col-12 col-md-4">
-            <div class="p-4 shadow card">
-                <div class="m-4 card-body">
-                    Teks
-                </div>
-            </div>
-        </div>
-        <div class="mt-4 col-12 col-md-4">
-            <div class="p-4 shadow card">
-                <div class="m-4 card-body">
-                    Teks
-                </div>
-            </div>
-        </div>
-    </div>
-
+    
     
 </div>
 {% endblock content %}

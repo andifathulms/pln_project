@@ -20,8 +20,9 @@ from django.urls import path
 from django.conf.urls.static import static
 from django.conf import settings
 
-from account.views import login_view, DashboardView, logout_view
+from account.views import login_view, logout_view
 from document.views import XLSM_Playground, JSON_Dumps, Assign_PRK
+from monev.views import DashboardView
 from notification.views import not_found_404
 
 urlpatterns = [

@@ -131,6 +131,12 @@ class MacroData(models.Model):
     def real_aki(self):
         return round(self.aki_this_year * 1000)
     
+    def ai_in_million(self):
+        return self.ai_this_year/1000
+    
+    def aki_in_million(self):
+        return self.aki_this_year/1000
+    
     def real_nilai_ang(self):
         return round(self.ang_nilai * 1000)
     
@@ -139,4 +145,8 @@ class MacroData(models.Model):
 
     def real_prediksi_pembayaran(self):
         return round(self.prediksi_pembayaran * 1000)
+    
+    
+
+    
 
