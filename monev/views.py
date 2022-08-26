@@ -429,22 +429,12 @@ class LKAIView(LoginRequiredMixin, View):
             skai_3 = DocSKAI.objects.get(pk=10)
             skai_2 = DocSKAI.objects.get(pk=19)
 
-        #skai_1 = DocSKAI.objects.get(pk=8) #DEV
-        #skai_1 = DocSKAI.objects.get(pk=1) #PROD
         macro_1 = skai_1.macro.macro_file_1
         macro_data_1 = MacroData.objects.filter(macro_file=macro_1).order_by('no_prk')
 
-        #skai_3 = DocSKAI.objects.get(pk=10) #DEV
-        #skai_3 = DocSKAI.objects.get(pk=3) #PROD
         macro_3 = skai_3.macro.macro_file_1
-        #macro_data_3 = MacroData.objects.filter(macro_file=macro_3)
-
-        #skai_2 = DocSKAI.objects.get(pk=19) #DEV
-        #skai_2 = DocSKAI.objects.get(pk=6) #PROD
 
         file_lookup = Assigned_PRK.objects.get(pk=1)
-        #lookup = PRK_Lookup.objects.get(file=file_lookup)
-
         macro_2 = skai_2.macro.macro_file_1
         macro_data_2 = MacroData.objects.filter(macro_file=macro_2)
 
@@ -704,14 +694,3 @@ class FileMonevList(LoginRequiredMixin, View):
 
         return render(request, 'monev/file_monev.html', context)
 
-class ReferenceLookup(LoginRequiredMixin, View):
-
-    def get(self, request):
-        context = {}
-
-        doc = Assigned_PRK.objects.all()[0]
-        prk = PRK_Lookup.objects.filter(file=doc)
-
-        context["data"] = prk
-
-        return render(request, 'monev/reference_lookup.html', context)

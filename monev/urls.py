@@ -6,7 +6,6 @@ from .views import(
     UploadLRPA,
     UploadMouPengalihan,
     FileMonevList,
-    ReferenceLookup,
 )
 
 app_name = 'monev'
@@ -17,5 +16,4 @@ urlpatterns = [
     path('file-monev-list', FileMonevList.as_view(), name='monev-list-file'), 
     path('monev-view', MonevView.as_view(), name='monev-view'),
     path('mou-upload', UploadMouPengalihan.as_view(), name='monev-upload-mou'),
-    path('reference-lookup', ReferenceLookup.as_view(), name='monev-reference-lookup'),
 ]

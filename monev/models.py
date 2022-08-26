@@ -60,6 +60,9 @@ class LRPA_Monitoring(models.Model):
         }
 
         return switch[month]
+
+    def pk_to_hex(self):
+        return hex(self.pk).lstrip("0x").rstrip("L")
     
     def get_realisasi_bulan(self, month):
         switch = {

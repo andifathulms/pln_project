@@ -141,12 +141,6 @@
                         </span>
                         <span class="text">View Data Source</span>
                     </button>
-                    <!-- <a href="{% url 'monev:monev-upload-lrpa' %}" class="btn btn-success btn-icon-split btn-sm float-right mr-1">
-                        <span class="icon text-white-50">
-                            <i class="fa-solid fa-file-arrow-up"></i>
-                        </span>
-                        <span class="text">Upload LRPA</span>
-                    </a> -->
                 </div>
             </div>
         </div>
@@ -535,13 +529,13 @@
                             {% endif %}
 
                             {% if d.6 %}
-                            <td>{{d.6.kode_prk}}</td>
-                            <td>{{d.6.kode_bpo}}</td>
-                            <td>{{d.6.rekap_user_induk}}</td>
+                            <td data-toggle="modal" data-target="#edit-{{d.2.pk_to_hex}}">{{d.6.kode_prk}}</td>
+                            <td data-toggle="modal" data-target="#edit-{{d.2.pk_to_hex}}">{{d.6.kode_bpo}}</td>
+                            <td data-toggle="modal" data-target="#edit-{{d.2.pk_to_hex}}">{{d.6.rekap_user_induk}}</td>
                             {% else %}
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td data-toggle="modal" data-target="#edit-{{d.2.pk_to_hex}}"></td>
+                            <td data-toggle="modal" data-target="#edit-{{d.2.pk_to_hex}}"></td>
+                            <td data-toggle="modal" data-target="#edit-{{d.2.pk_to_hex}}"></td>
                             {% endif %}
 
                             {% if d.0.no_prk %}
@@ -634,6 +628,58 @@
       </div>
     </div>
 </div>
+
+<!-- Modal Edit Data -->
+{% for d in data %}
+<div class="modal fade" id="edit-{{d.2.pk_to_hex}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Edit Data</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="formGroupExampleInput">No PRK</label>
+                        <input type="text" class="form-control" name="no_prk" id="formGroupExampleInput" 
+                        {% if d.0.no_prk %} value="{{d.0.no_prk}}" {% else %} value="{{d.1.no_prk}}"{% endif %} disabled/>
+                    </div>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput">Kode PRK</label>
+                        <input type="text" class="form-control" name="kode_prk" id="formGroupExampleInput" 
+                        {% if d.6 %} value="{{d.6.kode_prk}}" {% else %} value=""{% endif %}/>
+                    </div>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput">Kode BPO</label>
+                        <input type="text" class="form-control" name="kode_bpo" id="formGroupExampleInput" 
+                        {% if d.6 %} value="{{d.6.kode_bpo}}" {% else %} value=""{% endif %}/>
+                    </div>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput">UPP</label>
+                        <input type="text" class="form-control" name="upp" id="formGroupExampleInput" 
+                        {% if d.6 %} value="{{d.6.upp}}" {% else %} value=""{% endif %}/>
+                    </div>
+                    <div class="form-group">
+                        <label for="formGroupExampleInput">Rekap User Induk</label>
+                        <input type="text" class="form-control" name="rekap_user_induk" id="formGroupExampleInput" 
+                        {% if d.6 %} value="{{d.6.rekap_user_induk}}" {% else %} value=""{% endif %}/>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" disabled>Save changes</button>
+          </div>
+      </div>
+    </div>
+</div>
+{% endfor %}
 {% endblock content %}
 
 {% block script %}
