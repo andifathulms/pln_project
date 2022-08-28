@@ -24,6 +24,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Model
 
 from monev.views import is_production
+from monev.models import LRPA_Monitoring, LRPA_File, FileMouPengalihan, MouPengalihanData
 
 class SKAIListView(LoginRequiredMixin, View):
     def get(self, request, pk, *args, **kwargs):
@@ -528,6 +529,8 @@ class PRKObject(UserPassesTestMixin, View):
         macro_data_2 = MacroData.objects.filter(macro_file=skai_2.macro.macro_file_1).order_by('no_prk')
         macro_data_3 = MacroData.objects.filter(macro_file=skai_3.macro.macro_file_1).order_by('no_prk')
 
+        macros = [macro_data_1, macro_data_2, macro_data_3]
+
         #CREATING OBJECT PRK
         
         # for data in macro_data_1:
@@ -597,19 +600,81 @@ class PRKObject(UserPassesTestMixin, View):
         #             print(data.no_prk, "Created")
 
         #ASSIGN PRK KODE TO PRK
-        for p in PRK.objects.all():
+        # for p in PRK.objects.all():
             
-            try:
-                lookup = PRK_Lookup.objects.get(no_prk=p.no_prk)
-                p.kode_prk = lookup.kode_prk
-                p.kode_bpo = lookup.kode_bpo
-                p.rekap_user_induk = lookup.rekap_user_induk
-                p.upp = lookup.upp
+        #     try:
+        #         lookup = PRK_Lookup.objects.get(no_prk=p.no_prk)
+        #         p.kode_prk = lookup.kode_prk
+        #         p.kode_bpo = lookup.kode_bpo
+        #         p.rekap_user_induk = lookup.rekap_user_induk
+        #         p.upp = lookup.upp
 
-                p.save()
+        #         p.save()
 
-                print(p.no_prk, "Success")
-            except Exception as e:
-                print(p.no_prk, "None", e)
+        #         print(p.no_prk, "Success")
+        #     except Exception as e:
+        #         print(p.no_prk, "None", e)
+
+        #ASSIGN PRK OBJECT TO EACH MACRO DATA
         
+        # MACRO DATA
+        print("###################")
+        print("START ASSIGN MACROS")
+        print("###################")
+        for macro in macros:
+            for data in macro:
+                try:
+                    prk = PRK.objects.get(no_prk=data.no_prk)
+                    data.prk = prk
+                    data.save()
+
+                    print(data.prk.no_prk, "Success", data)
+                except Exception as e:
+                    print(data.no_prk, "Failed", e, data)
+        
+        print("#################")
+        print("END ASSIGN MACROS")
+        print("#################")
+        
+        #LRPA
+
+        print("###################")
+        print("START ASSIGN LRPA")
+        print("###################")
+        last_lrpa = LRPA_File.objects.order_by('-file_export_date').first()
+        lrpa_data = LRPA_Monitoring.objects.filter(file=last_lrpa)
+        for data in lrpa_data:
+            try:
+                prk = PRK.objects.get(no_prk=data.no_prk)
+                data.prk = prk
+                data.save()
+
+                print(data.prk.no_prk, "Success", data)
+            except Exception as e:
+                print(data.no_prk, "Failed", e, data)
+        
+        print("#################")
+        print("END ASSIGN LRPA")
+        print("#################")
+
+        #MOU
+
+        print("###################")
+        print("START ASSIGN MOU")
+        print("###################")
+        last_mou = FileMouPengalihan.objects.order_by('file_export_date').first()
+        mou_data = MouPengalihanData.objects.filter(file=last_mou)
+        for data in mou_data:
+            try:
+                prk = PRK.objects.get(no_prk=data.no_prk)
+                data.prk = prk
+                data.save()
+
+                print(data.prk.no_prk, "Success", data)
+            except Exception as e:
+                print(data.no_prk, "Failed", e, data)
+        
+        print("#################")
+        print("END ASSIGN MOU")
+        print("#################")
         return render(request, 'document/json_dumps.html', context)
