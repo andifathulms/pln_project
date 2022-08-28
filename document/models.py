@@ -20,6 +20,10 @@ class PRK(models.Model):
     jenis_program       = models.CharField(max_length=255, blank=True, null=True)
     keg_no              = models.PositiveIntegerField(blank=True, null=True)
     keg_uraian          = models.TextField(blank=True, null=True)
+    kode_prk            = models.CharField(max_length=100, blank=True, null=True)
+    kode_bpo            = models.CharField(max_length=100, blank=True, null=True)
+    rekap_user_induk    = models.CharField(max_length=100, blank=True, null=True)
+    upp                 = models.CharField(max_length=100, blank=True, null=True)
 
 class Document(models.Model):
     document_number     = models.CharField(max_length=100)
@@ -84,6 +88,7 @@ class MacroFile(models.Model):
 class MacroData(models.Model):
     #Based on excel file
     macro_file                  = models.ForeignKey('MacroFile', on_delete=models.CASCADE)
+    prk                         = models.ForeignKey('PRK', on_delete=models.CASCADE, blank=True, null=True)
     no_prk                      = models.CharField(max_length=255, blank=True, null=True) #
     no_program                  = models.PositiveIntegerField(blank=True, null=True) #
     no_ruptl                    = models.CharField(max_length=255, blank=True, null=True) #

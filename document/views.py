@@ -528,70 +528,88 @@ class PRKObject(UserPassesTestMixin, View):
         macro_data_2 = MacroData.objects.filter(macro_file=skai_2.macro.macro_file_1).order_by('no_prk')
         macro_data_3 = MacroData.objects.filter(macro_file=skai_3.macro.macro_file_1).order_by('no_prk')
 
-        for data in macro_data_1:
-            if data.no_prk:
-                try:
-                    obj = PRK.objects.get(no_prk=data.no_prk)
-                    print(data.no_prk, "Already There")
-                except PRK.DoesNotExist:
-                    obj = PRK(
-                        no_prk=data.no_prk,
-                        no_program=data.no_program,
-                        no_ruptl=data.no_ruptl,
-                        cluster=data.cluster,
-                        fungsi=data.fungsi,
-                        sub_fungsi=data.sub_fungsi,
-                        program_utama=data.program_utama,
-                        score=data.score,
-                        jenis_program=data.jenis_program,
-                        keg_no=data.keg_no,
-                        keg_uraian=data.keg_uraian
-                    )
-                    obj.save()
-                    print(data.no_prk, "Created")
-        print("##########################")
-        for data in macro_data_2:
-            if data.no_prk:
-                try:
-                    obj = PRK.objects.get(no_prk=data.no_prk)
-                    print(data.no_prk, "Already There")
-                except PRK.DoesNotExist:
-                    obj = PRK(
-                        no_prk=data.no_prk,
-                        no_program=data.no_program,
-                        no_ruptl=data.no_ruptl,
-                        cluster=data.cluster,
-                        fungsi=data.fungsi,
-                        sub_fungsi=data.sub_fungsi,
-                        program_utama=data.program_utama,
-                        score=data.score,
-                        jenis_program=data.jenis_program,
-                        keg_no=data.keg_no,
-                        keg_uraian=data.keg_uraian
-                    )
-                    obj.save()
-                    print(data.no_prk, "Created")
-        print("##########################")
-        for data in macro_data_3:
-            if data.no_prk:
-                try:
-                    obj = PRK.objects.get(no_prk=data.no_prk)
-                    print(data.no_prk, "Already There")
-                except PRK.DoesNotExist:
-                    obj = PRK(
-                        no_prk=data.no_prk,
-                        no_program=data.no_program,
-                        no_ruptl=data.no_ruptl,
-                        cluster=data.cluster,
-                        fungsi=data.fungsi,
-                        sub_fungsi=data.sub_fungsi,
-                        program_utama=data.program_utama,
-                        score=data.score,
-                        jenis_program=data.jenis_program,
-                        keg_no=data.keg_no,
-                        keg_uraian=data.keg_uraian
-                    )
-                    obj.save()
-                    print(data.no_prk, "Created")
+        #CREATING OBJECT PRK
+        
+        # for data in macro_data_1:
+        #     if data.no_prk:
+        #         try:
+        #             obj = PRK.objects.get(no_prk=data.no_prk)
+        #             print(data.no_prk, "Already There")
+        #         except PRK.DoesNotExist:
+        #             obj = PRK(
+        #                 no_prk=data.no_prk,
+        #                 no_program=data.no_program,
+        #                 no_ruptl=data.no_ruptl,
+        #                 cluster=data.cluster,
+        #                 fungsi=data.fungsi,
+        #                 sub_fungsi=data.sub_fungsi,
+        #                 program_utama=data.program_utama,
+        #                 score=data.score,
+        #                 jenis_program=data.jenis_program,
+        #                 keg_no=data.keg_no,
+        #                 keg_uraian=data.keg_uraian
+        #             )
+        #             obj.save()
+        #             print(data.no_prk, "Created")
+        # print("##########################")
+        # for data in macro_data_2:
+        #     if data.no_prk:
+        #         try:
+        #             obj = PRK.objects.get(no_prk=data.no_prk)
+        #             print(data.no_prk, "Already There")
+        #         except PRK.DoesNotExist:
+        #             obj = PRK(
+        #                 no_prk=data.no_prk,
+        #                 no_program=data.no_program,
+        #                 no_ruptl=data.no_ruptl,
+        #                 cluster=data.cluster,
+        #                 fungsi=data.fungsi,
+        #                 sub_fungsi=data.sub_fungsi,
+        #                 program_utama=data.program_utama,
+        #                 score=data.score,
+        #                 jenis_program=data.jenis_program,
+        #                 keg_no=data.keg_no,
+        #                 keg_uraian=data.keg_uraian
+        #             )
+        #             obj.save()
+        #             print(data.no_prk, "Created")
+        # print("##########################")
+        # for data in macro_data_3:
+        #     if data.no_prk:
+        #         try:
+        #             obj = PRK.objects.get(no_prk=data.no_prk)
+        #             print(data.no_prk, "Already There")
+        #         except PRK.DoesNotExist:
+        #             obj = PRK(
+        #                 no_prk=data.no_prk,
+        #                 no_program=data.no_program,
+        #                 no_ruptl=data.no_ruptl,
+        #                 cluster=data.cluster,
+        #                 fungsi=data.fungsi,
+        #                 sub_fungsi=data.sub_fungsi,
+        #                 program_utama=data.program_utama,
+        #                 score=data.score,
+        #                 jenis_program=data.jenis_program,
+        #                 keg_no=data.keg_no,
+        #                 keg_uraian=data.keg_uraian
+        #             )
+        #             obj.save()
+        #             print(data.no_prk, "Created")
 
+        #ASSIGN PRK KODE TO PRK
+        for p in PRK.objects.all():
+            
+            try:
+                lookup = PRK_Lookup.objects.get(no_prk=p.no_prk)
+                p.kode_prk = lookup.kode_prk
+                p.kode_bpo = lookup.kode_bpo
+                p.rekap_user_induk = lookup.rekap_user_induk
+                p.upp = lookup.upp
+
+                p.save()
+
+                print(p.no_prk, "Success")
+            except Exception as e:
+                print(p.no_prk, "None", e)
+        
         return render(request, 'document/json_dumps.html', context)
