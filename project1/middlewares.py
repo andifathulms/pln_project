@@ -1,4 +1,5 @@
 from django.db import connection
+from django.urls import reverse
 from time import time
 from operator import add
 import re
@@ -28,6 +29,9 @@ class StatsMiddleware:
         <!-- STATS: Total: %(total_time).2fs Python: %(python_time).2fs DB: %(db_time).2fs Queries: %(db_queries)d ENDSTATS -->
         </div>
         '''
+
+        if request.path.startswith(reverse('admin:index')):
+            return None
 
         # Uncomment the following if you want to get stats on DEBUG=True only
         #if not settings.DEBUG:

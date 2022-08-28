@@ -8,7 +8,7 @@ from django.views import View
 from django.views.generic.edit import DeleteView
 from django.http import HttpResponseRedirect
 
-from .models import Document, DocSKAI, MacroFile, Macro, MacroData
+from .models import Document, DocSKAI, MacroFile, Macro, MacroData, PRK
 from monev.models import Assigned_PRK, PRK_Lookup
 from .forms import DocumentForm
 
@@ -22,6 +22,8 @@ from openpyxl import load_workbook
 from django.forms import model_to_dict
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Model
+
+from monev.views import is_production
 
 class SKAIListView(LoginRequiredMixin, View):
     def get(self, request, pk, *args, **kwargs):
@@ -503,3 +505,93 @@ class Assign_PRK(UserPassesTestMixin, View):
 
     def post(self, request, *args, **kwargs):
         pass
+
+class PRKObject(UserPassesTestMixin, View):
+
+    def test_func(self):
+        return self.request.user.is_admin
+    
+    def get(self, request):
+        context = {}
+
+        # ALL DOCUMENT NEEDED
+        if is_production():
+            skai_1 = DocSKAI.objects.get(pk=1)
+            skai_2 = DocSKAI.objects.get(pk=3)
+            skai_3 = DocSKAI.objects.get(pk=6)
+        else:
+            skai_1 = DocSKAI.objects.get(pk=8)
+            skai_2 = DocSKAI.objects.get(pk=10)
+            skai_3 = DocSKAI.objects.get(pk=19)
+        
+        macro_data_1 = MacroData.objects.filter(macro_file=skai_1.macro.macro_file_1).order_by('no_prk')
+        macro_data_2 = MacroData.objects.filter(macro_file=skai_2.macro.macro_file_1).order_by('no_prk')
+        macro_data_3 = MacroData.objects.filter(macro_file=skai_3.macro.macro_file_1).order_by('no_prk')
+
+        for data in macro_data_1:
+            if data.no_prk:
+                try:
+                    obj = PRK.objects.get(no_prk=data.no_prk)
+                    print(data.no_prk, "Already There")
+                except PRK.DoesNotExist:
+                    obj = PRK(
+                        no_prk=data.no_prk,
+                        no_program=data.no_program,
+                        no_ruptl=data.no_ruptl,
+                        cluster=data.cluster,
+                        fungsi=data.fungsi,
+                        sub_fungsi=data.sub_fungsi,
+                        program_utama=data.program_utama,
+                        score=data.score,
+                        jenis_program=data.jenis_program,
+                        keg_no=data.keg_no,
+                        keg_uraian=data.keg_uraian
+                    )
+                    obj.save()
+                    print(data.no_prk, "Created")
+        print("##########################")
+        for data in macro_data_2:
+            if data.no_prk:
+                try:
+                    obj = PRK.objects.get(no_prk=data.no_prk)
+                    print(data.no_prk, "Already There")
+                except PRK.DoesNotExist:
+                    obj = PRK(
+                        no_prk=data.no_prk,
+                        no_program=data.no_program,
+                        no_ruptl=data.no_ruptl,
+                        cluster=data.cluster,
+                        fungsi=data.fungsi,
+                        sub_fungsi=data.sub_fungsi,
+                        program_utama=data.program_utama,
+                        score=data.score,
+                        jenis_program=data.jenis_program,
+                        keg_no=data.keg_no,
+                        keg_uraian=data.keg_uraian
+                    )
+                    obj.save()
+                    print(data.no_prk, "Created")
+        print("##########################")
+        for data in macro_data_3:
+            if data.no_prk:
+                try:
+                    obj = PRK.objects.get(no_prk=data.no_prk)
+                    print(data.no_prk, "Already There")
+                except PRK.DoesNotExist:
+                    obj = PRK(
+                        no_prk=data.no_prk,
+                        no_program=data.no_program,
+                        no_ruptl=data.no_ruptl,
+                        cluster=data.cluster,
+                        fungsi=data.fungsi,
+                        sub_fungsi=data.sub_fungsi,
+                        program_utama=data.program_utama,
+                        score=data.score,
+                        jenis_program=data.jenis_program,
+                        keg_no=data.keg_no,
+                        keg_uraian=data.keg_uraian
+                    )
+                    obj.save()
+                    print(data.no_prk, "Created")
+
+        return render(request, 'document/json_dumps.html', context)

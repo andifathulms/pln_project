@@ -8,6 +8,19 @@ from django.contrib.contenttypes.fields import GenericRelation
 
 from notification.models import Notification
 
+class PRK(models.Model):
+    no_prk              = models.CharField(max_length=255, unique=True)
+    no_program          = models.PositiveIntegerField(blank=True, null=True)
+    no_ruptl            = models.CharField(max_length=255, blank=True, null=True)
+    cluster             = models.CharField(max_length=255, blank=True, null=True)
+    fungsi              = models.CharField(max_length=255, blank=True, null=True)
+    sub_fungsi          = models.CharField(max_length=255, blank=True, null=True)
+    program_utama       = models.CharField(max_length=255, blank=True, null=True)
+    score               = models.CharField(max_length=255, blank=True, null=True)
+    jenis_program       = models.CharField(max_length=255, blank=True, null=True)
+    keg_no              = models.PositiveIntegerField(blank=True, null=True)
+    keg_uraian          = models.TextField(blank=True, null=True)
+
 class Document(models.Model):
     document_number     = models.CharField(max_length=100)
     published_date      = models.DateField()
@@ -71,17 +84,17 @@ class MacroFile(models.Model):
 class MacroData(models.Model):
     #Based on excel file
     macro_file                  = models.ForeignKey('MacroFile', on_delete=models.CASCADE)
-    no_prk                      = models.CharField(max_length=255, blank=True, null=True)
-    no_program                  = models.PositiveIntegerField(blank=True, null=True)
-    no_ruptl                    = models.CharField(max_length=255, blank=True, null=True)
-    cluster                     = models.CharField(max_length=255, blank=True, null=True)
-    fungsi                      = models.CharField(max_length=255, blank=True, null=True)
-    sub_fungsi                  = models.CharField(max_length=255, blank=True, null=True)
-    program_utama               = models.CharField(max_length=255, blank=True, null=True)
-    score                       = models.CharField(max_length=255, blank=True, null=True)
-    jenis_program               = models.CharField(max_length=255, blank=True, null=True)
-    keg_no                      = models.PositiveIntegerField(blank=True, null=True)
-    keg_uraian                  = models.TextField(blank=True, null=True)
+    no_prk                      = models.CharField(max_length=255, blank=True, null=True) #
+    no_program                  = models.PositiveIntegerField(blank=True, null=True) #
+    no_ruptl                    = models.CharField(max_length=255, blank=True, null=True) #
+    cluster                     = models.CharField(max_length=255, blank=True, null=True) #
+    fungsi                      = models.CharField(max_length=255, blank=True, null=True) #
+    sub_fungsi                  = models.CharField(max_length=255, blank=True, null=True) #
+    program_utama               = models.CharField(max_length=255, blank=True, null=True) #
+    score                       = models.CharField(max_length=255, blank=True, null=True) #
+    jenis_program               = models.CharField(max_length=255, blank=True, null=True) #
+    keg_no                      = models.PositiveIntegerField(blank=True, null=True) #
+    keg_uraian                  = models.TextField(blank=True, null=True) #
     keg_target_fisik            = models.CharField(max_length=255, blank=True, null=True)
     keg_satuan                  = models.CharField(max_length=255, blank=True, null=True)
     ang_nilai                   = models.FloatField(blank=True, null=True)
@@ -90,8 +103,8 @@ class MacroData(models.Model):
     ang_no_kontrak              = models.TextField(blank=True, null=True)
     realisasi_pembayaran        = models.FloatField(blank=True, null=True)
     prediksi_pembayaran         = models.FloatField(blank=True, null=True)
-    ai_this_year                = models.FloatField(blank=True, null=True) #Try use FloatField
-    aki_this_year               = models.FloatField(blank=True, null=True) #Try use FloatField
+    ai_this_year                = models.FloatField(blank=True, null=True)
+    aki_this_year               = models.FloatField(blank=True, null=True)
     aki_n1_year                 = models.FloatField(blank=True, null=True)
     aki_n2_year                 = models.FloatField(blank=True, null=True)
     aki_n3_year                 = models.FloatField(blank=True, null=True)
