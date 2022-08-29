@@ -25,7 +25,7 @@ def this_month():
     return datetime.now().month
 
 def is_production():
-    return True
+    return False
 
 class DashboardView(LoginRequiredMixin, View):
     def get(self, request):
@@ -605,4 +605,14 @@ class FileMonevList(LoginRequiredMixin, View):
         context["lrpa"] = lrpa
 
         return render(request, 'monev/file_monev.html', context)
+
+class EditPRK(LoginRequiredMixin, View):
+    def test_func(self):
+        return self.request.user.is_admin or self.request.user.is_staff
+    
+    def get(self, request):
+        pass
+
+    def post(self, request):
+        pass
 
