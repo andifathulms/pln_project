@@ -6,6 +6,7 @@ from django.views import View
 from django.db import models
 from django.db.models import Sum, OuterRef, Subquery, F, Value
 from django.db.models.functions import Round
+from django.http import HttpResponse
 
 from document.models import DocSKAI, MacroData
 
@@ -13,6 +14,8 @@ from openpyxl import load_workbook
 
 from .models import LRPA_Monitoring, LRPA_File, PRK_Lookup, Assigned_PRK, MouPengalihanData, FileMouPengalihan
 from .forms import LRPAFileForm, MouFileForm
+
+from document.models import PRK
 
 from datetime import datetime
 import sys
@@ -25,7 +28,7 @@ def this_month():
     return datetime.now().month
 
 def is_production():
-    return False
+    return True
 
 class DashboardView(LoginRequiredMixin, View):
     def get(self, request):
@@ -453,6 +456,9 @@ class LKAIView(LoginRequiredMixin, View):
                sd_1 = sq_1.values('sumber_dana'), sd_2 = sq_2.values('sumber_dana'), sd_3 = sq_3.values('sumber_dana'),
                )
         
+        document = [skai_1, skai_2, last_lrpa, skai_3, last_mou]
+        context["document"] = document #OPTIMIZE LATER?
+
         context["lrpa"] = lrpa
 
         return render(request, 'monev/monev_lkai.html', context)
@@ -610,9 +616,43 @@ class EditPRK(LoginRequiredMixin, View):
     def test_func(self):
         return self.request.user.is_admin or self.request.user.is_staff
     
-    def get(self, request):
-        pass
+    def get(self, request, pk, type, *args, **kwargs):
+        context = {}
 
-    def post(self, request):
-        pass
+        prk = PRK.objects.get(pk=pk)
+        context["data"] = prk
+        
+        if type == 1:
+            return render(request, 'monev/snippets/modal_prk_1.html', context)
+        
+        if type == 2:
+            return render(request, 'monev/snippets/modal_prk_2.html', context)
+        
+        if type == 3:
+            return render(request, 'monev/snippets/modal_prk_3.html', context)
+
+    def post(self, request, pk, type, *args, **kwargs):
+        context = {}
+
+        data = request.POST
+        prk = PRK.objects.get(no_prk = data["no_prk"])
+
+        if type == 1:
+            prk.kode_prk = data["kode_prk"]
+            prk.save()
+            context["data"] = prk
+            return render(request, 'monev/snippets/inline_td_1.html', context)
+        
+        if type == 2:
+            prk.kode_bpo = data["kode_bpo"]
+            prk.upp = data["upp"]
+            prk.save()
+            context["data"] = prk
+            return render(request, 'monev/snippets/inline_td_2.html', context)
+        
+        if type == 3:
+            prk.rekap_user_induk = data["rekap_user_induk"]
+            prk.save()
+            context["data"] = prk
+            return render(request, 'monev/snippets/inline_td_3.html', context)
 

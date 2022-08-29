@@ -1,0 +1,40 @@
+<div id="modal-backdrop" class="modal-backdrop fade show" style="display:block;"></div>
+<div id="modal" class="modal fade show" tabindex="-1" style="display:block;">
+	<div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLongTitle">Edit Data Rekap User Induk</h5>
+              <button type="button" class="close" onclick="closeModal()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid">
+                    <form hx-post="{% url 'monev:monev-edit-prk' pk=data.pk type=3 %}" hx-target="#target-3-{{data.pk}}" hx-swap="outerHTML" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="formGroupExampleInput">No PRK</label>
+                            <input type="text" class="form-control" name="prk" id="formGroupExampleInput" 
+                            value="{{data.no_prk}}" disabled/>
+                            <input type="hidden" name="no_prk" value={{data.no_prk}}>
+                        </div>
+                        <div class="form-group">
+                            <label for="formGroupExampleInput">Rekap User Induk</label>
+                            <input type="text" class="form-control" name="rekap_user_induk" id="formGroupExampleInput" 
+                            {% if data.rekap_user_induk %} value="{{data.rekap_user_induk}}" {% else %} value=""{% endif %}/>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" onclick="closeModal()">Close</button>
+                            {% if request.user.is_staff %}
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+                            {% else %}
+                            <button type="button" class="btn btn-primary" disabled>Save changes</button>
+                            <p>Youre not allowed to edit this data!</p>
+                            {% endif %}
+                          </div>
+                      </div>
+                    </form>
+                </div>
+        </div>
+	</div>
+</div>
