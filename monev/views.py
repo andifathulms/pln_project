@@ -2,7 +2,10 @@ from django.shortcuts import render
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import View
-from django.db.models import Sum
+
+from django.db import models
+from django.db.models import Sum, OuterRef, Subquery, F, Value
+from django.db.models.functions import Round
 
 from document.models import DocSKAI, MacroData
 
@@ -410,6 +413,7 @@ class LKAIView(LoginRequiredMixin, View):
     def get(self, request):
         context = {}
         context["month"] = this_month()
+        #Total: 1.57s Python: 1.26s DB: 0.31s Queries: 14 
 
         # ALL DOCUMENT NEEDED
         if is_production():
@@ -421,52 +425,37 @@ class LKAIView(LoginRequiredMixin, View):
             skai_2 = DocSKAI.objects.get(pk=10)
             skai_3 = DocSKAI.objects.get(pk=19)
         
-        macro_1 = skai_1.macro.macro_file_1
-        macro_2 = skai_2.macro.macro_file_1
-        macro_3 = skai_3.macro.macro_file_1
-        
         last_lrpa = LRPA_File.objects.order_by('-file_export_date').first()
         last_mou = FileMouPengalihan.objects.order_by('file_export_date').first()
-        file_lookup = Assigned_PRK.objects.get(pk=1)
 
-        document = [skai_1, skai_2, last_lrpa, skai_3, last_mou]
-        context["document"] = document
+        sq_1 = MacroData.objects.filter(macro_file=skai_1.macro.macro_file_1, prk=OuterRef('prk'))
+        sq_2 = MacroData.objects.filter(macro_file=skai_2.macro.macro_file_1, prk=OuterRef('prk'))
+        sq_3 = MacroData.objects.filter(macro_file=skai_3.macro.macro_file_1, prk=OuterRef('prk'))
+        sq_mou = MouPengalihanData.objects.filter(file=last_mou, prk=OuterRef('prk'))
 
-        #GET USER DIVISION
+        #GET USER DIVISION, DETERMINE USER VIEW
         division = request.user.division
 
         if division == "Super Admin" or division == "ANG":
+            monitoring = LRPA_Monitoring.objects.select_related('prk').filter(file=last_lrpa)
             context["for_div"] = "ALL"
         else:
+            monitoring = LRPA_Monitoring.objects.select_related('prk').filter(file=last_lrpa, prk__rekap_user_induk=division)
             context["for_div"] = division
-
-        macro_data_1 = MacroData.objects.filter(macro_file=macro_1).order_by('no_prk')
-        macro_data_2 = MacroData.objects.filter(macro_file=macro_2).order_by('no_prk')
-        macro_data_3 = MacroData.objects.filter(macro_file=macro_3).order_by('no_prk')
-        mou_data = MouPengalihanData.objects.filter(file=last_mou)
-        combine_list = []
-
-        lrpa_data = LRPA_Monitoring.objects.filter(file=last_lrpa)
         
-        for data in lrpa_data:
-            data_1 = macro_data_1.filter(no_prk=data.no_prk).first()
-            data_2 = macro_data_2.filter(no_prk=data.no_prk).first()
-            data_3 = macro_data_3.filter(no_prk=data.no_prk).first()
-            data_mou = mou_data.filter(no_prk=data.no_prk).first()
-            total_realisasi = data.sum_realisasi()
-            sisa_aki = data.sisa_aki()
+        lrpa = monitoring. \
+               annotate(ai_1 = Round(sq_1.values('ai_this_year')), aki_1 = Round(sq_1.values('aki_this_year')), status_1 = sq_1.values('ang_status'),
+               ai_2 = Round(sq_2.values('ai_this_year')), aki_2 = Round(sq_2.values('aki_this_year')), status_2 = sq_2.values('ang_status'),
+               ai_3 = Round(sq_3.values('ai_this_year')), aki_3 = Round(sq_3.values('aki_this_year')), status_3 = sq_3.values('ang_status'),
+               mou_jan = sq_mou.values('jan'),mou_feb = sq_mou.values('feb'),mou_mar = sq_mou.values('mar'),mou_apr = sq_mou.values('apr'),
+               mou_mei = sq_mou.values('mei'),mou_jun = sq_mou.values('jun'),mou_jul = sq_mou.values('jul'),mou_aug = sq_mou.values('aug'),
+               mou_sep = sq_mou.values('sep'),mou_okt = sq_mou.values('okt'),mou_nov = sq_mou.values('nov'),mou_des = sq_mou.values('des'),
+               sd_1 = sq_1.values('sumber_dana'), sd_2 = sq_2.values('sumber_dana'), sd_3 = sq_3.values('sumber_dana'),
+               )
+        
+        context["lrpa"] = lrpa
 
-            if division == "Super Admin" or division == "ANG" or request.user.is_staff:
-                lookup_prk = PRK_Lookup.objects.filter(file=file_lookup, no_prk=data.no_prk).first()
-                combine_list.append((data,data_1,data_2,data_3,data_mou,total_realisasi,sisa_aki,lookup_prk))
-            else:
-                lookup_prk = PRK_Lookup.objects.filter(file=file_lookup, no_prk=data.no_prk, rekap_user_induk=division).first()
-                if lookup_prk != None:
-                    combine_list.append((data,data_1,data_2,data_3,data_mou,total_realisasi,sisa_aki,lookup_prk))
-
-        context["data"] = combine_list
-
-        return render(request, 'monev/monev_lkai_new.html', context)
+        return render(request, 'monev/monev_lkai.html', context)
 
 class UploadLRPA(LoginRequiredMixin, View):
     

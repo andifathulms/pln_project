@@ -2,6 +2,7 @@ import json
 from urllib import request
 from django.shortcuts import redirect, render
 from django.urls import reverse, reverse_lazy
+from django.db.models import OuterRef, Subquery
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.conf import settings
 from django.views import View
@@ -525,11 +526,34 @@ class PRKObject(UserPassesTestMixin, View):
             skai_2 = DocSKAI.objects.get(pk=10)
             skai_3 = DocSKAI.objects.get(pk=19)
         
-        macro_data_1 = MacroData.objects.filter(macro_file=skai_1.macro.macro_file_1).order_by('no_prk')
-        macro_data_2 = MacroData.objects.filter(macro_file=skai_2.macro.macro_file_1).order_by('no_prk')
-        macro_data_3 = MacroData.objects.filter(macro_file=skai_3.macro.macro_file_1).order_by('no_prk')
+        last_lrpa = LRPA_File.objects.order_by('-file_export_date').first()
+        last_mou = FileMouPengalihan.objects.order_by('file_export_date').first()
+        
+        # macro_data_1 = MacroData.objects.filter(macro_file=skai_1.macro.macro_file_1).annotate(ai=Subquery(LRPA_Monitoring.objects.filter(file=last_lrpa,prk=OuterRef('prk')).values("ai_this_year")[:1]))
+        # macro_data_2 = MacroData.objects.filter(macro_file=skai_2.macro.macro_file_1).order_by('no_prk')
+        # macro_data_3 = MacroData.objects.filter(macro_file=skai_3.macro.macro_file_1).order_by('no_prk')
 
-        macros = [macro_data_1, macro_data_2, macro_data_3]
+        # macros = [macro_data_1, macro_data_2, macro_data_3]
+
+        sq_1 = MacroData.objects.filter(macro_file=skai_1.macro.macro_file_1, prk=OuterRef('prk'))
+        sq_2 = MacroData.objects.filter(macro_file=skai_2.macro.macro_file_1, prk=OuterRef('prk'))
+        sq_3 = MacroData.objects.filter(macro_file=skai_3.macro.macro_file_1, prk=OuterRef('prk'))
+        sq_mou = MouPengalihanData.objects.filter(file=last_mou, prk=OuterRef('prk'))
+        
+        lrpa = LRPA_Monitoring.objects.select_related('prk').filter(file=last_lrpa). \
+               annotate(ai_1 = sq_1.values('ai_this_year'), aki_1 = sq_1.values('aki_this_year'), status_1 = sq_1.values('ang_status'),
+               ai_2 = sq_2.values('ai_this_year'), aki_2 = sq_2.values('aki_this_year'), status_2 = sq_2.values('ang_status'),
+               ai_3 = sq_3.values('ai_this_year'), aki_3 = sq_3.values('aki_this_year'), status_3 = sq_3.values('ang_status'),
+               mou_jan = sq_mou.values('jan'),mou_feb = sq_mou.values('feb'),mou_mar = sq_mou.values('mar'),mou_apr = sq_mou.values('apr'),
+               mou_mei = sq_mou.values('mei'),mou_jun = sq_mou.values('jun'),mou_jul = sq_mou.values('jul'),mou_aug = sq_mou.values('aug'),
+               mou_sep = sq_mou.values('sep'),mou_okt = sq_mou.values('okt'),mou_nov = sq_mou.values('nov'),mou_des = sq_mou.values('des')
+               )
+        for data in lrpa.iterator():
+            print(data.no_prk, data.mou_jan, data.mou_feb, data.mou_mar, data.mou_apr)
+            print(data.no_prk, data.mou_mei, data.mou_jun, data.mou_jul, data.mou_aug)
+            print(data.no_prk, data.mou_sep, data.mou_okt, data.mou_nov, data.mou_des)
+            print("###")
+        
 
         #CREATING OBJECT PRK
         
@@ -617,64 +641,64 @@ class PRKObject(UserPassesTestMixin, View):
 
         #ASSIGN PRK OBJECT TO EACH MACRO DATA
         
-        # MACRO DATA
-        print("###################")
-        print("START ASSIGN MACROS")
-        print("###################")
-        for macro in macros:
-            for data in macro:
-                try:
-                    prk = PRK.objects.get(no_prk=data.no_prk)
-                    data.prk = prk
-                    data.save()
+        # # MACRO DATA
+        # print("###################")
+        # print("START ASSIGN MACROS")
+        # print("###################")
+        # for macro in macros:
+        #     for data in macro:
+        #         try:
+        #             prk = PRK.objects.get(no_prk=data.no_prk)
+        #             data.prk = prk
+        #             data.save()
 
-                    print(data.prk.no_prk, "Success", data)
-                except Exception as e:
-                    print(data.no_prk, "Failed", e, data)
+        #             print(data.prk.no_prk, "Success", data)
+        #         except Exception as e:
+        #             print(data.no_prk, "Failed", e, data)
         
-        print("#################")
-        print("END ASSIGN MACROS")
-        print("#################")
+        # print("#################")
+        # print("END ASSIGN MACROS")
+        # print("#################")
         
-        #LRPA
+        # #LRPA
 
-        print("###################")
-        print("START ASSIGN LRPA")
-        print("###################")
-        last_lrpa = LRPA_File.objects.order_by('-file_export_date').first()
-        lrpa_data = LRPA_Monitoring.objects.filter(file=last_lrpa)
-        for data in lrpa_data:
-            try:
-                prk = PRK.objects.get(no_prk=data.no_prk)
-                data.prk = prk
-                data.save()
+        # print("###################")
+        # print("START ASSIGN LRPA")
+        # print("###################")
+        # last_lrpa = LRPA_File.objects.order_by('-file_export_date').first()
+        # lrpa_data = LRPA_Monitoring.objects.filter(file=last_lrpa)
+        # for data in lrpa_data:
+        #     try:
+        #         prk = PRK.objects.get(no_prk=data.no_prk)
+        #         data.prk = prk
+        #         data.save()
 
-                print(data.prk.no_prk, "Success", data)
-            except Exception as e:
-                print(data.no_prk, "Failed", e, data)
+        #         print(data.prk.no_prk, "Success", data)
+        #     except Exception as e:
+        #         print(data.no_prk, "Failed", e, data)
         
-        print("#################")
-        print("END ASSIGN LRPA")
-        print("#################")
+        # print("#################")
+        # print("END ASSIGN LRPA")
+        # print("#################")
 
-        #MOU
+        # #MOU
 
-        print("###################")
-        print("START ASSIGN MOU")
-        print("###################")
-        last_mou = FileMouPengalihan.objects.order_by('file_export_date').first()
-        mou_data = MouPengalihanData.objects.filter(file=last_mou)
-        for data in mou_data:
-            try:
-                prk = PRK.objects.get(no_prk=data.no_prk)
-                data.prk = prk
-                data.save()
+        # print("###################")
+        # print("START ASSIGN MOU")
+        # print("###################")
+        # last_mou = FileMouPengalihan.objects.order_by('file_export_date').first()
+        # mou_data = MouPengalihanData.objects.filter(file=last_mou)
+        # for data in mou_data:
+        #     try:
+        #         prk = PRK.objects.get(no_prk=data.no_prk)
+        #         data.prk = prk
+        #         data.save()
 
-                print(data.prk.no_prk, "Success", data)
-            except Exception as e:
-                print(data.no_prk, "Failed", e, data)
+        #         print(data.prk.no_prk, "Success", data)
+        #     except Exception as e:
+        #         print(data.no_prk, "Failed", e, data)
         
-        print("#################")
-        print("END ASSIGN MOU")
-        print("#################")
+        # print("#################")
+        # print("END ASSIGN MOU")
+        # print("#################")
         return render(request, 'document/json_dumps.html', context)
