@@ -1,1 +1,1 @@
-<td hx-get="{% url 'monev:monev-edit-prk' pk=data.pk type=3 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="outerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-3-{{data.pk}}">{{data.rekap_user_induk}}</td>
+<td hx-get="{% url 'monev:monev-edit-prk' pk=data.pk type=3 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-3-{{data.pk}}">{{data.rekap_user_induk}}</td>

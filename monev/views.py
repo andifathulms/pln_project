@@ -28,7 +28,7 @@ def this_month():
     return datetime.now().month
 
 def is_production():
-    return True
+    return False
 
 class DashboardView(LoginRequiredMixin, View):
     def get(self, request):
