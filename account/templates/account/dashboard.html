@@ -21,6 +21,14 @@
     .percentage::after{
         content: "%";
     }
+    .total{
+        font-weight: 700;
+        color: #fff !important;
+    }
+
+    .tr-total{
+        background-color: #161616;
+    }
 </style>
 {% endblock style %}
 
@@ -72,6 +80,14 @@
                                 <td class="currency">{{d.5}}</td>
                             </tr>
                             {% endfor %}
+                            <tr class="tr-total">
+                                <td class="total">Total</td>
+                                <td class="currency total">{{data_1_total.0.0}}</td>
+                                <td class="currency total">{{data_1_total.0.1}}</td>
+                                <td class="currency total">{{data_1_total.0.2}}</td>
+                                <td class="percentage total">{{data_1_total.0.3|stringformat:".2f"}}</td>
+                                <td class="currency total">{{data_1_total.0.4}}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -117,6 +133,14 @@
                                 <td class="percentage">{{d.4|stringformat:".2f"}}</td>
                             </tr>
                             {% endfor %}
+                            <tr class="tr-total">
+                                <td class="total">Total</td>
+                                <td class="currency total">{{data_2_total.0.0}}</td>
+                                <td class="currency total">{{data_2_total.0.1}}</td>
+                                <td class="currency total">{{data_2_total.0.2}}</td>
+                                <td class="currency total">{{data_2_total.0.3}}</td>
+                                <td class="percentage total">{{data_2_total.0.4|stringformat:".2f"}}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

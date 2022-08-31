@@ -82,20 +82,20 @@
                                     <td class="text-left" style="max-width: 230px;">{{prk.0}}</td>
                                     <td>{{prk.1}}</td>
                                     <td>{{prk.7}}</td>
-                                    <td class="currency">{{prk.2}}</td>
-                                    <td class="currency">{{prk.3}}</td>
+                                    <td class="currency">{{prk.2|floatformat}}</td>
+                                    <td class="currency">{{prk.3|floatformat}}</td>
                                     <td class="currency">{{prk.4}}</td>
-                                    <td class="currency">{{prk.5}}</td>
+                                    <td class="currency">{{prk.5|floatformat}}</td>
                                     <td class="percentage">{{prk.6|stringformat:".2f"}}</td>
                                 </tr>
                                 {% endfor %}
                                 <tr class="tr-total">
                                     <td colspan="3" class="total">Total</td>
                                     <td class="total">{{count_bpo_total}}</td>
-                                    <td class="currency total">{{total_ai_bpo}}</td>
-                                    <td class="currency total">{{total_aki_bpo}}</td>
+                                    <td class="currency total">{{total_ai_bpo|floatformat}}</td>
+                                    <td class="currency total">{{total_aki_bpo|floatformat}}</td>
                                     <td class="currency total">{{total_realisasi_bpo}}</td>
-                                    <td class="currency total">{{total_sisa_aki_bpo}}</td>
+                                    <td class="currency total">{{total_sisa_aki_bpo|floatformat}}</td>
                                     <td class="percentage total">{{total_pct_bpo|stringformat:".2f"}}</td>
                                 </tr>
                             </tbody>
@@ -143,20 +143,20 @@
                                     <td class="text-left" style="max-width: 230px;">{{prk.0}}</td>
                                     <td>{{prk.1}}</td>
                                     <td>{{prk.7}}</td>
-                                    <td class="currency">{{prk.2}}</td>
-                                    <td class="currency">{{prk.3}}</td>
+                                    <td class="currency">{{prk.2|floatformat}}</td>
+                                    <td class="currency">{{prk.3|floatformat}}</td>
                                     <td class="currency">{{prk.4}}</td>
-                                    <td class="currency">{{prk.5}}</td>
+                                    <td class="currency">{{prk.5|floatformat}}</td>
                                     <td class="percentage">{{prk.6|stringformat:".2f"}}</td>
                                 </tr>
                                 {% endfor %}
                                 <tr>
                                     <td colspan="3"><strong>Total A</strong></td>
                                     <td><strong>{{count_a_total}}</strong></td>
-                                    <td class="currency"><strong>{{total_ai_a}}</strong></td>
-                                    <td class="currency"><strong>{{total_aki_a}}</strong></td>
+                                    <td class="currency"><strong>{{total_ai_a|floatformat}}</strong></td>
+                                    <td class="currency"><strong>{{total_aki_a|floatformat}}</strong></td>
                                     <td class="currency"><strong>{{total_realisasi_a}}</strong></td>
-                                    <td class="currency"><strong>{{total_sisa_aki_a}}</strong></td>
+                                    <td class="currency"><strong>{{total_sisa_aki_a|floatformat}}</strong></td>
                                     <td class="percentage"><strong>{{total_pct_a|stringformat:".2f"}}</strong></td>
                                 </tr>
                                 <tr class="bg-secondary">
@@ -170,20 +170,20 @@
                                     <td class="text-left" style="max-width: 230px;">{{prk.0}}</td>
                                     <td>{{prk.1}}</td>
                                     <td>{{prk.7}}</td>
-                                    <td class="currency">{{prk.2}}</td>
-                                    <td class="currency">{{prk.3}}</td>
+                                    <td class="currency">{{prk.2|floatformat}}</td>
+                                    <td class="currency">{{prk.3|floatformat}}</td>
                                     <td class="currency">{{prk.4}}</td>
-                                    <td class="currency">{{prk.5}}</td>
+                                    <td class="currency">{{prk.5|floatformat}}</td>
                                     <td class="percentage">{{prk.6|stringformat:".2f"}}</td>
                                 </tr>
                                 {% endfor %}
                                 <tr>
                                     <td colspan="3"><strong>Total B</strong></td>
                                     <td><strong>{{count_b_total}}</strong></td>
-                                    <td class="currency"><strong>{{total_ai_b}}</strong></td>
-                                    <td class="currency"><strong>{{total_aki_b}}</strong></td>
+                                    <td class="currency"><strong>{{total_ai_b|floatformat}}</strong></td>
+                                    <td class="currency"><strong>{{total_aki_b|floatformat}}</strong></td>
                                     <td class="currency"><strong>{{total_realisasi_b}}</strong></td>
-                                    <td class="currency"><strong>{{total_sisa_aki_b}}</strong></td>
+                                    <td class="currency"><strong>{{total_sisa_aki_b|floatformat}}</strong></td>
                                     <td class="percentage"><strong>{{total_pct_b|stringformat:".2f"}}</strong></td>
                                 </tr>
                                 <tr class="bg-secondary">
@@ -197,29 +197,29 @@
                                     <td class="text-left" style="max-width: 230px;">{{prk.0}}</td>
                                     <td>{{prk.1}}</td>
                                     <td>{{prk.7}}</td>
-                                    <td class="currency">{{prk.2}}</td>
-                                    <td class="currency">{{prk.3}}</td>
+                                    <td class="currency">{{prk.2|floatformat}}</td>
+                                    <td class="currency">{{prk.3|floatformat}}</td>
                                     <td class="currency">{{prk.4}}</td>
-                                    <td class="currency">{{prk.5}}</td>
+                                    <td class="currency">{{prk.5|floatformat}}</td>
                                     <td class="percentage">{{prk.6|stringformat:".2f"}}</td>
                                 </tr>
                                 {% endfor %}
                                 <tr>
                                     <td colspan="3"><strong>Total C</strong></td>
                                     <td><strong>{{count_c_total}}</strong></td>
-                                    <td class="currency"><strong>{{total_ai_c}}</strong></td>
-                                    <td class="currency"><strong>{{total_aki_c}}</strong></td>
+                                    <td class="currency"><strong>{{total_ai_c|floatformat}}</strong></td>
+                                    <td class="currency"><strong>{{total_aki_c|floatformat}}</strong></td>
                                     <td class="currency"><strong>{{total_realisasi_c}}</strong></td>
-                                    <td class="currency"><strong>{{total_sisa_aki_c}}</strong></td>
+                                    <td class="currency"><strong>{{total_sisa_aki_c|floatformat}}</strong></td>
                                     <td class="percentage"><strong>{{total_pct_c|stringformat:".2f"}}</strong></td>
                                 </tr>
                                 <tr class="tr-total">
                                     <td colspan="3" class="total">Total</td>
                                     <td class="total">{{total_count_prk}}</td>
-                                    <td class="currency total">{{total_ai_prk}}</td>
-                                    <td class="currency total">{{total_aki_prk}}</td>
+                                    <td class="currency total">{{total_ai_prk|floatformat}}</td>
+                                    <td class="currency total">{{total_aki_prk|floatformat}}</td>
                                     <td class="currency total">{{total_realisasi_prk}}</td>
-                                    <td class="currency total">{{total_sisa_aki_prk}}</td>
+                                    <td class="currency total">{{total_sisa_aki_prk|floatformat}}</td>
                                     <td class="percentage total">{{total_pct_prk|stringformat:".2f"}}</td>
                                 </tr>
                             </tbody>

@@ -38,38 +38,60 @@ class DashboardView(LoginRequiredMixin, View):
         last_mou = FileMouPengalihan.objects.order_by('file_export_date').first()
         file_lookup = Assigned_PRK.objects.get(pk=1) #MANUAL
 
+        total_ai = 0
+        total_aki = 0
+        total_realisasi = 0
         pembayaran = ["Unit", "Pusat", "Pengalihan"]
         data_1 = []
+        data_1_total = []
         for idx,x in enumerate(pembayaran):
             sum_ai = int(LRPA_Monitoring.objects.filter(file=last_lrpa,mekanisme_pembayaran=x).aggregate(Sum('ai_this_year'))['ai_this_year__sum'])
             sum_aki = int(LRPA_Monitoring.objects.filter(file=last_lrpa,mekanisme_pembayaran=x).aggregate(Sum('aki_this_year'))['aki_this_year__sum'])
             sum_realisasi = int(sum([m.sum_realisasi() for m in LRPA_Monitoring.objects.filter(file=last_lrpa,mekanisme_pembayaran=x)]))
             pct = (sum_realisasi*100)/sum_aki
             sisa = sum_aki - sum_realisasi
+
+            total_ai = total_ai + sum_ai
+            total_aki = total_aki + sum_aki
+            total_realisasi = total_realisasi + sum_realisasi
             
             data_1.append((pembayaran[idx],sum_ai,sum_aki,sum_realisasi,pct,sisa))
-
+        data_1_total.append((total_ai, total_aki,total_realisasi,(safe_div(total_realisasi,total_aki)*100),total_aki-total_realisasi))
         context["data_1"] = data_1
+        context["data_1_total"] = data_1_total
         
         bpo = ["REN", "PPK", "OPK 1", "OPK 2", "K3L"]
         data_2 = []
-        for idx,x in enumerate(bpo):
-            prk = PRK_Lookup.objects.filter(file=file_lookup, kode_bpo=x).values_list('no_prk')
-            prk_1 = LRPA_Monitoring.objects.filter(file=last_lrpa,mekanisme_pembayaran="Pengalihan").values_list('no_prk')
-            prk_list = [p[0] for p in prk]
-            prk_list_1 = [p[0] for p in prk_1]
+        data_2_total = []
+        # for idx,x in enumerate(bpo):
+        #     prk = PRK_Lookup.objects.filter(file=file_lookup, kode_bpo=x).values_list('no_prk')
+        #     prk_1 = LRPA_Monitoring.objects.filter(file=last_lrpa,mekanisme_pembayaran="Pengalihan").values_list('no_prk')
+        #     prk_list = [p[0] for p in prk]
+        #     prk_list_1 = [p[0] for p in prk_1]
 
-            not_union = [p for p in prk_list if p not in prk_list_1]
-            union = list(set(prk_list).intersection(prk_list_1)) # intersection between pengalihan and bpo
+        #     not_union = [p for p in prk_list if p not in prk_list_1]
+        #     union = list(set(prk_list).intersection(prk_list_1)) # intersection between pengalihan and bpo
             
-            #ADD IF PENGALIHAN
-            sum_of_akb = int(sum([p.get_rencana_bulan(this_month()) for p in LRPA_Monitoring.objects.filter(no_prk__in=prk_list,file=last_lrpa)]))
-            sum_of_realisasi_0 = int(sum([p.get_realisasi_bulan(this_month()) for p in LRPA_Monitoring.objects.filter(no_prk__in=not_union,file=last_lrpa)]))
-            mou = MouPengalihanData.objects.filter(no_prk__in=union,file=last_mou)
-            #print(x)
-            #for p in mou: print(p.get_realisasi_bulan(this_month()),x)
-            sum_of_realisasi_1 = int(sum([p.get_realisasi_bulan(this_month()) if p else 0 for p in mou]))
-            sum_of_realisasi = sum_of_realisasi_0 + sum_of_realisasi_1
+        #     #ADD IF PENGALIHAN
+        #     sum_of_akb = int(sum([p.get_rencana_bulan(this_month()) for p in LRPA_Monitoring.objects.filter(no_prk__in=prk_list,file=last_lrpa)]))
+        #     sum_of_realisasi_0 = int(sum([p.get_realisasi_bulan(this_month()) for p in LRPA_Monitoring.objects.filter(no_prk__in=not_union,file=last_lrpa)]))
+        #     mou = MouPengalihanData.objects.filter(no_prk__in=union,file=last_mou)
+        #     #print(x)
+        #     #for p in mou: print(p.get_realisasi_bulan(this_month()),x)
+        #     sum_of_realisasi_1 = int(sum([p.get_realisasi_bulan(this_month()) if p else 0 for p in mou]))
+        #     sum_of_realisasi = sum_of_realisasi_0 + sum_of_realisasi_1
+        #     sisa = sum_of_akb - sum_of_realisasi
+        #     try:
+        #         pct = (sisa*100)/sum_of_akb
+        #     except:
+        #         pct = 0
+        #     data_2.append((x, sum_of_akb, sum_of_realisasi,sisa,pct))
+        
+        total_akb = 0
+        total_realisasi_bulan = 0
+        for idx,x in enumerate(bpo):
+            sum_of_akb = int(sum([p.get_rencana_bulan(this_month()) for p in LRPA_Monitoring.objects.filter(file=last_lrpa, prk__kode_bpo=x)]))
+            sum_of_realisasi = int(sum([p.get_realisasi_bulan(this_month()) for p in LRPA_Monitoring.objects.filter(file=last_lrpa, prk__kode_bpo=x)]))
             sisa = sum_of_akb - sum_of_realisasi
             try:
                 pct = (sisa*100)/sum_of_akb
@@ -77,8 +99,13 @@ class DashboardView(LoginRequiredMixin, View):
                 pct = 0
             data_2.append((x, sum_of_akb, sum_of_realisasi,sisa,pct))
 
+            total_akb = total_akb + sum_of_akb
+            total_realisasi_bulan = total_realisasi_bulan + sum_of_realisasi
         
+        data_2_total.append((total_akb, total_realisasi_bulan,"-",total_akb-total_realisasi_bulan,(safe_div((total_akb-total_realisasi_bulan),total_akb)*100)))
         context["data_2"] = data_2
+        context["data_2_total"] = data_2_total
+        
         return render(request, 'account/dashboard.html', context)
 
 class MonevView(LoginRequiredMixin, View):
@@ -91,6 +118,10 @@ class MonevView(LoginRequiredMixin, View):
 
         month = this_month() #CHANGE LATER TO LAST MOU MONTH
 
+        total_ai_bpo = 0
+        total_aki_bpo = 0
+        total_realisasi_bpo = 0
+
         #START COMPUTE FOR MONEV BY BPO
         #COUNT FOR BPO BESIDE "UPP"
         BPO_1 = ["Perencanaan", "Perizinan, Pertanahan, dan Komunikasi", "Operasi Konstruksi 1", "Operasi Konstruksi 2", "K3L"]
@@ -98,110 +129,71 @@ class MonevView(LoginRequiredMixin, View):
 
         BPO_list = []
 
-        total_ai_bpo = 0
-        total_aki_bpo = 0
-        total_realisasi_bpo = 0
-
-        count_bpo = 0
-        count_bpo_total = 0
-        sum_ai_temp = 0
-        sum_aki_temp = 0
-        temp_realisasi = 0
-        
-        for idx,x in enumerate(BPO_2):
-            prk = PRK_Lookup.objects.filter(file=file_lookup, kode_bpo=x)
-            for p in prk:
-                lrpa = LRPA_Monitoring.objects.get(no_prk=p.no_prk, file=last_lrpa)
-                sum_ai_temp = sum_ai_temp + lrpa.real_ai()
-                sum_aki_temp = sum_aki_temp + lrpa.real_aki()
-                lrpa_realisasi = [int(lrpa.jan_realisasi_disburse or 0), int(lrpa.feb_realisasi_disburse or 0), int(lrpa.mar_realisasi_disburse or 0), int(lrpa.apr_realisasi_disburse or 0), int(lrpa.mei_realisasi_disburse or 0), int(lrpa.jun_realisasi_disburse or 0), int(lrpa.jul_realisasi_disburse or 0), int(lrpa.aug_realisasi_disburse or 0), int(lrpa.sep_realisasi_disburse or 0), int(lrpa.okt_realisasi_disburse or 0), int(lrpa.nov_realisasi_disburse or 0), int(lrpa.des_realisasi_disburse or 0)]
+        for idx,data in enumerate(BPO_2):
+            query = LRPA_Monitoring.objects.filter(prk__kode_bpo=data, file=last_lrpa)
+            count = query.count()
+            sum_ai = query.aggregate(Sum('ai_this_year'))['ai_this_year__sum']
+            sum_aki = query.aggregate(Sum('aki_this_year'))['aki_this_year__sum']
+            realisasi = 0
+            for x in query:
+                realisasi = realisasi + x.sum_realisasi()
                 try:
-                    mou = MouPengalihanData.objects.get(no_prk=p.no_prk, file=last_mou)
-                    mou_realisasi = [int(mou.jan or 0), int(mou.feb or 0), int(mou.mar or 0), int(mou.apr or 0), int(mou.mei or 0), int(mou.jun or 0), int(mou.jul or 0), int(mou.aug or 0), int(mou.sep or 0), int(mou.okt or 0), int(mou.nov or 0), int(mou.des or 0)]
-                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
-                    print(sum(lrpa_realisasi), " - ", lrpa_realisasi[month-1], " + ", mou_realisasi[month+1])
+                    mou = MouPengalihanData.objects.get(prk=x.prk, file=last_mou)
+                    realisasi = realisasi - x.get_realisasi_bulan(month) + mou.get_realisasi_bulan(month)
                 except ValueError:
-                    mou_realisasi = [int(float(mou.jan) or 0), int(float(mou.feb) or 0), int(float(mou.mar) or 0), int(float(mou.apr) or 0), int(float(mou.mei) or 0), int(float(mou.jun) or 0), int(float(mou.jul) or 0), int(float(mou.aug) or 0), int(float(mou.sep) or 0), int(float(mou.okt) or 0), int(float(mou.nov) or 0), int(float(mou.des) or 0)]
-                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
                     print("FLOAT")
                 except MouPengalihanData.DoesNotExist:
-                    temp_realisasi_temp = sum(lrpa_realisasi)
-                
-                temp_realisasi = temp_realisasi + temp_realisasi_temp
-                count_bpo = count_bpo + 1
+                    realisasi = realisasi
             
-            count_bpo_total = count_bpo_total + count_bpo
+            total_ai_bpo = total_ai_bpo + sum_ai
+            total_aki_bpo = total_aki_bpo + sum_aki
+            total_realisasi_bpo = total_realisasi_bpo + realisasi
 
-            total_ai_bpo = total_ai_bpo + sum_ai_temp
-            total_aki_bpo = total_aki_bpo + sum_aki_temp
-            total_realisasi_bpo = total_realisasi_bpo + temp_realisasi
-
-            temp_sisa = sum_aki_temp-temp_realisasi
-            temp_pct = (temp_realisasi/sum_aki_temp)*100
-
-            BPO_list.append((BPO_1[idx],x,sum_ai_temp,sum_aki_temp,temp_realisasi,temp_sisa,temp_pct,count_bpo))
-
-            sum_ai_temp = 0
-            sum_aki_temp = 0
-            temp_realisasi = 0
-            count_bpo = 0
+            sisa_aki = sum_aki - realisasi
+            pct = (realisasi/sum_aki)*100
+            
+            BPO_list.append((BPO_1[idx],data,sum_ai,sum_aki,realisasi,sisa_aki,pct,count))
         
         #COUNT FOR BPO "UPP"
         BPO_UPP_1 = ["UPP KITRING SULSEL","UPP KITRING SULTENG","UPP KITRING SULTRA","UPP KITRING SULUT dan GORONTALO"]
         BPO_UPP_2 = ["UPP 1","UPP 2", "UPP 3", "UPP 4"]
 
-        count_bpo = 0
-        sum_ai_temp = 0
-        sum_aki_temp = 0
-        temp_realisasi = 0
-        for idx,x in enumerate(BPO_UPP_2):
-            prk = PRK_Lookup.objects.filter(file=file_lookup, upp=x)
-            for p in prk:
-                lrpa = LRPA_Monitoring.objects.get(no_prk=p.no_prk, file=last_lrpa)
-                sum_ai_temp = sum_ai_temp + lrpa.real_ai()
-                sum_aki_temp = sum_aki_temp + lrpa.real_aki()
-                lrpa_realisasi = [int(lrpa.jan_realisasi_disburse or 0), int(lrpa.feb_realisasi_disburse or 0), int(lrpa.mar_realisasi_disburse or 0), int(lrpa.apr_realisasi_disburse or 0), int(lrpa.mei_realisasi_disburse or 0), int(lrpa.jun_realisasi_disburse or 0), int(lrpa.jul_realisasi_disburse or 0), int(lrpa.aug_realisasi_disburse or 0), int(lrpa.sep_realisasi_disburse or 0), int(lrpa.okt_realisasi_disburse or 0), int(lrpa.nov_realisasi_disburse or 0), int(lrpa.des_realisasi_disburse or 0)]
-                    
+        for idx,data in enumerate(BPO_UPP_2):
+            query = LRPA_Monitoring.objects.filter(prk__upp=data, file=last_lrpa)
+            count = query.count()
+            sum_ai = query.aggregate(Sum('ai_this_year'))['ai_this_year__sum']
+            sum_aki = query.aggregate(Sum('aki_this_year'))['aki_this_year__sum']
+            if not sum_ai: sum_ai = 0
+            if not sum_aki: sum_aki = 0
+            realisasi = 0
+            for x in query:
+                realisasi = realisasi + x.sum_realisasi()
                 try:
-                    mou = MouPengalihanData.objects.get(no_prk=p.no_prk, file=last_mou)
-                    mou_realisasi = [int(mou.jan or 0), int(mou.feb or 0), int(mou.mar or 0), int(mou.apr or 0), int(mou.mei or 0), int(mou.jun or 0), int(mou.jul or 0), int(mou.aug or 0), int(mou.sep or 0), int(mou.okt or 0), int(mou.nov or 0), int(mou.des or 0)]
-                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
-                    print(sum(lrpa_realisasi), " - ", lrpa_realisasi[month-1], " + ", mou_realisasi[month+1])
+                    mou = MouPengalihanData.objects.get(prk=x.prk, file=last_mou)
+                    realisasi = realisasi - x.get_realisasi_bulan(month) + mou.get_realisasi_bulan(month)
                 except ValueError:
-                    mou_realisasi = [int(float(mou.jan) or 0), int(float(mou.feb) or 0), int(float(mou.mar) or 0), int(float(mou.apr) or 0), int(float(mou.mei) or 0), int(float(mou.jun) or 0), int(float(mou.jul) or 0), int(float(mou.aug) or 0), int(float(mou.sep) or 0), int(float(mou.okt) or 0), int(float(mou.nov) or 0), int(float(mou.des) or 0)]
-                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
                     print("FLOAT")
                 except MouPengalihanData.DoesNotExist:
-                    temp_realisasi_temp = sum(lrpa_realisasi)
-
-                temp_realisasi = temp_realisasi + temp_realisasi_temp
-                count_bpo = count_bpo + 1
+                    realisasi = realisasi
             
-            count_bpo_total = count_bpo_total + count_bpo
+            total_ai_bpo = total_ai_bpo + sum_ai
+            total_aki_bpo = total_aki_bpo + sum_aki
+            total_realisasi_bpo = total_realisasi_bpo + realisasi
+
+            sisa_aki = sum_aki - realisasi
+            pct = (safe_div(realisasi,sum_aki))*100
             
-            total_ai_bpo = total_ai_bpo + sum_ai_temp
-            total_aki_bpo = total_aki_bpo + sum_aki_temp
-            total_realisasi_bpo = total_realisasi_bpo + temp_realisasi
-
-            temp_sisa = sum_aki_temp-temp_realisasi
-            temp_pct = (safe_div(temp_realisasi,sum_aki_temp))*100
-
-            BPO_list.append((BPO_UPP_1[idx],x,sum_ai_temp,sum_aki_temp,temp_realisasi,temp_sisa,temp_pct,count_bpo))
-
-            sum_ai_temp = 0
-            sum_aki_temp = 0
-            temp_realisasi = 0
-            count_bpo = 0
+            BPO_list.append((BPO_UPP_1[idx],data,sum_ai,sum_aki,realisasi,sisa_aki,pct,count))
         
         context["BPO_list"] = BPO_list
-
-        context["count_bpo_total"] = count_bpo_total
+        context["count_bpo_total"] = LRPA_Monitoring.objects.filter(prk__kode_bpo__in=BPO_2, file=last_lrpa).count() + LRPA_Monitoring.objects.filter(prk__upp__in=BPO_UPP_2, file=last_lrpa).count()
         context["total_ai_bpo"] = total_ai_bpo
         context["total_aki_bpo"] = total_aki_bpo
         context["total_realisasi_bpo"] = total_realisasi_bpo
         context["total_sisa_aki_bpo"] = total_aki_bpo - total_realisasi_bpo
         context["total_pct_bpo"] = (safe_div(total_realisasi_bpo,total_aki_bpo))*100
-
+        
+        #############################################
 
         #START COMPUTE FOR MONEV BY PRK
         #COUNT FOR ALL PRK IN "Pekerjaan. Prasarana"
@@ -215,56 +207,42 @@ class MonevView(LoginRequiredMixin, View):
         total_realisasi_a = 0
 
         count_a_total = 0
-        count_a = 0
-        sum_ai_temp = 0
-        sum_aki_temp = 0
-        temp_realisasi = 0
 
-        for idx,x in enumerate(A_PRK_2):
-            prk = PRK_Lookup.objects.filter(file=file_lookup, kode_prk=x)
-            for p in prk:
-                lrpa = LRPA_Monitoring.objects.get(no_prk=p.no_prk, file=last_lrpa)
-                sum_ai_temp = sum_ai_temp + lrpa.real_ai()
-                sum_aki_temp = sum_aki_temp + lrpa.real_aki()
-                lrpa_realisasi = [int(lrpa.jan_realisasi_disburse or 0), int(lrpa.feb_realisasi_disburse or 0), int(lrpa.mar_realisasi_disburse or 0), int(lrpa.apr_realisasi_disburse or 0), int(lrpa.mei_realisasi_disburse or 0), int(lrpa.jun_realisasi_disburse or 0), int(lrpa.jul_realisasi_disburse or 0), int(lrpa.aug_realisasi_disburse or 0), int(lrpa.sep_realisasi_disburse or 0), int(lrpa.okt_realisasi_disburse or 0), int(lrpa.nov_realisasi_disburse or 0), int(lrpa.des_realisasi_disburse or 0)]
+        for idx,data in enumerate(A_PRK_2):
+            query = LRPA_Monitoring.objects.filter(prk__kode_prk=data, file=last_lrpa)
+            count = query.count()
+            sum_ai = query.aggregate(Sum('ai_this_year'))['ai_this_year__sum']
+            sum_aki = query.aggregate(Sum('aki_this_year'))['aki_this_year__sum']
+            if not sum_ai: sum_ai = 0
+            if not sum_aki: sum_aki = 0
+            realisasi = 0
+            for x in query:
+                realisasi = realisasi + x.sum_realisasi()
                 try:
-                    mou = MouPengalihanData.objects.get(no_prk=p.no_prk, file=last_mou)
-                    mou_realisasi = [int(mou.jan or 0), int(mou.feb or 0), int(mou.mar or 0), int(mou.apr or 0), int(mou.mei or 0), int(mou.jun or 0), int(mou.jul or 0), int(mou.aug or 0), int(mou.sep or 0), int(mou.okt or 0), int(mou.nov or 0), int(mou.des or 0)]
-                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
-                    print(sum(lrpa_realisasi), " - ", lrpa_realisasi[month-1], " + ", mou_realisasi[month+1])
+                    mou = MouPengalihanData.objects.get(prk=x.prk, file=last_mou)
+                    realisasi = realisasi - x.get_realisasi_bulan(month) + mou.get_realisasi_bulan(month)
                 except ValueError:
-                    mou_realisasi = [int(float(mou.jan) or 0), int(float(mou.feb) or 0), int(float(mou.mar) or 0), int(float(mou.apr) or 0), int(float(mou.mei) or 0), int(float(mou.jun) or 0), int(float(mou.jul) or 0), int(float(mou.aug) or 0), int(float(mou.sep) or 0), int(float(mou.okt) or 0), int(float(mou.nov) or 0), int(float(mou.des) or 0)]
-                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
                     print("FLOAT")
                 except MouPengalihanData.DoesNotExist:
-                    temp_realisasi_temp = sum(lrpa_realisasi)
-
-                temp_realisasi = temp_realisasi + temp_realisasi_temp
-                count_a = count_a + 1
+                    realisasi = realisasi
             
-            count_a_total = count_a_total + count_a
-            total_ai_a = total_ai_a + sum_ai_temp
-            total_aki_a = total_aki_a + sum_aki_temp
-            total_realisasi_a = total_realisasi_a + temp_realisasi
+            total_ai_a = total_ai_a + sum_ai
+            total_aki_a = total_aki_a + sum_aki
+            total_realisasi_a = total_realisasi_a + realisasi
+
+            sisa_aki = sum_aki - realisasi
+            pct = (safe_div(realisasi,sum_aki))*100
             
-            temp_sisa = sum_aki_temp-temp_realisasi
-            temp_pct = (temp_realisasi/sum_aki_temp)*100
-
-            A_list.append((A_PRK_1[idx],x,sum_ai_temp,sum_aki_temp,temp_realisasi,temp_sisa,temp_pct,count_a))
-
-            sum_ai_temp = 0
-            sum_aki_temp = 0
-            temp_realisasi = 0
-            count_a = 0
-
+            A_list.append((A_PRK_1[idx],data,sum_ai,sum_aki,realisasi,sisa_aki,pct,count))
+        
         context["A_list"] = A_list
-
-        context["count_a_total"] = count_a_total
+        context["count_a_total"] = LRPA_Monitoring.objects.filter(prk__kode_prk__in=A_PRK_2, file=last_lrpa).count()
         context["total_ai_a"] = total_ai_a
         context["total_aki_a"] = total_aki_a
         context["total_realisasi_a"] = total_realisasi_a
         context["total_sisa_aki_a"] = total_aki_a - total_realisasi_a
         context["total_pct_a"] = (safe_div(total_realisasi_a,total_aki_a))*100
+        
         #END COUNT FOR ALL PRK IN "Pekerjaan. Prasarana"
 
         #COUNT FOR ALL PRK IN "Pekerjaan. Utama"
@@ -278,58 +256,42 @@ class MonevView(LoginRequiredMixin, View):
         total_realisasi_b = 0
 
         count_b_total = 0
-        count_b = 0
-        sum_ai_temp = 0
-        sum_aki_temp = 0
-        temp_realisasi = 0
         
-
-        for idx,x in enumerate(B_PRK_2):
-            prk = PRK_Lookup.objects.filter(file=file_lookup, kode_prk=x)
-            for p in prk:
-                lrpa = LRPA_Monitoring.objects.get(no_prk=p.no_prk, file=last_lrpa)
-                sum_ai_temp = sum_ai_temp + lrpa.real_ai()
-                sum_aki_temp = sum_aki_temp + lrpa.real_aki()
-                lrpa_realisasi = [int(lrpa.jan_realisasi_disburse or 0), int(lrpa.feb_realisasi_disburse or 0), int(lrpa.mar_realisasi_disburse or 0), int(lrpa.apr_realisasi_disburse or 0), int(lrpa.mei_realisasi_disburse or 0), int(lrpa.jun_realisasi_disburse or 0), int(lrpa.jul_realisasi_disburse or 0), int(lrpa.aug_realisasi_disburse or 0), int(lrpa.sep_realisasi_disburse or 0), int(lrpa.okt_realisasi_disburse or 0), int(lrpa.nov_realisasi_disburse or 0), int(lrpa.des_realisasi_disburse or 0)]
-                
+        for idx,data in enumerate(B_PRK_2):
+            query = LRPA_Monitoring.objects.filter(prk__kode_prk=data, file=last_lrpa)
+            count = query.count()
+            sum_ai = query.aggregate(Sum('ai_this_year'))['ai_this_year__sum']
+            sum_aki = query.aggregate(Sum('aki_this_year'))['aki_this_year__sum']
+            if not sum_ai: sum_ai = 0
+            if not sum_aki: sum_aki = 0
+            realisasi = 0
+            for x in query:
+                realisasi = realisasi + x.sum_realisasi()
                 try:
-                    mou = MouPengalihanData.objects.get(no_prk=p.no_prk, file=last_mou)
-                    mou_realisasi = [int(mou.jan or 0), int(mou.feb or 0), int(mou.mar or 0), int(mou.apr or 0), int(mou.mei or 0), int(mou.jun or 0), int(mou.jul or 0), int(mou.aug or 0), int(mou.sep or 0), int(mou.okt or 0), int(mou.nov or 0), int(mou.des or 0)]
-                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
-                    print(sum(lrpa_realisasi), " - ", lrpa_realisasi[month-1], " + ", mou_realisasi[month+1])
+                    mou = MouPengalihanData.objects.get(prk=x.prk, file=last_mou)
+                    realisasi = realisasi - x.get_realisasi_bulan(month) + mou.get_realisasi_bulan(month)
                 except ValueError:
-                    mou_realisasi = [int(float(mou.jan) or 0), int(float(mou.feb) or 0), int(float(mou.mar) or 0), int(float(mou.apr) or 0), int(float(mou.mei) or 0), int(float(mou.jun) or 0), int(float(mou.jul) or 0), int(float(mou.aug) or 0), int(float(mou.sep) or 0), int(float(mou.okt) or 0), int(float(mou.nov) or 0), int(float(mou.des) or 0)]
-                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
                     print("FLOAT")
                 except MouPengalihanData.DoesNotExist:
-                    temp_realisasi_temp = sum(lrpa_realisasi)
-
-                temp_realisasi = temp_realisasi + temp_realisasi_temp
-                count_b = count_b + 1
+                    realisasi = realisasi
             
-            count_b_total = count_b_total + count_b
-            total_ai_b = total_ai_b + sum_ai_temp
-            total_aki_b = total_aki_b + sum_aki_temp
-            total_realisasi_b = total_realisasi_b + temp_realisasi
+            total_ai_b = total_ai_b + sum_ai
+            total_aki_b = total_aki_b + sum_aki
+            total_realisasi_b = total_realisasi_b + realisasi
+
+            sisa_aki = sum_aki - realisasi
+            pct = (safe_div(realisasi,sum_aki))*100
             
-            temp_sisa = sum_aki_temp-temp_realisasi
-            temp_pct = (safe_div(temp_realisasi,sum_aki_temp))*100
-
-            B_list.append((B_PRK_1[idx],x,sum_ai_temp,sum_aki_temp,temp_realisasi,temp_sisa,temp_pct,count_b))
-
-            count_b = 0
-            sum_ai_temp = 0
-            sum_aki_temp = 0
-            temp_realisasi = 0
-
+            B_list.append((B_PRK_1[idx],data,sum_ai,sum_aki,realisasi,sisa_aki,pct,count))
+        
         context["B_list"] = B_list
-
-        context["count_b_total"] = count_b_total
+        context["count_b_total"] = LRPA_Monitoring.objects.filter(prk__kode_prk__in=B_PRK_2, file=last_lrpa).count()
         context["total_ai_b"] = total_ai_b
         context["total_aki_b"] = total_aki_b
         context["total_realisasi_b"] = total_realisasi_b
         context["total_sisa_aki_b"] = total_aki_b - total_realisasi_b
         context["total_pct_b"] = (safe_div(total_realisasi_b,total_aki_b))*100
+
         #END COUNT FOR ALL PRK IN "Pekerjaan. Utama"
 
         #COUNT FOR ALL PRK IN "Pekerjaan. Lainnya"
@@ -343,52 +305,36 @@ class MonevView(LoginRequiredMixin, View):
         total_realisasi_c = 0
 
         count_c_total = 0
-        count_c = 0
-        sum_ai_temp = 0
-        sum_aki_temp = 0
-        temp_realisasi = 0
 
-        for idx,x in enumerate(C_PRK_2):
-            prk = PRK_Lookup.objects.filter(file=file_lookup, kode_prk=x)
-            for p in prk:
-                lrpa = LRPA_Monitoring.objects.get(no_prk=p.no_prk, file=last_lrpa)
-                sum_ai_temp = sum_ai_temp + lrpa.real_ai()
-                sum_aki_temp = sum_aki_temp + lrpa.real_aki()
-                lrpa_realisasi = [int(lrpa.jan_realisasi_disburse or 0), int(lrpa.feb_realisasi_disburse or 0), int(lrpa.mar_realisasi_disburse or 0), int(lrpa.apr_realisasi_disburse or 0), int(lrpa.mei_realisasi_disburse or 0), int(lrpa.jun_realisasi_disburse or 0), int(lrpa.jul_realisasi_disburse or 0), int(lrpa.aug_realisasi_disburse or 0), int(lrpa.sep_realisasi_disburse or 0), int(lrpa.okt_realisasi_disburse or 0), int(lrpa.nov_realisasi_disburse or 0), int(lrpa.des_realisasi_disburse or 0)]
-                
+        for idx,data in enumerate(C_PRK_2):
+            query = LRPA_Monitoring.objects.filter(prk__kode_prk=data, file=last_lrpa)
+            count = query.count()
+            sum_ai = query.aggregate(Sum('ai_this_year'))['ai_this_year__sum']
+            sum_aki = query.aggregate(Sum('aki_this_year'))['aki_this_year__sum']
+            if not sum_ai: sum_ai = 0
+            if not sum_aki: sum_aki = 0
+            realisasi = 0
+            for x in query:
+                realisasi = realisasi + x.sum_realisasi()
                 try:
-                    mou = MouPengalihanData.objects.get(no_prk=p.no_prk, file=last_mou)
-                    mou_realisasi = [int(mou.jan or 0), int(mou.feb or 0), int(mou.mar or 0), int(mou.apr or 0), int(mou.mei or 0), int(mou.jun or 0), int(mou.jul or 0), int(mou.aug or 0), int(mou.sep or 0), int(mou.okt or 0), int(mou.nov or 0), int(mou.des or 0)]
-                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
-                    print(sum(lrpa_realisasi), " - ", lrpa_realisasi[month-1], " + ", mou_realisasi[month+1])
+                    mou = MouPengalihanData.objects.get(prk=x.prk, file=last_mou)
+                    realisasi = realisasi - x.get_realisasi_bulan(month) + mou.get_realisasi_bulan(month)
                 except ValueError:
-                    mou_realisasi = [int(float(mou.jan) or 0), int(float(mou.feb) or 0), int(float(mou.mar) or 0), int(float(mou.apr) or 0), int(float(mou.mei) or 0), int(float(mou.jun) or 0), int(float(mou.jul) or 0), int(float(mou.aug) or 0), int(float(mou.sep) or 0), int(float(mou.okt) or 0), int(float(mou.nov) or 0), int(float(mou.des) or 0)]
-                    temp_realisasi_temp = sum(lrpa_realisasi) - lrpa_realisasi[month-1] + mou_realisasi[month+1]
                     print("FLOAT")
                 except MouPengalihanData.DoesNotExist:
-                    temp_realisasi_temp = sum(lrpa_realisasi)
-
-                temp_realisasi = temp_realisasi + temp_realisasi_temp
-                count_c = count_c + 1
+                    realisasi = realisasi
             
-            count_c_total = count_c_total + count_c
-            total_ai_c = total_ai_c + sum_ai_temp
-            total_aki_c = total_aki_c + sum_aki_temp
-            total_realisasi_c = total_realisasi_c + temp_realisasi
+            total_ai_c = total_ai_c + sum_ai
+            total_aki_c = total_aki_c + sum_aki
+            total_realisasi_c = total_realisasi_c + realisasi
+
+            sisa_aki = sum_aki - realisasi
+            pct = (safe_div(realisasi,sum_aki))*100
             
-            temp_sisa = sum_aki_temp-temp_realisasi
-            temp_pct = (safe_div(temp_realisasi,sum_aki_temp))*100
-
-            C_list.append((C_PRK_1[idx],x,sum_ai_temp,sum_aki_temp,temp_realisasi,temp_sisa,temp_pct,count_c))
-
-            count_c = 0
-            sum_ai_temp = 0
-            sum_aki_temp = 0
-            temp_realisasi = 0
+            C_list.append((C_PRK_1[idx],data,sum_ai,sum_aki,realisasi,sisa_aki,pct,count))
 
         context["C_list"] = C_list
-
-        context["count_c_total"] = count_c_total
+        context["count_c_total"] = LRPA_Monitoring.objects.filter(prk__kode_prk__in=C_PRK_2, file=last_lrpa).count()
         context["total_ai_c"] = total_ai_c
         context["total_aki_c"] = total_aki_c
         context["total_realisasi_c"] = total_realisasi_c
@@ -399,7 +345,7 @@ class MonevView(LoginRequiredMixin, View):
         total_aki_prk = total_aki_a + total_aki_b + total_aki_c
         total_realisasi_prk = total_realisasi_a + total_realisasi_b + total_realisasi_c
         total_sisa_aki_prk = total_aki_prk - total_realisasi_prk
-        total_count_prk = count_a_total + count_b_total + count_c_total
+        total_count_prk = context["count_a_total"] + context["count_b_total"] + context["count_c_total"]
 
         context["total_count_prk"] = total_count_prk
         context["total_ai_prk"] = total_ai_prk
@@ -447,9 +393,9 @@ class LKAIView(LoginRequiredMixin, View):
             context["for_div"] = division
         
         lrpa = monitoring. \
-               annotate(ai_1 = Round(sq_1.values('ai_this_year')), aki_1 = Round(sq_1.values('aki_this_year')), status_1 = sq_1.values('ang_status'),
-               ai_2 = Round(sq_2.values('ai_this_year')), aki_2 = Round(sq_2.values('aki_this_year')), status_2 = sq_2.values('ang_status'),
-               ai_3 = Round(sq_3.values('ai_this_year')), aki_3 = Round(sq_3.values('aki_this_year')), status_3 = sq_3.values('ang_status'),
+               annotate(ai_1 = Round(Subquery(sq_1.values('ai_this_year')[:1])*1000), aki_1 = Round(Subquery(sq_1.values('aki_this_year')[:1])*1000), status_1 = sq_1.values('ang_status'),
+               ai_2 = Round(Subquery(sq_2.values('ai_this_year')[:1])*1000), aki_2 = Round(Subquery(sq_2.values('aki_this_year')[:1])*1000), status_2 = sq_2.values('ang_status'),
+               ai_3 = Round(Subquery(sq_3.values('ai_this_year')[:1])*1000), aki_3 = Round(Subquery(sq_3.values('aki_this_year')[:1])*1000), status_3 = sq_3.values('ang_status'),
                mou_jan = sq_mou.values('jan'),mou_feb = sq_mou.values('feb'),mou_mar = sq_mou.values('mar'),mou_apr = sq_mou.values('apr'),
                mou_mei = sq_mou.values('mei'),mou_jun = sq_mou.values('jun'),mou_jul = sq_mou.values('jul'),mou_aug = sq_mou.values('aug'),
                mou_sep = sq_mou.values('sep'),mou_okt = sq_mou.values('okt'),mou_nov = sq_mou.values('nov'),mou_des = sq_mou.values('des'),
@@ -460,6 +406,9 @@ class LKAIView(LoginRequiredMixin, View):
         context["document"] = document #OPTIMIZE LATER?
 
         context["lrpa"] = lrpa
+
+        for data in lrpa:
+            print(data.no_prk, data.prk.pk)
 
         return render(request, 'monev/monev_lkai.html', context)
 
@@ -496,6 +445,7 @@ class UploadLRPA(LoginRequiredMixin, View):
                     lrpa = LRPA_Monitoring(
                         file = doc,
                         no_prk = row[0],
+                        prk = PRK.objects.get(no_prk=row[0]), #QUICK FIX, CHECK LATER
                         disburse_year_before = row[9],
                         jan_rencana_disburse = row[18],
                         jan_realisasi_disburse = row[19],

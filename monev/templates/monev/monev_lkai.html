@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block style %}
+
 <style>
     td {
         vertical-align: middle;
@@ -111,6 +112,11 @@
         100% {
             opacity: 0;
         }
+    }
+    #header-fixed { 
+        position: fixed; 
+        top: 0px; display:none;
+        background-color:white;
     }
 </style>
 {% endblock style%}
@@ -262,16 +268,16 @@
                             {% endif %}
                             
                             <!-- AI and AKI For SKAI 1 -->
-                            <td class="currency" >{{data.ai_1}}</td>
-                            <td class="currency" >{{data.aki_1}}</td>
+                            <td class="currency" >{{data.ai_1|floatformat}}</td>
+                            <td class="currency" >{{data.aki_1|floatformat}}</td>
 
                             <!-- AI and AKI For SKAI 2 -->
-                            <td class="currency" >{{data.ai_2}}</td>
-                            <td class="currency" >{{data.aki_2}}</td>
+                            <td class="currency" >{{data.ai_2|floatformat}}</td>
+                            <td class="currency" >{{data.aki_2|floatformat}}</td>
 
                             <!-- AI and AKI For SKAI 3 -->
-                            <td class="currency" >{{data.ai_3}}</td>
-                            <td class="currency" >{{data.aki_3}}</td>
+                            <td class="currency" >{{data.ai_3|floatformat}}</td>
+                            <td class="currency" >{{data.aki_3|floatformat}}</td>
 
                             <!-- AI and AKI For LRPA -->
                             {% if data.ai_this_year != 0 %}
@@ -525,10 +531,10 @@
                         {% endfor %}
                     </tbody>
                 </table>
+                <table id="header-fixed"></table>
             </div>
         </div>
     </div>
-    
 </div>
 
 <div id="modals-here"></div>
@@ -604,6 +610,24 @@
 {% endblock content %}
 
 {% block script %}
+<script>
+    var tableOffset = $("#dataTableMonev").offset().top;
+    var $header = $("#dataTableMonev > thead");
+    var $fixedHeader = $("#header-fixed").append($header.clone());
+
+    // $(window).bind("scroll", function() {
+    //     var offset = $(this).scrollTop();
+        
+    //     if (offset >= tableOffset && $fixedHeader.is(":hidden")) {
+    //         console.log("Hidden")
+    //         $fixedHeader.show();
+    //     }
+    //     else if (offset < tableOffset) {
+    //         $fixedHeader.hide();
+    //         console.log("Show")
+    //     }
+    // });
+</script>
 <script>
     $(document).ready(function () {
         var table = $('#dataTableMonev').DataTable({
