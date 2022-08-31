@@ -34,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/scroller/2.0.7/css/scroller.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/keytable/2.7.0/css/keyTable.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/fixedcolumns/4.1.0/css/fixedColumns.dataTables.min.css">
 
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,8 +58,12 @@
         }
         
         thead {
-            background-color: #0FA3B1;
+            background-color: #1A4D2E;
             color: #fff;
+        }
+
+        th.dtfc-fixed-left{
+            background-color: #1A4D2E !important;
         }
 
         .card-header{
@@ -168,6 +173,7 @@
     <script type="text/javascript" charset="utf8" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/fixedcolumns/4.1.0/js/dataTables.fixedColumns.min.js"></script>
     
     <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
     <script src="{% static 'js/ddtf.js' %}"></script>

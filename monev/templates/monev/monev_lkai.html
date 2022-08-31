@@ -7,7 +7,7 @@
     td {
         vertical-align: middle;
         text-align: center;
-        color: #161616; 
+        color: #161616;
     }
 
     table#dataTableLKAI{
@@ -23,7 +23,7 @@
 
     .cell-disabled{
         background-color: #CFD2CF;
-        opacity: 0.2;
+        opacity: 0.1;
     }
 
     .currency{
@@ -42,13 +42,19 @@
         color: #FCFCFC;
         text-align: center !important;
     }
-
+    .cell{
+        min-width: 150px;
+    }
     .past{
-        background-color: #42855B;
-        color: #FCFCFC;
+        background-color: #D0C9C0;
+        color: #100720;
     }
     .current{
-        background-color: #FEDB39;
+        background-color: #FFFFDE;
+        color: #100720;
+    }
+    .future{
+        background-color: #377D71;
         color: #100720;
     }
 
@@ -61,7 +67,7 @@
         justify-content: space-between;
         top: 0px;
         left: 0px;
-        width: 240px;
+        /* width: 240px; */
         padding: 20px 20px;
         font-size: 18px;
         color: #161616;
@@ -113,11 +119,6 @@
             opacity: 0;
         }
     }
-    #header-fixed { 
-        position: fixed; 
-        top: 0px; display:none;
-        background-color:white;
-    }
 </style>
 {% endblock style%}
 
@@ -145,7 +146,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table" id="dataTableMonev" width="100%" cellspacing="0">
+                <table class="table table-bordered" id="dataTableMonev" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <td class="sum-cell" colspan="5">Total</td>
@@ -212,30 +213,30 @@
                             <th>AI</th>
                             <th>AKI</th>
 
-                            {% if month > 1 %}<th class="past"> {% elif month == 1 %} <th class="current">{% else %}<th>{% endif %} AKB Januari</th>
-                            {% if month > 1 %}<th class="past"> {% elif month == 1 %} <th class="current">{% else %}<th>{% endif %} Januari</th>
-                            {% if month > 2 %}<th class="past"> {% elif month == 2 %} <th class="current">{% else %}<th>{% endif %}AKB Februari</th>
-                            {% if month > 2 %}<th class="past"> {% elif month == 2 %} <th class="current">{% else %}<th>{% endif %}Februari</th>
-                            {% if month > 3 %}<th class="past"> {% elif month == 3 %} <th class="current">{% else %}<th>{% endif %}AKB Maret</th>
-                            {% if month > 3 %}<th class="past"> {% elif month == 3 %} <th class="current">{% else %}<th>{% endif %}Maret</th>
-                            {% if month > 4 %}<th class="past"> {% elif month == 4 %} <th class="current">{% else %}<th>{% endif %}AKB April</th>
-                            {% if month > 4 %}<th class="past"> {% elif month == 4 %} <th class="current">{% else %}<th>{% endif %}April</th>
-                            {% if month > 5 %}<th class="past"> {% elif month == 5 %} <th class="current">{% else %}<th>{% endif %}AKB Mei</th>
-                            {% if month > 5 %}<th class="past"> {% elif month == 5 %} <th class="current">{% else %}<th>{% endif %}Mei</th>
-                            {% if month > 6 %}<th class="past"> {% elif month == 6 %} <th class="current">{% else %}<th>{% endif %}AKB Juni</th>
-                            {% if month > 6 %}<th class="past"> {% elif month == 6 %} <th class="current">{% else %}<th>{% endif %}Juni</th>
-                            {% if month > 7 %}<th class="past"> {% elif month == 7 %} <th class="current">{% else %}<th>{% endif %}AKB Juli</th>
-                            {% if month > 7 %}<th class="past"> {% elif month == 7 %} <th class="current">{% else %}<th>{% endif %}Juli</th>
-                            {% if month > 8 %}<th class="past"> {% elif month == 8 %} <th class="current">{% else %}<th>{% endif %}AKB Agustus</th>
-                            {% if month > 8 %}<th class="past"> {% elif month == 8 %} <th class="current">{% else %}<th>{% endif %}Agustus</th>
-                            {% if month > 9 %}<th class="past"> {% elif month == 9 %} <th class="current">{% else %}<th>{% endif %}AKB September</th>
-                            {% if month > 9 %}<th class="past"> {% elif month == 9 %} <th class="current">{% else %}<th>{% endif %}September</th>
-                            {% if month > 10 %}<th class="past"> {% elif month == 10 %} <th class="current">{% else %}<th>{% endif %}AKB Oktober</th>
-                            {% if month > 10 %}<th class="past"> {% elif month == 10 %} <th class="current">{% else %}<th>{% endif %}Oktober</th>
-                            {% if month > 11 %}<th class="past"> {% elif month == 11 %} <th class="current">{% else %}<th>{% endif %}AKB November</th>
-                            {% if month > 11 %}<th class="past"> {% elif month == 11 %} <th class="current">{% else %}<th>{% endif %}November</th>
-                            {% if month > 12 %}<th class="past"> {% elif month == 12 %} <th class="current">{% else %}<th>{% endif %}AKB Desember</th>
-                            {% if month > 12 %}<th class="past"> {% elif month == 12 %} <th class="current">{% else %}<th>{% endif %}Desember</th>
+                            {% if month > 1 %}<th class="past"> {% elif month == 1 %} <th class="current">{% else %}<th class="future">{% endif %} AKB Januari</th>
+                            {% if month > 1 %}<th class="past"> {% elif month == 1 %} <th class="current">{% else %}<th class="future">{% endif %} Januari</th>
+                            {% if month > 2 %}<th class="past"> {% elif month == 2 %} <th class="current">{% else %}<th class="future">{% endif %}AKB Februari</th>
+                            {% if month > 2 %}<th class="past"> {% elif month == 2 %} <th class="current">{% else %}<th class="future">{% endif %}Februari</th>
+                            {% if month > 3 %}<th class="past"> {% elif month == 3 %} <th class="current">{% else %}<th class="future">{% endif %}AKB Maret</th>
+                            {% if month > 3 %}<th class="past"> {% elif month == 3 %} <th class="current">{% else %}<th class="future">{% endif %}Maret</th>
+                            {% if month > 4 %}<th class="past"> {% elif month == 4 %} <th class="current">{% else %}<th class="future">{% endif %}AKB April</th>
+                            {% if month > 4 %}<th class="past"> {% elif month == 4 %} <th class="current">{% else %}<th class="future">{% endif %}April</th>
+                            {% if month > 5 %}<th class="past"> {% elif month == 5 %} <th class="current">{% else %}<th class="future">{% endif %}AKB Mei</th>
+                            {% if month > 5 %}<th class="past"> {% elif month == 5 %} <th class="current">{% else %}<th class="future">{% endif %}Mei</th>
+                            {% if month > 6 %}<th class="past"> {% elif month == 6 %} <th class="current">{% else %}<th class="future">{% endif %}AKB Juni</th>
+                            {% if month > 6 %}<th class="past"> {% elif month == 6 %} <th class="current">{% else %}<th class="future">{% endif %}Juni</th>
+                            {% if month > 7 %}<th class="past"> {% elif month == 7 %} <th class="current">{% else %}<th class="future">{% endif %}AKB Juli</th>
+                            {% if month > 7 %}<th class="past"> {% elif month == 7 %} <th class="current">{% else %}<th class="future">{% endif %}Juli</th>
+                            {% if month > 8 %}<th class="past"> {% elif month == 8 %} <th class="current">{% else %}<th class="future">{% endif %}AKB Agustus</th>
+                            {% if month > 8 %}<th class="past"> {% elif month == 8 %} <th class="current">{% else %}<th class="future">{% endif %}Agustus</th>
+                            {% if month > 9 %}<th class="past"> {% elif month == 9 %} <th class="current">{% else %}<th class="future">{% endif %}AKB September</th>
+                            {% if month > 9 %}<th class="past"> {% elif month == 9 %} <th class="current">{% else %}<th class="future">{% endif %}September</th>
+                            {% if month > 10 %}<th class="past"> {% elif month == 10 %} <th class="current">{% else %}<th class="future">{% endif %}AKB Oktober</th>
+                            {% if month > 10 %}<th class="past"> {% elif month == 10 %} <th class="current">{% else %}<th class="future">{% endif %}Oktober</th>
+                            {% if month > 11 %}<th class="past"> {% elif month == 11 %} <th class="current">{% else %}<th class="future">{% endif %}AKB November</th>
+                            {% if month > 11 %}<th class="past"> {% elif month == 11 %} <th class="current">{% else %}<th class="future">{% endif %}November</th>
+                            {% if month > 12 %}<th class="past"> {% elif month == 12 %} <th class="current">{% else %}<th class="future">{% endif %}AKB Desember</th>
+                            {% if month > 12 %}<th class="past"> {% elif month == 12 %} <th class="current">{% else %}<th class="future">{% endif %}Desember</th>
                             <th>Total Realisasi</th>
                         </tr>
                         
@@ -245,7 +246,7 @@
                         <tr>
                             <td>{{forloop.counter}}</td>
                             <!-- NO PRK -->
-                            <td style="position:relative;">
+                            <td>
                                 <div id="id-{{data.pk}}" class="copy_container">
                                     <p style="margin: auto;">{{data.prk.no_prk}}</p>
                                     <div id="copy-{{data.pk}}" class="copy">
@@ -255,10 +256,10 @@
                                 </div>
                             </td>
                             <!-- PROGRAM UTAMA -->
-                            <td style="min-width: 200px; text-align: justify;">{{data.prk.program_utama}}</td>
+                            <td style="min-width: 175px; text-align: justify;">{{data.prk.program_utama}}</td>
                             
                             <!-- Kegiatan Uraian -->
-                            <td style="min-width: 400px; text-align: justify;">{{data.prk.keg_uraian}}</td>
+                            <td style="min-width: 350px; text-align: justify;">{{data.prk.keg_uraian}}</td>
                             
                             <!-- Status -->
                             {% if data.status_1 %}
@@ -268,231 +269,258 @@
                             {% endif %}
                             
                             <!-- AI and AKI For SKAI 1 -->
+                            {% if data.ai_1 != 0 %}
                             <td class="currency" >{{data.ai_1|floatformat}}</td>
+                            {% else %}
+                            <td>-</td>
+                            {% endif %}
+
+                            {% if data.aki_1 != 0 %}
                             <td class="currency" >{{data.aki_1|floatformat}}</td>
+                            {% else %}
+                            <td>-</td>
+                            {% endif %}
 
                             <!-- AI and AKI For SKAI 2 -->
+                            {% if data.ai_2 != 0 %}
                             <td class="currency" >{{data.ai_2|floatformat}}</td>
+                            {% else %}
+                            <td>-</td>
+                            {% endif %}
+                            
+                            {% if data.aki_2 != 0 %}
                             <td class="currency" >{{data.aki_2|floatformat}}</td>
+                            {% else %}
+                            <td>-</td>
+                            {% endif %}
 
                             <!-- AI and AKI For SKAI 3 -->
+                            {% if data.ai_3 != 0 %}
                             <td class="currency" >{{data.ai_3|floatformat}}</td>
+                            {% else %}
+                            <td>-</td>
+                            {% endif %}
+                            
+                            {% if data.aki_3 != 0 %}
                             <td class="currency" >{{data.aki_3|floatformat}}</td>
+                            {% else %}
+                            <td>-</td>
+                            {% endif %}
 
                             <!-- AI and AKI For LRPA -->
                             {% if data.ai_this_year != 0 %}
                             <td class="currency" >{{data.real_ai}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td> - </td>
                             {% endif %}
 
                             {% if data.ai_this_year != 0 %}
                             <td class="currency" >{{data.real_aki}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td> - </td>
                             {% endif %}
 
                             <!-- Disburse data, taken from LRPA -->
                             {% if data.jan_rencana_disburse != "0" %}
-                            <td class="currency">{{data.jan_rencana_disburse|floatformat}}</td>
+                            <td class="cell currency">{{data.jan_rencana_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_jan and month == 1 %}
-                            <td class="currency mou">{{data.mou_jan|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_jan|floatformat}}</td>
                             {% elif data.jan_realisasi_disburse != "0" %}
                             <td class="currency">{{data.jan_realisasi_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
                             
                             {% if data.mou_feb and month < 2 %}
-                            <td class="currency mou">{{data.mou_feb|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_feb|floatformat}}</td>
                             {% elif data.feb_rencana_disburse != "0" %}
                             <td class="currency">{{data.feb_rencana_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_feb and month == 2 %}
-                            <td class="currency mou">{{data.mou_feb|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_feb|floatformat}}</td>
                             {% elif data.feb_realisasi_disburse != "0" %}
                             <td class="currency">{{data.feb_realisasi_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_mar and month < 3 %}
-                            <td class="currency mou">{{data.mou_mar|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_mar|floatformat}}</td>
                             {% elif data.mar_rencana_disburse != "0" %}
                             <td class="currency">{{data.mar_rencana_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_mar and month == 3 %}
-                            <td class="currency mou">{{data.mou_mar|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_mar|floatformat}}</td>
                             {% elif data.mar_realisasi_disburse != "0" %}
                             <td class="currency">{{data.mar_realisasi_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_apr and month < 4 %}
-                            <td class="currency mou">{{data.mou_apr|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_apr|floatformat}}</td>
                             {% elif data.apr_rencana_disburse != "0" %}
                             <td class="currency">{{data.apr_rencana_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_apr and month == 4 %}
-                            <td class="currency mou">{{data.mou_apr|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_apr|floatformat}}</td>
                             {% elif data.apr_realisasi_disburse != "0" %}
                             <td class="currency">{{data.apr_realisasi_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
                             
                             {% if data.mou_mei and month < 5 %}
-                            <td class="currency mou">{{data.mou_mei|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_mei|floatformat}}</td>
                             {% elif data.mei_rencana_disburse != "0" %}
                             <td class="currency">{{data.mei_rencana_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_mei and month == 5 %}
-                            <td class="currency mou">{{data.mou_mei|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_mei|floatformat}}</td>
                             {% elif data.mei_realisasi_disburse != "0" %}
                             <td class="currency">{{data.mei_realisasi_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_jun and month < 6 %}
-                            <td class="currency mou">{{data.mou_jun|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_jun|floatformat}}</td>
                             {% elif data.jun_rencana_disburse != "0" %}
                             <td class="currency">{{data.jun_rencana_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_jun and month == 6 %}
-                            <td class="currency mou">{{data.mou_jun|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_jun|floatformat}}</td>
                             {% elif data.jun_realisasi_disburse != "0" %}
                             <td class="currency">{{data.jun_realisasi_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_jul and month < 7 %}
-                            <td class="currency mou">{{data.mou_jul|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_jul|floatformat}}</td>
                             {% elif data.jul_rencana_disburse != "0" %}
                             <td class="currency">{{data.jul_rencana_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_jul and month == 7 %}
-                            <td class="currency mou">{{data.mou_jul|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_jul|floatformat}}</td>
                             {% elif data.jul_realisasi_disburse != "0" %}
                             <td class="currency">{{data.jul_realisasi_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
                             
                             {% if data.mou_aug and month < 8 %}
-                            <td class="currency mou">{{data.mou_aug|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_aug|floatformat}}</td>
                             {% elif data.aug_rencana_disburse != "0" %}
                             <td class="currency">{{data.aug_rencana_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_aug and month == 8 %}
-                            <td class="currency mou">{{data.mou_aug|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_aug|floatformat}}</td>
                             {% elif data.aug_realisasi_disburse != "0" %}
                             <td class="currency">{{data.aug_realisasi_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_sep and month < 9 %}
-                            <td class="currency mou">{{data.mou_sep|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_sep|floatformat}}</td>
                             {% elif data.sep_rencana_disburse != "0" %}
                             <td class="currency">{{data.sep_rencana_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_sep and month == 9 %}
-                            <td class="currency mou">{{data.mou_sep|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_sep|floatformat}}</td>
                             {% elif data.sep_realisasi_disburse != "0" %}
                             <td class="currency">{{data.sep_realisasi_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_okt and month < 10 %}
-                            <td class="currency mou">{{data.mou_sep|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_sep|floatformat}}</td>
                             {% elif data.okt_rencana_disburse != "0" %}
                             <td class="currency">{{data.okt_rencana_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_sep and month == 10 %}
-                            <td class="currency mou">{{data.mou_sep|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_sep|floatformat}}</td>
                             {% elif data.okt_realisasi_disburse != "0" %}
                             <td class="currency">{{data.okt_realisasi_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_nov and month < 11 %}
-                            <td class="currency mou">{{data.mou_nov|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_nov|floatformat}}</td>
                             {% elif data.nov_rencana_disburse != "0" %}
                             <td class="currency">{{data.nov_rencana_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_nov and month == 11 %}
-                            <td class="currency mou">{{data.mou_nov|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_nov|floatformat}}</td>
                             {% elif data.nov_realisasi_disburse != "0" %}
                             <td class="currency">{{data.nov_realisasi_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_des and month < 12 %}
-                            <td class="currency mou">{{data.mou_des|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_des|floatformat}}</td>
                             {% elif data.des_rencana_disburse != "0" %}
                             <td class="currency">{{data.des_rencana_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.mou_des and month == 12 %}
-                            <td class="currency mou">{{data.mou_des|floatformat}}</td>
+                            <td class="cell currency mou">{{data.mou_des|floatformat}}</td>
                             {% elif data.des_realisasi_disburse != "0" %}
                             <td class="currency">{{data.des_realisasi_disburse|floatformat}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td class="cell"> - </td>
                             {% endif %}
 
                             {% if data.sum_realisasi != 0 %}
                             <td class="currency">{{data.sum_realisasi}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td> - </td>
                             {% endif %}
 
                             {% if data.sisa_aki != 0 %}
                             <td class="currency">{{data.sisa_aki}}</td>
                             {% else %}
-                            <td class="cell-disabled"> - </td>
+                            <td> - </td>
                             {% endif %}
 
                             <!-- PRK Kode -->
@@ -531,7 +559,6 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <table id="header-fixed"></table>
             </div>
         </div>
     </div>
@@ -610,37 +637,24 @@
 {% endblock content %}
 
 {% block script %}
-<script>
-    var tableOffset = $("#dataTableMonev").offset().top;
-    var $header = $("#dataTableMonev > thead");
-    var $fixedHeader = $("#header-fixed").append($header.clone());
 
-    // $(window).bind("scroll", function() {
-    //     var offset = $(this).scrollTop();
-        
-    //     if (offset >= tableOffset && $fixedHeader.is(":hidden")) {
-    //         console.log("Hidden")
-    //         $fixedHeader.show();
-    //     }
-    //     else if (offset < tableOffset) {
-    //         $fixedHeader.hide();
-    //         console.log("Show")
-    //     }
-    // });
-</script>
 <script>
     $(document).ready(function () {
         var table = $('#dataTableMonev').DataTable({
             scrollY: 600,
-            scrollX: "100%",
+            scrollX: true,
+            scrollCollapse: true,
             paging: true,
             keys: true,
-            "paging": true,
+            paging: true,
             dom: 'BQlfrtip',
             // dom: "<'row'<'col-sm-6'Bl><'col-sm-6'f>>" +"<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
             buttons: [
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ],
+            fixedColumns:{
+                leftColumns: 4
+            },
             drawCallback: function(){
                 var api = this.api();
                 var intVal = function (i) {
@@ -747,8 +761,27 @@
         });
 
         $.fn.dataTable.tables( { visible: true, api: true } ).scroller.measure();
- 
+        // new $.fn.dataTable.FixedHeader( table ).scroller.measure();
     });
+
+    $(function() {
+        // Check the initial Poistion of the Sticky Header
+        var stickyHeaderTop = $('#dataTableMonev').offset().top;
+        $(window).scroll(function() {
+            if ($(window).scrollTop() > stickyHeaderTop) {
+                $('.dataTables_scrollHead, .DTFC_LeftHeadWrapper').css('transform', 'translateY(0%)');
+                $('.DTFC_LeftHeadWrapper').css({position: 'fixed',top: '0px',zIndex: '1',left: 'auto'});
+                $('.dataTables_scrollHead').css({position: 'fixed',top: '0px', zIndex: '1' });
+                $('.DTFC_ScrollWrapper').css({height: ''});
+            }
+            else {
+                $('.DTFC_LeftHeadWrapper, .DTFC_LeftHeadWrapper').css({position: 'relative',top: '0px'});
+                $('.dataTables_scrollHead').css({position: 'relative', top: '0px'});
+                $('.dataTables_scrollHead').css('transform', 'translateY(0%)');
+            }
+
+        });
+    });S
 </script>
 
 <script>
