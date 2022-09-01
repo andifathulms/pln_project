@@ -136,7 +136,7 @@
 <div class="container-fluid">
     <div class="row" id="div-1">
     </div>
-    <!-- DataTales Example -->
+    
     <div class="mb-4 shadow card">
         <div class="py-3 card-header">
             <h6 class="m-0 font-weight-bold">LKAI Macro untuk {{skai.document.regarding}}</h6>
@@ -522,25 +522,38 @@
     $(document).ready(function () {
         var table = $('#dataTableLKAI').DataTable({
             scrollY: 600,
-            scrollX: "100%",
+            scrollX: true,
+            scrollCollapse: true,
             paging: true,
             keys: true,
-            "paging": true,
-            dom: 'Qlfrtip'
+            dom: 'BQlfrtip',
+            fixedColumns:{
+                leftColumns: 2
+            },
         });
 
         $.fn.dataTable.tables( { visible: true, api: true } ).scroller.measure();
  
     });
 
-    //on clicking the row
-    // $("tbody tr").on("click", function() {
-    //     //loop through all td elements in the row
-    //     $(this).find("td").each(function(i) {
-    //         //toggle between adding/removing the 'active' class
-    //         $(this).toggleClass('active-td');
-    //     });
-    // });
+    $(function() {
+        // Check the initial Poistion of the Sticky Header
+        var stickyHeaderTop = $('#dataTableLKAI').offset().top;
+        $(window).scroll(function() {
+            if ($(window).scrollTop() > stickyHeaderTop) {
+                $('.dataTables_scrollHead, .DTFC_LeftHeadWrapper').css('transform', 'translateY(0%)');
+                $('.DTFC_LeftHeadWrapper').css({position: 'fixed',top: '0px',zIndex: '1',left: 'auto'});
+                $('.dataTables_scrollHead').css({position: 'fixed',top: '0px', zIndex: '1' });
+                $('.DTFC_ScrollWrapper').css({height: ''});
+            }
+            else {
+                $('.DTFC_LeftHeadWrapper, .DTFC_LeftHeadWrapper').css({position: 'relative',top: '0px'});
+                $('.dataTables_scrollHead').css({position: 'relative', top: '0px'});
+                $('.dataTables_scrollHead').css('transform', 'translateY(0%)');
+            }
+
+        });
+    });
 
     $('#to-expand').click(function() {
         elements = document.getElementsByClassName("to-hide");

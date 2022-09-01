@@ -43,7 +43,7 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    <li class="nav-item">
         <a class="nav-link" href="{% url 'home' %}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
@@ -102,6 +102,30 @@
                 <a class="collapse-item" style="white-space: normal; !important" href="{% url 'monev:lkai-view' %}">Monev LKAI</a>
                 <a class="collapse-item" style="white-space: normal; !important" href="{% url 'monev:monev-view' %}">Monev Rekap</a>
                 <a class="collapse-item" style="white-space: normal; !important" href="{% url 'monev:monev-list-file' %}">File Monev</a>
+            </div>
+        </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Rekomposisi
+    </div>
+
+
+    <!-- Nav Item - Charts -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFour"
+            aria-expanded="true" aria-controls="collapseFour">
+            <i class="fa-solid fa-recycle"></i>
+            <span>Usulan Rekomposisi</span>
+        </a>
+        <div id="collapseFour" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Usulan Rekomposisi</h6>
+                <a class="collapse-item" style="white-space: normal; !important" href="{% url 'monev:lkai-view' %}">Rekomposisi AKI</a>
             </div>
         </div>
     </li>

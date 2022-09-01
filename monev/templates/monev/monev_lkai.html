@@ -46,7 +46,7 @@
         min-width: 150px;
     }
     .past{
-        background-color: #D0C9C0;
+        background-color: #FFE162;
         color: #100720;
     }
     .current{
@@ -68,7 +68,7 @@
         top: 0px;
         left: 0px;
         /* width: 240px; */
-        padding: 20px 20px;
+        padding: 2px 2px;
         font-size: 18px;
         color: #161616;
         border-radius: 8px 8px 0 0;
@@ -244,7 +244,7 @@
                     <tbody id="macro-table" class="table-group-divider">
                         {% for data in lrpa %}
                         <tr>
-                            <td>{{forloop.counter}}</td>
+                            <td style="max-width: 5px; padding: 2px 2px;">{{forloop.counter}}</td>
                             <!-- NO PRK -->
                             <td>
                                 <div id="id-{{data.pk}}" class="copy_container">
@@ -256,10 +256,10 @@
                                 </div>
                             </td>
                             <!-- PROGRAM UTAMA -->
-                            <td style="min-width: 175px; text-align: justify;">{{data.prk.program_utama}}</td>
+                            <td style="min-width: 165px; text-align: justify;">{{data.prk.program_utama}}</td>
                             
                             <!-- Kegiatan Uraian -->
-                            <td style="min-width: 350px; text-align: justify;">{{data.prk.keg_uraian}}</td>
+                            <td style="min-width: 330px; text-align: justify;">{{data.prk.keg_uraian}}</td>
                             
                             <!-- Status -->
                             {% if data.status_1 %}
@@ -552,7 +552,7 @@
                             {% if data.mekanisme_pembayaran %}
                             <td>{{data.mekanisme_pembayaran}}</td>
                             {% else %}
-                            <td class="cell-disabled" > - </td>
+                            <td> - </td>
                             {% endif %}
                             
                         </tr>
@@ -781,7 +781,7 @@
             }
 
         });
-    });S
+    });
 </script>
 
 <script>
