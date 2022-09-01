@@ -1,0 +1,739 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style %}
+
+<style>
+    td {
+        vertical-align: middle;
+        text-align: center;
+        color: #161616;
+    }
+
+    table#dataTableLKAI{
+        background-color: #FCFCFC !important;
+        border-spacing: 0;
+        color: #161616;
+        overflow: hidden;
+    }
+
+    table#dataTableLKAI>tbody>tr:hover {
+        background-color: rgba(68, 151, 152, 0.1);
+    }
+
+    .cell-disabled{
+        background-color: #CFD2CF;
+        opacity: 0.1;
+    }
+
+    .currency{
+        text-align: right !important;
+        min-width: 160px;
+    }
+
+    .currency::before{
+        content: "Rp.";
+        float: left;
+        padding-right: 4px;
+    }
+
+    .sum-cell{
+        background-color: #161616;
+        color: #FCFCFC;
+        text-align: center !important;
+    }
+    .cell{
+        min-width: 150px;
+    }
+    .past{
+        background-color: #FFE162;
+        color: #100720;
+    }
+    .current{
+        background-color: #FFFFDE;
+        color: #100720;
+    }
+    .future{
+        background-color: #377D71;
+        color: #100720;
+    }
+
+    .mou{
+        background-color: blanchedalmond !important;
+    }
+
+    .copy_container{
+        display: flex;
+        justify-content: space-between;
+        top: 0px;
+        left: 0px;
+        /* width: 240px; */
+        padding: 2px 2px;
+        font-size: 18px;
+        color: #161616;
+        border-radius: 8px 8px 0 0;
+        cursor: pointer;
+    }
+
+    .copy{
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        align-items: center;
+        opacity: 0.6;
+        transition: all 0.1s ease;
+    }
+
+    .tooltip{
+        position: absolute;
+        top: 30px;
+        left: -30px;
+        background: #161616;
+        padding: 10px 15px;
+        display: flex;
+        justify-content: center;
+        color: #fff;
+        font-size: 14px;
+        border-radius: 4px;
+        letter-spacing: 1px;
+        opacity: 0;
+    }
+
+    .tooltip.appear {
+        animation: appear 1s ease;
+    }
+
+    @keyframes appear {
+        0% {
+            opacity: 0;
+        }
+        20% {
+            transform: translateY(10px);
+            opacity: 1;
+        }
+        80% {
+            transform: translateY(0px);
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+</style>
+{% endblock style%}
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="row" id="div-1">
+    </div>
+    <!-- DataTales Example -->
+    <div class="mb-4 shadow card">
+        <div class="py-3 card-header">
+            <div class="row">
+                <div class="col-8">
+                    <h6 class="m-0 font-weight-bold" style="color: #fff;">Monev LKAI 2022 (Viewing PRK for {{for_div}})</h6>
+                </div>
+                <div class="col-4 ">
+                    <button class="btn btn-info btn-icon-split btn-sm float-right" data-toggle="modal" data-target="#dataSource">
+                        <span class="icon text-white-50">
+                            <i class="fa-solid fa-arrow-pointer"></i>
+                        </span>
+                        <span class="text">View Data Source</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTableMonev" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <td class="sum-cell" colspan="4">Total</td>
+                            <td class="sum-cell" id="total_ai_lrpa"></td>
+                            <td class="sum-cell" id="total_aki_lrpa"></td>
+                            <td class="sum-cell" id="jan"></td>
+                            <td class="sum-cell" id="feb"></td>
+                            <td class="sum-cell" id="mar"></td>
+                            <td class="sum-cell" id="apr"></td>
+                            <td class="sum-cell" id="mei"></td>
+                            <td class="sum-cell" id="jun"></td>
+                            <td class="sum-cell" id="jul"></td>
+                            <td class="sum-cell" id="aug"></td>
+                            <td class="sum-cell" id="sep"></td>
+                            <td class="sum-cell" id="okt"></td>
+                            <td class="sum-cell" id="nov"></td>
+                            <td class="sum-cell" id="des"></td>
+                            <td class="sum-cell" id="total_realisasi"></td>
+                            <td class="sum-cell" id="sisa_aki"></td>
+                        </tr>
+                        <tr>
+                            <th rowspan="2">No</th>
+                            <th rowspan="2">No PRK</th>
+                            <th rowspan="2">Program Utama/Proyek</th>
+                            <th rowspan="2">Uraian Kegiatan</th>
+                            
+                            <th colspan="2">LRPA {{document.2.file_export_date}}</th>
+                            <th colspan="13">Rencana/Realisasi 2022</th>
+                            <th rowspan="2">Sisa AKI</th>
+                            <th rowspan="2">Kode PRK</th>
+                            <th rowspan="2">Kode BPO</th>
+                            <th rowspan="2">Rekap User Induk</th>
+                            <th rowspan="2">Sumber Dana</th>
+                            <th rowspan="2">Mekanisme Pembayaran</th>
+                        </tr>
+                        <tr>
+                            <th>AI</th>
+                            <th>AKI</th>
+
+                            {% if month > 1 %}<th class="past"> {% elif month == 1 %} <th class="current">{% else %}<th class="future">{% endif %} Januari</th>
+                            {% if month > 2 %}<th class="past"> {% elif month == 2 %} <th class="current">{% else %}<th class="future">{% endif %}Februari</th>
+                            {% if month > 3 %}<th class="past"> {% elif month == 3 %} <th class="current">{% else %}<th class="future">{% endif %}Maret</th>
+                            {% if month > 4 %}<th class="past"> {% elif month == 4 %} <th class="current">{% else %}<th class="future">{% endif %}April</th>
+                            {% if month > 5 %}<th class="past"> {% elif month == 5 %} <th class="current">{% else %}<th class="future">{% endif %}Mei</th>
+                            {% if month > 6 %}<th class="past"> {% elif month == 6 %} <th class="current">{% else %}<th class="future">{% endif %}Juni</th>
+                            {% if month > 7 %}<th class="past"> {% elif month == 7 %} <th class="current">{% else %}<th class="future">{% endif %}Juli</th>
+                            {% if month > 8 %}<th class="past"> {% elif month == 8 %} <th class="current">{% else %}<th class="future">{% endif %}Agustus</th>
+                            {% if month > 9 %}<th class="past"> {% elif month == 9 %} <th class="current">{% else %}<th class="future">{% endif %}September</th>
+                            {% if month > 10 %}<th class="past"> {% elif month == 10 %} <th class="current">{% else %}<th class="future">{% endif %}Oktober</th>
+                            {% if month > 11 %}<th class="past"> {% elif month == 11 %} <th class="current">{% else %}<th class="future">{% endif %}November</th>
+                            {% if month > 12 %}<th class="past"> {% elif month == 12 %} <th class="current">{% else %}<th class="future">{% endif %}Desember</th>
+                            <th>Total Realisasi</th>
+                        </tr>
+                        
+                    </thead>
+                    <tbody id="macro-table" class="table-group-divider">
+                        {% for data in lrpa %}
+                        <tr>
+                            <td style="max-width: 5px; padding: 2px 2px;">{{forloop.counter}}</td>
+                            <!-- NO PRK -->
+                            <td>
+                                <div id="id-{{data.pk}}" class="copy_container">
+                                    <p style="margin: auto;">{{data.prk.no_prk}}</p>
+                                    <div id="copy-{{data.pk}}" class="copy">
+                                        <span class="tooltip">Copied PRK Number</span>
+                                        <i class="material-icons">content_copy</i>
+                                    </div>
+                                </div>
+                            </td>
+                            <!-- PROGRAM UTAMA -->
+                            <td style="min-width: 165px; text-align: justify;">{{data.prk.program_utama}}</td>
+                            
+                            <!-- Kegiatan Uraian -->
+                            <td style="min-width: 330px; text-align: justify;">{{data.prk.keg_uraian}}</td>
+
+                            <!-- AI and AKI For LRPA -->
+                            {% if data.ai_this_year != 0 %}
+                            <td class="currency" >{{data.real_ai}}</td>
+                            {% else %}
+                            <td> - </td>
+                            {% endif %}
+
+                            {% if data.ai_this_year != 0 %}
+                            <td class="currency" >{{data.real_aki}}</td>
+                            {% else %}
+                            <td> - </td>
+                            {% endif %}
+
+                            <!-- Disburse data, taken from LRPA -->
+                            {% if month >= 1 %}
+                                {% if data.mou_jan and month == 1 %}
+                                    <td class="cell currency mou">{{data.mou_jan|floatformat}}</td>
+                                {% elif data.jan_realisasi_disburse != "0" %}
+                                    <td class="currency">{{data.jan_realisasi_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% else %}
+                                {% if data.jan_rencana_disburse != "0" %}
+                                    <td class="cell currency">{{data.jan_rencana_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% endif %}
+                            
+                            {% if month >= 2 %}
+                                {% if data.mou_feb and month == 2 %}
+                                    <td class="cell currency mou">{{data.mou_feb|floatformat}}</td>
+                                {% elif data.feb_realisasi_disburse != "0" %}
+                                    <td class="currency">{{data.feb_realisasi_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% else %}
+                                {% if data.mou_feb and month < 2 %}
+                                    <td class="cell currency mou">{{data.mou_feb|floatformat}}</td>
+                                {% elif data.feb_rencana_disburse != "0" %}
+                                    <td class="currency">{{data.feb_rencana_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if month >= 3 %}
+                                {% if data.mou_mar and month == 3 %}
+                                    <td class="cell currency mou">{{data.mou_mar|floatformat}}</td>
+                                {% elif data.mar_realisasi_disburse != "0" %}
+                                    <td class="currency">{{data.mar_realisasi_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% else %}
+                                {% if data.mou_mar and month < 3 %}
+                                    <td class="cell currency mou">{{data.mou_mar|floatformat}}</td>
+                                {% elif data.mar_rencana_disburse != "0" %}
+                                    <td class="currency">{{data.mar_rencana_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if month >= 4 %}
+                                {% if data.mou_apr and month == 4 %}
+                                    <td class="cell currency mou">{{data.mou_apr|floatformat}}</td>
+                                {% elif data.apr_realisasi_disburse != "0" %}
+                                    <td class="currency">{{data.apr_realisasi_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% else %}
+                                {% if data.mou_apr and month < 4 %}
+                                    <td class="cell currency mou">{{data.mou_apr|floatformat}}</td>
+                                {% elif data.apr_rencana_disburse != "0" %}
+                                    <td class="currency">{{data.apr_rencana_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if month >= 5 %}
+                                {% if data.mou_mei and month == 5 %}
+                                    <td class="cell currency mou">{{data.mou_mei|floatformat}}</td>
+                                {% elif data.mei_realisasi_disburse != "0" %}
+                                    <td class="currency">{{data.mei_realisasi_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% else %}
+                                {% if data.mou_mei and month < 5 %}
+                                    <td class="cell currency mou">{{data.mou_mei|floatformat}}</td>
+                                {% elif data.mei_rencana_disburse != "0" %}
+                                    <td class="currency">{{data.mei_rencana_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if month >= 6 %}
+                                {% if data.mou_jun and month == 6 %}
+                                    <td class="cell currency mou">{{data.mou_jun|floatformat}}</td>
+                                {% elif data.jun_realisasi_disburse != "0" %}
+                                    <td class="currency">{{data.jun_realisasi_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% else %}
+                                {% if data.mou_jun and month < 6 %}
+                                    <td class="cell currency mou">{{data.mou_jun|floatformat}}</td>
+                                {% elif data.jun_rencana_disburse != "0" %}
+                                    <td class="currency">{{data.jun_rencana_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if month >= 7 %}
+                                {% if data.mou_jul and month == 7 %}
+                                    <td class="cell currency mou">{{data.mou_jul|floatformat}}</td>
+                                {% elif data.jul_realisasi_disburse != "0" %}
+                                    <td class="currency">{{data.jul_realisasi_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% else %}
+                                {% if data.mou_jul and month < 7 %}
+                                    <td class="cell currency mou">{{data.mou_jul|floatformat}}</td>
+                                {% elif data.jul_rencana_disburse != "0" %}
+                                    <td class="currency">{{data.jul_rencana_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% endif %}
+                            
+                            {% if month >= 8 %}
+                                {% if data.mou_aug and month == 8 %}
+                                    <td class="cell currency mou">{{data.mou_aug|floatformat}}</td>
+                                {% elif data.aug_realisasi_disburse != "0" %}
+                                    <td class="currency">{{data.aug_realisasi_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% else %}
+                                {% if data.mou_aug and month < 8 %}
+                                    <td class="cell currency mou">{{data.mou_aug|floatformat}}</td>
+                                {% elif data.aug_rencana_disburse != "0" %}
+                                    <td class="currency">{{data.aug_rencana_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if month >= 9 %}
+                                {% if data.mou_sep and month == 9 %}
+                                    <td class="cell currency mou">{{data.mou_sep|floatformat}}</td>
+                                {% elif data.sep_realisasi_disburse != "0" %}
+                                    <td class="currency">{{data.sep_realisasi_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% else %}
+                                {% if data.mou_sep and month < 9 %}
+                                    <td class="cell currency mou">{{data.mou_sep|floatformat}}</td>
+                                {% elif data.sep_rencana_disburse != "0" %}
+                                    <td class="currency">{{data.sep_rencana_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% endif %}
+                            
+                            {% if month >= 10 %}
+                                {% if data.mou_sep and month == 10 %}
+                                    <td class="cell currency mou">{{data.mou_sep|floatformat}}</td>
+                                {% elif data.okt_realisasi_disburse != "0" %}
+                                    <td class="currency">{{data.okt_realisasi_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% else %}
+                                {% if data.mou_okt and month < 10 %}
+                                    <td class="cell currency mou">{{data.mou_sep|floatformat}}</td>
+                                {% elif data.okt_rencana_disburse != "0" %}
+                                    <td class="currency">{{data.okt_rencana_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% endif %}
+                            
+                            {% if month >= 11 %}
+                                {% if data.mou_nov and month == 11 %}
+                                    <td class="cell currency mou">{{data.mou_nov|floatformat}}</td>
+                                {% elif data.nov_realisasi_disburse != "0" %}
+                                    <td class="currency">{{data.nov_realisasi_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% else %}
+                                {% if data.mou_nov and month < 11 %}
+                                    <td class="cell currency mou">{{data.mou_nov|floatformat}}</td>
+                                {% elif data.nov_rencana_disburse != "0" %}
+                                    <td class="currency">{{data.nov_rencana_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if month >= 12 %}
+                                {% if data.mou_des and month == 12 %}
+                                    <td class="cell currency mou">{{data.mou_des|floatformat}}</td>
+                                {% elif data.des_realisasi_disburse != "0" %}
+                                    <td class="currency">{{data.des_realisasi_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% else %}
+                                {% if data.mou_des and month < 12 %}
+                                    <td class="cell currency mou">{{data.mou_des|floatformat}}</td>
+                                {% elif data.des_rencana_disburse != "0" %}
+                                    <td class="currency">{{data.des_rencana_disburse|floatformat}}</td>
+                                {% else %}
+                                    <td class="cell"> - </td>
+                                {% endif %}
+                            {% endif %}
+
+                            {% if data.sum_realisasi != 0 %}
+                            <td class="currency">{{data.sum_realisasi}}</td>
+                            {% else %}
+                            <td> - </td>
+                            {% endif %}
+
+                            {% if data.sisa_aki != 0 %}
+                            <td class="currency">{{data.sisa_aki}}</td>
+                            {% else %}
+                            <td> - </td>
+                            {% endif %}
+
+                            <!-- PRK Kode -->
+                            {% if data.prk.kode_prk %}
+                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.prk.pk type=1 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-1-{{data.prk.pk}}">{{data.prk.kode_prk}}</td>
+                            {% else %}
+                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.prk.pk type=1 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-1-{{data.prk.pk}}">-</td>
+                            {% endif %}
+
+                            {% if data.prk.kode_bpo %}
+                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.prk.pk type=2 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-2-{{data.prk.pk}}">{{data.prk.kode_bpo}}</td>
+                            {% else %}
+                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.prk.pk type=2 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-2-{{data.prk.pk}}">-</td>
+                            {% endif %}
+
+                            {% if data.prk.rekap_user_induk %}
+                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.prk.pk type=3 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-3-{{data.prk.pk}}">{{data.prk.rekap_user_induk}}</td>
+                            {% else %}
+                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.prk.pk type=3 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-3-{{data.prk.pk}}">-</td>
+                            {% endif %}
+                            <!-- Sumber Dana -->
+                            {% if data.sd_1 %}
+                            <td>{{data.sd_1}}</td>
+                            {% else %}
+                            <td>{{data.sd_3}}</td>
+                            {% endif %}
+                            
+
+                            {% if data.mekanisme_pembayaran %}
+                            <td>{{data.mekanisme_pembayaran}}</td>
+                            {% else %}
+                            <td> - </td>
+                            {% endif %}
+                            
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modals-here"></div>
+
+<!-- Modal Data Source -->
+<div class="modal fade" id="dataSource" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Data Source</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>File</th>
+                            <th>Name/Keyword</th>
+                            <th>Tanggal Dokumen/File</th>
+                            <th style="background-color: #161616 !important;">Tanggal Upload</th>
+                            <th style="background-color: #161616 !important;">Diupload oleh</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>SKAI</td>
+                            <td><a href="">{{document.0.keyword}}</a></td>
+                            <td>{{document.0.document.published_date|date:"d M Y"}}</td>
+                            <td>{{document.0.document.upload_date}}</td>
+                            <td>{{document.0.document.uploader}}</td>
+                        </tr>
+                        <tr>
+                            <td>SKAI</td>
+                            <td><a href="">{{document.3.keyword}}</a></td>
+                            <td>{{document.3.document.published_date|date:"d M Y"}}</td>
+                            <td>{{document.3.document.upload_date}}</td>
+                            <td>{{document.3.document.uploader}}</td>
+                        </tr>
+                        <tr>
+                            <td>SKAI</td>
+                            <td><a href="">{{document.1.keyword}}</a></td>
+                            <td>{{document.1.document.published_date|date:"d M Y"}}</td>
+                            <td>{{document.1.document.upload_date}}</td>
+                            <td>{{document.1.document.uploader}}</td>
+                        </tr>
+                        <tr>
+                            <td>LRPA</td>
+                            <td>LRPA bulan : {{document.2.for_month}}</td>
+                            <td>{{document.2.file_export_date|date:"d M Y"}}</td>
+                            <td>{{document.2.upload_date}}</td>
+                            <td>{{document.2.upload_by}}</td>
+                        </tr>
+                        <tr>
+                            <td>Daftar MOU Pengalihan</td>
+                            <td>Tarikan FIX bulan : {{document.4.for_month}}</td>
+                            <td>{{document.4.file_export_date|date:"d M Y"}}</td>
+                            <td>{{document.4.upload_date}}</td>
+                            <td>{{document.4.upload_by}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+        
+      </div>
+    </div>
+</div>
+  
+{% endblock content %}
+
+{% block script %}
+
+<script>
+    $(document).ready(function () {
+        var table = $('#dataTableMonev').DataTable({
+            scrollY: 600,
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            keys: true,
+            paging: true,
+            dom: 'BQlfrtip',
+            // dom: "<'row'<'col-sm-6'Bl><'col-sm-6'f>>" +"<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            fixedColumns:{
+                leftColumns: 4
+            },
+            drawCallback: function(){
+                var api = this.api();
+                var intVal = function (i) {
+                    return parseInt(i) || 0;
+                };
+                
+                function myFunc(total, num) {
+                    return intVal(total) + intVal(num);
+                }
+                
+                var ai_lrpa = api.column(4, {search: 'applied'}).data();
+                var aki_lrpa = api.column(5, {search: 'applied'}).data();
+
+                var jan = api.column(6, {search: 'applied'}).data();
+                var feb = api.column(7, {search: 'applied'}).data();
+                var mar = api.column(8, {search: 'applied'}).data();
+                var apr = api.column(9, {search: 'applied'}).data();
+                var mei = api.column(10, {search: 'applied'}).data();
+                var jun = api.column(11, {search: 'applied'}).data();
+                var jul = api.column(12, {search: 'applied'}).data();
+                var aug = api.column(13, {search: 'applied'}).data();
+                var sep = api.column(14, {search: 'applied'}).data();
+                var okt = api.column(15, {search: 'applied'}).data();
+                var nov = api.column(16, {search: 'applied'}).data();
+                var des = api.column(17, {search: 'applied'}).data();
+
+                var total_realisasi = api.column(18, {search: 'applied'}).data();
+                var sisa_aki = api.column(19, {search: 'applied'}).data();
+
+                //alert( Object.keys(data_ai_1).length );
+
+                var listColumn = [ai_lrpa, aki_lrpa, jan, feb, mar, apr, mei, jun, jul, aug, sep, okt, nov, des, total_realisasi, sisa_aki]
+
+                var reduceColumn = []
+                for (var obj in listColumn){
+                    var data = listColumn[obj];
+                    //console.log(data);
+                    Object.keys(data).forEach(function(key){
+                        if(typeof data[key] === 'string'){
+                            data[key] = intVal(data[key].replaceAll(',',''))
+                        }
+                    })
+                    reduceColumn.push(data.reduce(myFunc))
+                }
+
+                console.log(reduceColumn);
+
+                $('#total_ai_lrpa').html(Number(reduceColumn[0]).toLocaleString('id'));
+                $('#total_aki_lrpa').html(Number(reduceColumn[1]).toLocaleString('id'));
+                $('#jan').html(Number(reduceColumn[2]).toLocaleString('id'));
+                $('#feb').html(Number(reduceColumn[3]).toLocaleString('id'));
+                $('#mar').html(Number(reduceColumn[4]).toLocaleString('id'));
+                $('#apr').html(Number(reduceColumn[5]).toLocaleString('id'));
+                $('#mei').html(Number(reduceColumn[6]).toLocaleString('id'));
+                $('#jun').html(Number(reduceColumn[7]).toLocaleString('id'));
+                $('#jul').html(Number(reduceColumn[8]).toLocaleString('id'));
+                $('#aug').html(Number(reduceColumn[9]).toLocaleString('id'));
+                $('#sep').html(Number(reduceColumn[10]).toLocaleString('id'));
+                $('#okt').html(Number(reduceColumn[11]).toLocaleString('id'));
+                $('#nov').html(Number(reduceColumn[12]).toLocaleString('id'));
+                $('#des').html(Number(reduceColumn[13]).toLocaleString('id'));
+
+                $('#total_realisasi').html(Number(reduceColumn[14]).toLocaleString('id'));
+                $('#sisa_aki').html(Number(reduceColumn[15]).toLocaleString('id'));
+            }
+        });
+
+        $.fn.dataTable.tables( { visible: true, api: true } ).scroller.measure();
+        // new $.fn.dataTable.FixedHeader( table ).scroller.measure();
+    });
+
+    $(function() {
+        // Check the initial Poistion of the Sticky Header
+        var stickyHeaderTop = $('#dataTableMonev').offset().top;
+        $(window).scroll(function() {
+            if ($(window).scrollTop() > stickyHeaderTop) {
+                $('.dataTables_scrollHead, .DTFC_LeftHeadWrapper').css('transform', 'translateY(0%)');
+                $('.DTFC_LeftHeadWrapper').css({position: 'fixed',top: '0px',zIndex: '1',left: 'auto'});
+                $('.dataTables_scrollHead').css({position: 'fixed',top: '0px', zIndex: '1' });
+                $('.DTFC_ScrollWrapper').css({height: ''});
+            }
+            else {
+                $('.DTFC_LeftHeadWrapper, .DTFC_LeftHeadWrapper').css({position: 'relative',top: '0px'});
+                $('.dataTables_scrollHead').css({position: 'relative', top: '0px'});
+                $('.dataTables_scrollHead').css('transform', 'translateY(0%)');
+            }
+
+        });
+    });
+</script>
+
+<script>
+
+    function closeModal() {
+        var container = document.getElementById("modals-here")
+        console.log(container)
+        var backdrop = document.getElementById("modal-backdrop")
+        var modal = document.getElementById("modal")
+
+        modal.classList.remove("show")
+        backdrop.classList.remove("show")
+
+        setTimeout(function() {
+            container.removeChild(backdrop)
+            container.removeChild(modal)
+        }, 200)
+    }
+
+    htmx.on("htmx:beforeSwap", (e) => {
+        // Empty response not targeting #modals-here => hide the modal
+        console.log("Before Swap")
+        console.log(e.detail.target.id)
+        if (e.detail.target.id != "modals-here") {
+            console.log("If")
+            closeModal()
+            e.detail.shouldSwap = false
+        }
+    })
+
+
+    $("[id^=copy-").on("click", function(e){
+        e.preventDefault();
+
+        //find the number of the parent
+        let num = $(this).parent().attr("id").slice("id-".length);
+        //let elem = $("#id-" + num);
+        let elem = document.getElementById("id-"+num);
+        
+        //copy the text
+        let $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($(elem).children(":first").text()).select();
+        document.execCommand("copy");
+        
+        $temp.remove();
+
+        $(this).children(".tooltip").addClass("appear").delay(1000).queue(function( next ){
+            $(this).removeClass("appear"); 
+            $(this).dequeue();
+        });
+    });
+</script>
+{% endblock script %}

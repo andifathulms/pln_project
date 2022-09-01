@@ -34,6 +34,7 @@ urlpatterns = [
 
     path('document/', include('document.urls', namespace='document')),
     path('monev/', include('monev.urls', namespace='monev')),
+    path('recomposition/', include('recomposition.urls', namespace='recomposition')),
 
     #for dev only
     path('playground/', XLSM_Playground.as_view(), name="playground"),

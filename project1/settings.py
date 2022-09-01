@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'division',
     'document',
     'monev',
+    'recomposition',
 
     'notification',
     
