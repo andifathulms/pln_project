@@ -427,7 +427,7 @@ class UploadLRPA(LoginRequiredMixin, View):
         wb = load_workbook(file)
         ws = wb['Monitoring LRPA']
 
-        # COMPROMISE ADDED ROW
+        # COMPROMISE ADDED COL
         start_col = 2
         end_col = 42
         
