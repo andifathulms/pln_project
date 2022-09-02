@@ -132,7 +132,7 @@
         <div class="py-3 card-header">
             <div class="row">
                 <div class="col-8">
-                    <h6 class="m-0 font-weight-bold" style="color: #fff;">Monev LKAI 2022 (Viewing PRK for {{for_div}})</h6>
+                    <h6 class="m-0 font-weight-bold" style="color: #fff;">Usulan Rekomposisi AKI (Viewing PRK for {{for_div}})</h6>
                 </div>
                 <div class="col-4 ">
                     <button class="btn btn-info btn-icon-split btn-sm float-right" data-toggle="modal" data-target="#dataSource">
@@ -152,6 +152,7 @@
                             <td class="sum-cell" colspan="4">Total</td>
                             <td class="sum-cell" id="total_ai_lrpa"></td>
                             <td class="sum-cell" id="total_aki_lrpa"></td>
+                            <td class="sum-cell" id="total_revisi_usulan"></td>
                             <td class="sum-cell" id="jan"></td>
                             <td class="sum-cell" id="feb"></td>
                             <td class="sum-cell" id="mar"></td>
@@ -174,6 +175,7 @@
                             <th rowspan="2">Uraian Kegiatan</th>
                             
                             <th colspan="2">LRPA {{document.2.file_export_date}}</th>
+                            <th rowspan="2">Usulan Revisi</th>
                             <th colspan="13">Rencana/Realisasi 2022</th>
                             <th rowspan="2">Sisa AKI</th>
                             <th rowspan="2">Kode PRK</th>
@@ -229,6 +231,13 @@
                             <td> - </td>
                             {% endif %}
 
+                            {% if data.ai_this_year != 0 %}
+                            <td class="currency" >{{data.real_aki}}</td>
+                            {% else %}
+                            <td> - </td>
+                            {% endif %}
+
+                            <!-- Revisi Usulan -->
                             {% if data.ai_this_year != 0 %}
                             <td class="currency" >{{data.real_aki}}</td>
                             {% else %}
@@ -606,26 +615,27 @@
                 
                 var ai_lrpa = api.column(4, {search: 'applied'}).data();
                 var aki_lrpa = api.column(5, {search: 'applied'}).data();
+                var revisi_usulan = api.column(6, {search: 'applied'}).data();
 
-                var jan = api.column(6, {search: 'applied'}).data();
-                var feb = api.column(7, {search: 'applied'}).data();
-                var mar = api.column(8, {search: 'applied'}).data();
-                var apr = api.column(9, {search: 'applied'}).data();
-                var mei = api.column(10, {search: 'applied'}).data();
-                var jun = api.column(11, {search: 'applied'}).data();
-                var jul = api.column(12, {search: 'applied'}).data();
-                var aug = api.column(13, {search: 'applied'}).data();
-                var sep = api.column(14, {search: 'applied'}).data();
-                var okt = api.column(15, {search: 'applied'}).data();
-                var nov = api.column(16, {search: 'applied'}).data();
-                var des = api.column(17, {search: 'applied'}).data();
+                var jan = api.column(7, {search: 'applied'}).data();
+                var feb = api.column(8, {search: 'applied'}).data();
+                var mar = api.column(9, {search: 'applied'}).data();
+                var apr = api.column(10, {search: 'applied'}).data();
+                var mei = api.column(11, {search: 'applied'}).data();
+                var jun = api.column(12, {search: 'applied'}).data();
+                var jul = api.column(13, {search: 'applied'}).data();
+                var aug = api.column(14, {search: 'applied'}).data();
+                var sep = api.column(15, {search: 'applied'}).data();
+                var okt = api.column(16, {search: 'applied'}).data();
+                var nov = api.column(17, {search: 'applied'}).data();
+                var des = api.column(18, {search: 'applied'}).data();
 
-                var total_realisasi = api.column(18, {search: 'applied'}).data();
-                var sisa_aki = api.column(19, {search: 'applied'}).data();
+                var total_realisasi = api.column(19, {search: 'applied'}).data();
+                var sisa_aki = api.column(20, {search: 'applied'}).data();
 
                 //alert( Object.keys(data_ai_1).length );
 
-                var listColumn = [ai_lrpa, aki_lrpa, jan, feb, mar, apr, mei, jun, jul, aug, sep, okt, nov, des, total_realisasi, sisa_aki]
+                var listColumn = [ai_lrpa, aki_lrpa,revisi_usulan, jan, feb, mar, apr, mei, jun, jul, aug, sep, okt, nov, des, total_realisasi, sisa_aki]
 
                 var reduceColumn = []
                 for (var obj in listColumn){
@@ -643,21 +653,22 @@
 
                 $('#total_ai_lrpa').html(Number(reduceColumn[0]).toLocaleString('id'));
                 $('#total_aki_lrpa').html(Number(reduceColumn[1]).toLocaleString('id'));
-                $('#jan').html(Number(reduceColumn[2]).toLocaleString('id'));
-                $('#feb').html(Number(reduceColumn[3]).toLocaleString('id'));
-                $('#mar').html(Number(reduceColumn[4]).toLocaleString('id'));
-                $('#apr').html(Number(reduceColumn[5]).toLocaleString('id'));
-                $('#mei').html(Number(reduceColumn[6]).toLocaleString('id'));
-                $('#jun').html(Number(reduceColumn[7]).toLocaleString('id'));
-                $('#jul').html(Number(reduceColumn[8]).toLocaleString('id'));
-                $('#aug').html(Number(reduceColumn[9]).toLocaleString('id'));
-                $('#sep').html(Number(reduceColumn[10]).toLocaleString('id'));
-                $('#okt').html(Number(reduceColumn[11]).toLocaleString('id'));
-                $('#nov').html(Number(reduceColumn[12]).toLocaleString('id'));
-                $('#des').html(Number(reduceColumn[13]).toLocaleString('id'));
+                $('#total_revisi_usulan').html(Number(reduceColumn[2]).toLocaleString('id'));
+                $('#jan').html(Number(reduceColumn[3]).toLocaleString('id'));
+                $('#feb').html(Number(reduceColumn[4]).toLocaleString('id'));
+                $('#mar').html(Number(reduceColumn[5]).toLocaleString('id'));
+                $('#apr').html(Number(reduceColumn[6]).toLocaleString('id'));
+                $('#mei').html(Number(reduceColumn[7]).toLocaleString('id'));
+                $('#jun').html(Number(reduceColumn[8]).toLocaleString('id'));
+                $('#jul').html(Number(reduceColumn[9]).toLocaleString('id'));
+                $('#aug').html(Number(reduceColumn[10]).toLocaleString('id'));
+                $('#sep').html(Number(reduceColumn[11]).toLocaleString('id'));
+                $('#okt').html(Number(reduceColumn[12]).toLocaleString('id'));
+                $('#nov').html(Number(reduceColumn[13]).toLocaleString('id'));
+                $('#des').html(Number(reduceColumn[14]).toLocaleString('id'));
 
-                $('#total_realisasi').html(Number(reduceColumn[14]).toLocaleString('id'));
-                $('#sisa_aki').html(Number(reduceColumn[15]).toLocaleString('id'));
+                $('#total_realisasi').html(Number(reduceColumn[15]).toLocaleString('id'));
+                $('#sisa_aki').html(Number(reduceColumn[16]).toLocaleString('id'));
             }
         });
 

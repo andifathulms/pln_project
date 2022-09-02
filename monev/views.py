@@ -427,10 +427,11 @@ class UploadLRPA(LoginRequiredMixin, View):
         wb = load_workbook(file)
         ws = wb['Monitoring LRPA']
 
-        start_col = 1
+        # COMPROMISE ADDED ROW
+        start_col = 2
         end_col = 42
-
-        list_rows = [idx for idx,cell in enumerate(ws["B"]) if cell.value and idx >= 6]
+        
+        list_rows = [idx for idx,cell in enumerate(ws["C"]) if cell.value and idx >= 6]
         #print(list_rows)
         
         doc_form = LRPAFileForm(request.POST, request.FILES)
