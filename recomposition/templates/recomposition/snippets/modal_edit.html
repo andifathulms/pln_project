@@ -3,14 +3,14 @@
 	<div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLongTitle">Edit Rencana Realisasi Oktober</h5>
+              <h5 class="modal-title" id="exampleModalLongTitle">Edit Rencana Realisasi {{month}}</h5>
               <button type="button" class="close" onclick="closeModal()">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
             <div class="modal-body">
                 <div class="container-fluid">
-                    <form hx-post="{% url 'monev:monev-edit-prk' pk=data.pk type=1 %}" hx-target="#target-1-{{data.pk}}" hx-swap="outerHTML" enctype="multipart/form-data">
+                    <form hx-post="{#% url 'monev:monev-edit-prk' pk=data.pk type=1 %#}" hx-target="#target-1-{{data.pk}}" hx-swap="outerHTML" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="formGroupExampleInput">No PRK</label>
@@ -24,10 +24,32 @@
                                 <div class="input-group-prepend">
                                   <div class="input-group-text">Rp.</div>
                                 </div>
-                                <input type="number" class="form-control" name="kode_prk" id="formGroupExampleInput" value="{{value}}"/>
+                                <input type="number" class="form-control" name="value-former" id="formGroupExampleInput" value="{{value}}" disabled/>
                             </div>
                         </div>
-                        <p>{{words}}</p>
+                        <div class="form-group">
+                            <label for="formGroupExampleInput">Perubahan Realisasi Oktober</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                  <div class="input-group-text">Rp.</div>
+                                </div>
+                                <input type="number" class="form-control" name="value" id="formGroupExampleInput" value="{{value}}"
+                                hx-get="{% url 'recomposition:recomposition-onchgvalue' former_value=value %}"
+                                hx-target="#onChgArea" hx-trigger="keyup" hx-swap="innerHTML"/>
+                            </div>
+                        </div>
+                        <div id="onChgArea">
+                            <p id="value-words">{{words}}</p>
+                            <div class="form-group">
+                                <label for="formGroupExampleInput">Selisih +/-</label>
+                                <div class="input-group mb-2">
+                                    <div class="input-group-prepend">
+                                    <div class="input-group-text">Rp.</div>
+                                    </div>
+                                    <input type="text" class="form-control" name="value-former" id="formGroupExampleInput" value="{{selisih}}" disabled/>
+                                </div>
+                            </div>
+                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" onclick="closeModal()">Close</button>
                             <button type="submit" class="btn btn-primary">Save changes</button>

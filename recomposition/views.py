@@ -56,15 +56,19 @@ class UsulanRekomposisiEdit(LoginRequiredMixin, View):
     
     def get(self, request, pk, month, *args, **kwargs):
         context = {}
+        months = {1:"Januari", 2:"Februari", 3:"Maret", 4:"April", 5:"Mei", 6:"Juni", 7:"Juli", 8:"Agustus", 9:"September", 10:"Oktober", 11:"November", 12:"Desember"}
 
         prk = PRK.objects.get(pk=pk)
         context["data"] = prk
 
         last_lrpa = LRPA_File.objects.order_by('-file_export_date').first()
         prk_lrpa = LRPA_Monitoring.objects.get(file=last_lrpa, prk=prk)
-        value = prk_lrpa.get_rencana_bulan(month)
+        value = prk_lrpa.get_rencana_bulan(month) #MANUAL
+
         context["value"] = str(value)
         context["words"] = num2words(value , lang='id')
+        context["month"] = months[month]
+        context["selisih"] = str(value) #MANUAL
 
         return render(request, 'recomposition/snippets/modal_edit.html', context)
 
@@ -72,3 +76,24 @@ class UsulanRekomposisiEdit(LoginRequiredMixin, View):
         context = {}
 
         pass
+
+class OnChangeValue(LoginRequiredMixin, View):
+
+    def get(self, request, former_value):
+        context = {}
+        data = request.GET
+        context["words"] = num2words(int(data["value"]) , lang='id')
+        
+
+        selisih = int(data["value"]) - int(former_value)
+
+        if selisih > 0:
+            context["selisih"] = str(selisih) + " (tambah)"
+        elif selisih < 0:
+            context["selisih"] = str(selisih) + " (kurang)"
+        else:
+            context["selisih"] = str(selisih)
+
+        print(context["selisih"])
+
+        return render(request, 'recomposition/snippets/value_to_words.html', context)
