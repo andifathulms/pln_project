@@ -33,7 +33,7 @@
                                 <div class="input-group-prepend">
                                   <div class="input-group-text">Rp.</div>
                                 </div>
-                                <input type="number" class="form-control" name="value" id="formGroupExampleInput" value="{{value}}"
+                                <input type="number" class="form-control" name="value-chg" id="formGroupExampleInput" value="{{value}}"
                                 hx-get="{% url 'recomposition:recomposition-onchgvalue' former_value=value %}"
                                 hx-target="#onChgArea" hx-trigger="keyup" hx-swap="innerHTML"/>
                             </div>

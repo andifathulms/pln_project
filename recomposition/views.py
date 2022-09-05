@@ -116,4 +116,11 @@ class InlineAKBEdit(LoginRequiredMixin, View):
         pass
 
     def post(self, request):
-        pass
+        context = {}
+        
+        data = request.POST
+
+        edit_akb = data["value-chg"]
+        context["edit_akb"] = edit_akb
+
+        return render(request, 'recomposition/snippets/inline_edit_cell_akb.html', context)
