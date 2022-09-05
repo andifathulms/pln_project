@@ -3,13 +3,18 @@ from django.db import models
 from document.models import PRK
 from account.models import Account
 
+class UsulanPeriod(models.Model):
+    start_date      = models.DateField()
+    end_date        = models.DateField()
+
 class UsulanRekomposisi(models.Model):
     proposed_by     = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True)
     upload_date     = models.DateTimeField(blank=True, null=True)
     last_edit_date  = models.DateTimeField(blank=True, null=True)
+    for_month       = models.PositiveIntegerField()
     division        = models.CharField(max_length=10,blank=True, null=True)
     is_draft        = models.BooleanField(default=True)
-    is_publish      = models.BooleanField(default=True)
+    is_publish      = models.BooleanField(default=False)
 
 class UsulanRekomposisiData(models.Model):
     file            = models.ForeignKey('UsulanRekomposisi', on_delete=models.CASCADE)

@@ -11,6 +11,8 @@ from monev.models import LRPA_Monitoring, LRPA_File, MouPengalihanData, FileMouP
 from document.models import PRK
 from monev.views import this_month, is_production
 
+from .models import UsulanRekomposisi, UsulanRekomposisiData
+
 from num2words import num2words
 
 class RecompositionAKI(LoginRequiredMixin, View):
@@ -18,7 +20,6 @@ class RecompositionAKI(LoginRequiredMixin, View):
     def get(self, request):
         context = {}
         context["month"] = this_month()
-        #Total: 1.57s Python: 1.26s DB: 0.31s Queries: 14 
 
         last_lrpa = LRPA_File.objects.order_by('-file_export_date').first()
         last_mou = FileMouPengalihan.objects.order_by('file_export_date').first()
@@ -34,6 +35,16 @@ class RecompositionAKI(LoginRequiredMixin, View):
         else:
             monitoring = LRPA_Monitoring.objects.select_related('prk').filter(file=last_lrpa, prk__rekap_user_induk=division)
             context["for_div"] = division
+        
+        # CREATED INSTANCE DRAFT RECOMP IF THE FIRST TIME IN THIS MONTH
+        try :
+            draft = UsulanRekomposisi.objects.get(division=context["for_div"], for_month=this_month())
+        except:
+            draft = UsulanRekomposisi(
+                division=context["for_div"],
+                for_month=this_month()
+            )
+            draft.save()
         
         lrpa = monitoring. \
                annotate(
@@ -67,6 +78,7 @@ class UsulanRekomposisiEdit(LoginRequiredMixin, View):
 
         context["value"] = str(value)
         context["words"] = num2words(value , lang='id')
+        context["this_month"] = month
         context["month"] = months[month]
         context["selisih"] = str(value) #MANUAL
 
@@ -97,3 +109,11 @@ class OnChangeValue(LoginRequiredMixin, View):
         print(context["selisih"])
 
         return render(request, 'recomposition/snippets/value_to_words.html', context)
+
+class InlineAKBEdit(LoginRequiredMixin, View):
+
+    def get(self, request):
+        pass
+
+    def post(self, request):
+        pass

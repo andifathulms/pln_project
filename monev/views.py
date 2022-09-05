@@ -28,11 +28,13 @@ def this_month():
     return datetime.now().month
 
 def is_production():
-    return False
+    return True
 
 class DashboardView(LoginRequiredMixin, View):
     def get(self, request):
         context = {}
+        months = {1:"Januari", 2:"Februari", 3:"Maret", 4:"April", 5:"Mei", 6:"Juni", 7:"Juli", 8:"Agustus", 9:"September", 10:"Oktober", 11:"November", 12:"Desember"}
+        context["month"] = months[this_month()]
 
         last_lrpa = LRPA_File.objects.order_by('-file_export_date').first()
         last_mou = FileMouPengalihan.objects.order_by('file_export_date').first()
@@ -429,7 +431,7 @@ class UploadLRPA(LoginRequiredMixin, View):
 
         # COMPROMISE ADDED COL
         start_col = 2
-        end_col = 42
+        end_col = 43
         
         list_rows = [idx for idx,cell in enumerate(ws["C"]) if cell.value and idx >= 6]
         #print(list_rows)
