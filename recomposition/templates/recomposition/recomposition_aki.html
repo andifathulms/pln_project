@@ -820,14 +820,14 @@
     }
 
     htmx.on("htmx:beforeSwap", (e) => {
-        // // Empty response not targeting #modals-here => hide the modal
-        // console.log("Before Swap")
-        // console.log(e.detail.target.id)
-        // if (e.detail.target.id != "modals-here") {
-        //     console.log("If")
-        //     closeModal()
-        //     e.detail.shouldSwap = false
-        // }
+        // Empty response not targeting #onChgArea => hide the modal
+        console.log("Before Swap")
+        console.log(e.detail.target.id)
+        if (e.detail.target.id != "onChgArea") {
+            console.log("If")
+            closeModal()
+            e.detail.shouldSwap = false
+        }
     })
 
 

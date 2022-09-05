@@ -119,8 +119,11 @@ class InlineAKBEdit(LoginRequiredMixin, View):
         context = {}
         
         data = request.POST
+        prk = PRK.objects.get(no_prk = data["no_prk"])
 
-        edit_akb = data["value-chg"]
+        edit_akb = data["value"]
         context["edit_akb"] = edit_akb
+        context["data"] = prk
+        context["this_month"] = data["this_month"]
 
         return render(request, 'recomposition/snippets/inline_edit_cell_akb.html', context)

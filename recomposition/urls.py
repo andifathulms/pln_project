@@ -13,5 +13,5 @@ urlpatterns = [
     path('recomposition-aki', RecompositionAKI.as_view(), name='recomposition-aki'),
     path('edit-prk/<int:pk>/<int:month>/', UsulanRekomposisiEdit.as_view(), name='recomposition-edit-prk'),
     path('onchgvalue/<int:former_value>/', OnChangeValue.as_view(), name='recomposition-onchgvalue'),
-    path('akb-edit/<int:pk>/', InlineAKBEdit.as_view(), name='akb-edit'),
+    path('akb-edit/', InlineAKBEdit.as_view(), name='akb-edit'),
 ]
