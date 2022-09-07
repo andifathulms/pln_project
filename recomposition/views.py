@@ -132,11 +132,16 @@ class UsulanRekomposisiEdit(LoginRequiredMixin, View):
         context["data"] = prk
 
         last_lrpa = LRPA_File.objects.order_by('-file_export_date').first()
-        prk_lrpa = LRPA_Monitoring.objects.get(file=last_lrpa, prk=prk)
+        prk_data = PRKData.objects.get(file_lrpa=last_lrpa, prk=prk)
 
         if month != 0:
-            value = prk_lrpa.get_rencana_bulan(month) #MANUAL
-            context["words"] = num2words(value , lang='id')
+            value = prk_data.get_rencana_month(month) #MANUAL
+            try:
+                context["words"] = num2words(int(value) , lang='id')
+                context["value"] = str(int(value))
+            except:
+                context["words"] = num2words(int(float(value)) , lang='id')
+                context["value"] = str(int(float(value)))
         else:
             value = None
         
@@ -145,11 +150,10 @@ class UsulanRekomposisiEdit(LoginRequiredMixin, View):
             prk_draft = UsulanRekomposisiData.objects.get(file=draft, prk=prk)
             value_1 = prk_draft.get_rencana_bulan(month) #MANUAL
             notes = prk_draft.notes
+
         except:
             value_1 = 0
             notes = ""
-        
-        context["value"] = str(value)
 
         if value_1:
             context["value_draft"] = str(value_1)
@@ -207,7 +211,7 @@ class InlineAKBEdit(LoginRequiredMixin, View):
         division = request.user.division
         draft = UsulanRekomposisi.objects.get(division=division, for_month=this_month()) #add period later
         
-        if data["notes"]:
+        try:
             notes = data["notes"]
             try:
                 data_rekom = UsulanRekomposisiData.objects.get(file=draft, prk=prk)
@@ -219,7 +223,7 @@ class InlineAKBEdit(LoginRequiredMixin, View):
                 data_rekom.insertToMonth(data["this_month"], int(val))
             
             context["notes"] = notes
-        else:
+        except:
             val = data["value"]
 
             # GET OR CREATE UsulanRekomposisiData

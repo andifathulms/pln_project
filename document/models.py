@@ -15,6 +15,10 @@ from datetime import datetime
 def this_month():
     return datetime.now().month
 
+def safe_div(x,y):
+    if y==0: return 0
+    return x/y
+
 class PRK(models.Model):
     no_prk              = models.CharField(max_length=255, unique=True)
     no_program          = models.PositiveIntegerField(blank=True, null=True)
@@ -84,6 +88,9 @@ class PRKData(models.Model):
     nov_pengalihan          = models.CharField(max_length=100, blank=True, null=True)
     des_pengalihan          = models.CharField(max_length=100, blank=True, null=True)
 
+    def __str__(self) -> str:
+        return self.prk.no_prk
+    
     def real_ai(self):
         return int(self.ai_this_year or 0)
 
@@ -93,62 +100,62 @@ class PRKData(models.Model):
     def get_realisasi_month(self, m):
         month = this_month()
         if m == 1:
-            if self.jan_pengalihan and month == m:
+            if self.jan_pengalihan and month > m:
                 return self.jan_pengalihan
             else:
                 return self.jan_realisasi
         elif m == 2:
-            if self.feb_pengalihan and month == m:
+            if self.feb_pengalihan and month > m:
                 return self.feb_pengalihan
             else:
                 return self.feb_realisasi
         elif m == 3:
-            if self.mar_pengalihan and month == m:
+            if self.mar_pengalihan and month > m:
                 return self.mar_pengalihan
             else:
                 return self.mar_realisasi
         elif m == 4:
-            if self.apr_pengalihan and month == m:
+            if self.apr_pengalihan and month > m:
                 return self.apr_pengalihan
             else:
                 return self.apr_realisasi
         elif m == 5:
-            if self.mei_pengalihan and month == m:
+            if self.mei_pengalihan and month > m:
                 return self.mei_pengalihan
             else:
                 return self.mei_realisasi
         elif m == 6:
-            if self.jun_pengalihan and month == m:
+            if self.jun_pengalihan and month > m:
                 return self.jun_pengalihan
             else:
                 return self.jun_realisasi
         elif m == 7:
-            if self.jul_pengalihan and month == m:
+            if self.jul_pengalihan and month > m:
                 return self.jul_pengalihan
             else:
                 return self.jul_realisasi
         elif m == 8:
-            if self.aug_pengalihan and month == m:
+            if self.aug_pengalihan and month > m:
                 return self.aug_pengalihan
             else:
                 return self.aug_realisasi
         elif m == 9:
-            if self.sep_pengalihan and month == m:
+            if self.sep_pengalihan and month > m:
                 return self.sep_pengalihan
             else:
                 return self.sep_realisasi
         elif m == 10:
-            if self.okt_pengalihan and month == m:
+            if self.okt_pengalihan and month > m:
                 return self.okt_pengalihan
             else:
                 return self.okt_realisasi
         elif m == 11:
-            if self.nov_pengalihan and month == m:
+            if self.nov_pengalihan and month > m:
                 return self.nov_pengalihan
             else:
                 return self.nov_realisasi
         elif m == 12:
-            if self.des_pengalihan and month == m:
+            if self.des_pengalihan and month > m:
                 return self.des_pengalihan
             else:
                 return self.des_realisasi
@@ -156,92 +163,92 @@ class PRKData(models.Model):
     def get_rencana_month(self, m):
         month = this_month()
         if m == 1:
-            if m <= month:
+            if m < month:
                 return self.jan_rencana
-            elif m > month and self.jan_pengalihan:
+            elif m >= month and self.jan_pengalihan:
                 return self.jan_pengalihan
             else:
                 return self.jan_rencana
         elif m == 2:
-            if m <= month:
+            if m < month:
                 return self.feb_rencana
-            elif m > month and self.feb_pengalihan:
+            elif m >= month and self.feb_pengalihan:
                 return self.feb_pengalihan
             else:
                 return self.feb_rencana
         elif m == 3:
-            if m <= month:
+            if m < month:
                 return self.mar_rencana
-            elif m > month and self.mar_pengalihan:
+            elif m >= month and self.mar_pengalihan:
                 return self.mar_pengalihan
             else:
                 return self.mar_rencana
         elif m == 4:
-            if m <= month:
+            if m < month:
                 return self.apr_rencana
-            elif m > month and self.apr_pengalihan:
+            elif m >= month and self.apr_pengalihan:
                 return self.apr_pengalihan
             else:
                 return self.apr_rencana
         elif m == 5:
-            if m <= month:
+            if m < month:
                 return self.mei_rencana
-            elif m > month and self.mei_pengalihan:
+            elif m >= month and self.mei_pengalihan:
                 return self.mei_pengalihan
             else:
                 return self.mei_rencana
         elif m == 6:
-            if m <= month:
+            if m < month:
                 return self.jun_rencana
-            elif m > month and self.jun_pengalihan:
+            elif m >= month and self.jun_pengalihan:
                 return self.jun_pengalihan
             else:
                 return self.jun_rencana
         elif m == 7:
-            if m <= month:
+            if m < month:
                 return self.jul_rencana
-            elif m > month and self.jul_pengalihan:
+            elif m >= month and self.jul_pengalihan:
                 return self.jul_pengalihan
             else:
                 return self.jul_rencana
         elif m == 8:
-            if m <= month:
+            if m < month:
                 return self.aug_rencana
-            elif m > month and self.aug_pengalihan:
+            elif m >= month and self.aug_pengalihan:
                 return self.aug_pengalihan
             else:
                 return self.aug_rencana
         elif m == 9:
-            if m <= month:
+            if m < month:
                 return self.sep_rencana
-            elif m > month and self.sep_pengalihan:
+            elif m >= month and self.sep_pengalihan:
                 return self.sep_pengalihan
             else:
                 return self.sep_rencana
         elif m == 10:
-            if m <= month:
+            if m < month:
                 return self.okt_rencana
-            elif m > month and self.okt_pengalihan:
+            elif m >= month and self.okt_pengalihan:
                 return self.okt_pengalihan
             else:
                 return self.okt_rencana
         elif m == 11:
-            if m <= month:
+            if m < month:
                 return self.nov_rencana
-            elif m > month and self.nov_pengalihan:
+            elif m >= month and self.nov_pengalihan:
                 return self.nov_pengalihan
             else:
                 return self.nov_rencana
         elif m == 12:
-            if m <= month:
+            if m < month:
                 return self.des_rencana
-            elif m > month and self.des_pengalihan:
+            elif m >= month and self.des_pengalihan:
                 return self.des_pengalihan
             else:
                 return self.des_rencana
 
     def get_total_realisasi(self):
-        return sum([int(self.get_realisasi_month(i)) for i in range(1,13)])
+        return sum([int(float(self.get_realisasi_month(i))) for i in range(1,13)])
     
     def get_sisa_aki(self):
         return self.real_aki() - self.get_total_realisasi()
@@ -249,6 +256,12 @@ class PRKData(models.Model):
     def get_usulan(self):
         usulan = UsulanRekomposisiData.objects.filter(prk=self.prk).first()
         return usulan
+    
+    def get_sisa_aki_pct(self):
+        return safe_div(self.get_total_realisasi(),self.real_aki())*100
+    
+    def is_aki_completed(self):
+        return self.get_sisa_aki_pct() >= 99
 
 class Document(models.Model):
     document_number     = models.CharField(max_length=100)

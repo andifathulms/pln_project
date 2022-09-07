@@ -26,6 +26,10 @@
         opacity: 0.1;
     }
 
+    .completed{
+        background-color: #377D71 !important;
+    }
+
     .currency{
         text-align: right !important;
         min-width: 160px;
@@ -60,6 +64,10 @@
 
     .mou{
         background-color: blanchedalmond !important;
+    }
+
+    .percentage::after{
+        content: "%";
     }
 
     .copy_container{
@@ -183,6 +191,7 @@
                             <td class="sum-cell" id="des_akb"></td>
                             <td class="sum-cell" id="des_real"></td>
                             <td class="sum-cell" id="total_realisasi"></td>
+                            <td></td>
                             <td class="sum-cell" id="sisa_aki"></td>
                         </tr>
                         <tr>
@@ -196,7 +205,7 @@
                             <th colspan="2">SKAI Revisi 2 Tahun 2022</th>
                             <th colspan="2">LRPA {{document.2.file_export_date}}</th>
                             <th colspan="24">Rencana/Realisasi 2022</th>
-                            <th rowspan="2">Total Realisasi</th>
+                            <th colspan="2">Total Realisasi</th>
                             <th rowspan="2">Sisa AKI</th>
                             <th rowspan="2">Kode PRK</th>
                             <th rowspan="2">Kode BPO</th>
@@ -238,13 +247,19 @@
                             {% if month > 11 %}<th class="past"> {% elif month == 11 %} <th class="current">{% else %}<th class="future">{% endif %}November</th>
                             {% if month > 12 %}<th class="past"> {% elif month == 12 %} <th class="current">{% else %}<th class="future">{% endif %}AKB Desember</th>
                             {% if month > 12 %}<th class="past"> {% elif month == 12 %} <th class="current">{% else %}<th class="future">{% endif %}Desember</th>
+                            <th>Total</th>
+                            <th>%</th>
                         </tr>
                         
                     </thead>
                     <tbody id="macro-table" class="table-group-divider">
                         {% for data in lrpa %}
                         <tr>
+                            {% if data.is_aki_completed %}
+                            <td class= "completed" style="max-width: 5px; padding: 2px 2px;">{{forloop.counter}}</td>
+                            {% else %}
                             <td style="max-width: 5px; padding: 2px 2px;">{{forloop.counter}}</td>
+                            {% endif %}
                             <!-- NO PRK -->
                             <td>
                                 <div id="id-{{data.pk}}" class="copy_container">
@@ -314,7 +329,7 @@
                             <td> - </td>
                             {% endif %}
 
-                            {% if data.ai_this_year != 0 %}
+                            {% if data.aki_this_year != 0 %}
                             <td class="currency" >{{data.real_aki}}</td>
                             {% else %}
                             <td> - </td>
@@ -347,145 +362,145 @@
                             {% call_method data 'get_realisasi_month' 11 as realisasi_11 %}
                             {% call_method data 'get_realisasi_month' 12 as realisasi_12 %}
 
-                            {% if rencana_1 == "0" %}
+                            {% if rencana_1 == "0" or rencana_1 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{rencana_1|floatformat}}</td>
                             {% endif %}
 
-                            {% if realisasi_1 == "0" %}
+                            {% if realisasi_1 == "0" or realisasi_1 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{realisasi_1|floatformat}}</td>
                             {% endif %}
 
-                            {% if rencana_2 == "0" %}
+                            {% if rencana_2 == "0" or rencana_2 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{rencana_2|floatformat}}</td>
                             {% endif %}
 
-                            {% if realisasi_2 == "0" %}
+                            {% if realisasi_2 == "0" or realisasi_2 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{realisasi_2|floatformat}}</td>
                             {% endif %}
 
-                            {% if rencana_3 == "0" %}
+                            {% if rencana_3 == "0" or rencana_3 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{rencana_3|floatformat}}</td>
                             {% endif %}
 
-                            {% if realisasi_3 == "0" %}
+                            {% if realisasi_3 == "0" or realisasi_3 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{realisasi_3|floatformat}}</td>
                             {% endif %}
 
-                            {% if rencana_4 == "0" %}
+                            {% if rencana_4 == "0" or rencana_4 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{rencana_4|floatformat}}</td>
                             {% endif %}
 
-                            {% if realisasi_4 == "0" %}
+                            {% if realisasi_4 == "0" or realisasi_4 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{realisasi_4|floatformat}}</td>
                             {% endif %}
 
-                            {% if rencana_5 == "0" %}
+                            {% if rencana_5 == "0" or rencana_5 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{rencana_5|floatformat}}</td>
                             {% endif %}
 
-                            {% if realisasi_5 == "0" %}
+                            {% if realisasi_5 == "0" or realisasi_5 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{realisasi_5|floatformat}}</td>
                             {% endif %}
 
-                            {% if rencana_6 == "0" %}
+                            {% if rencana_6 == "0" or rencana_6 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{rencana_6|floatformat}}</td>
                             {% endif %}
 
-                            {% if realisasi_6 == "0" %}
+                            {% if realisasi_6 == "0" or realisasi_6 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{realisasi_6|floatformat}}</td>
                             {% endif %}
 
-                            {% if rencana_7 == "0" %}
+                            {% if rencana_7 == "0" or rencana_7 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{rencana_7|floatformat}}</td>
                             {% endif %}
 
-                            {% if realisasi_7 == "0" %}
+                            {% if realisasi_7 == "0" or realisasi_7 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{realisasi_7|floatformat}}</td>
                             {% endif %}
 
-                            {% if rencana_8 == "0" %}
+                            {% if rencana_8 == "0" or rencana_8 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{rencana_8|floatformat}}</td>
                             {% endif %}
 
-                            {% if realisasi_8 == "0" %}
+                            {% if realisasi_8 == "0" or realisasi_8 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{realisasi_8|floatformat}}</td>
                             {% endif %}
 
-                            {% if rencana_9 == "0" %}
+                            {% if rencana_9 == "0" or rencana_9 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{rencana_9|floatformat}}</td>
                             {% endif %}
 
-                            {% if realisasi_9 == "0" %}
+                            {% if realisasi_9 == "0" or realisasi_9 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{realisasi_9|floatformat}}</td>
                             {% endif %}
 
-                            {% if rencana_10 == "0" %}
+                            {% if rencana_10 == "0" or rencana_10 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{rencana_10|floatformat}}</td>
                             {% endif %}
 
-                            {% if realisasi_10 == "0" %}
+                            {% if realisasi_10 == "0" or realisasi_10 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{realisasi_10|floatformat}}</td>
                             {% endif %}
 
-                            {% if rencana_11 == "0" %}
+                            {% if rencana_11 == "0" or rencana_11 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{rencana_11|floatformat}}</td>
                             {% endif %}
 
-                            {% if realisasi_11 == "0" %}
+                            {% if realisasi_11 == "0" or realisasi_11 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{realisasi_11|floatformat}}</td>
                             {% endif %}
 
-                            {% if rencana_12 == "0" %}
+                            {% if rencana_12 == "0" or rencana_12 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{rencana_12|floatformat}}</td>
                             {% endif %}
 
-                            {% if realisasi_12 == "0" %}
+                            {% if realisasi_12 == "0" or realisasi_12 == "0.0" %}
                             <td class="cell"> - </td>
                             {% else %}
                             <td class="cell currency">{{realisasi_12|floatformat}}</td>
@@ -494,6 +509,12 @@
 
                             {% if data.get_total_realisasi != 0 %}
                             <td class="currency">{{data.get_total_realisasi}}</td>
+                            {% else %}
+                            <td> - </td>
+                            {% endif %}
+
+                            {% if data.aki_this_year != 0 %}
+                            <td class="percentage">{{data.get_sisa_aki_pct|stringformat:".2f"}}</td>
                             {% else %}
                             <td> - </td>
                             {% endif %}
@@ -680,7 +701,7 @@
                 var des_real = api.column(36, {search: 'applied'}).data();
 
                 var total_realisasi = api.column(37, {search: 'applied'}).data();
-                var sisa_aki = api.column(38, {search: 'applied'}).data();
+                var sisa_aki = api.column(39, {search: 'applied'}).data();
 
                 //alert( Object.keys(data_ai_1).length );
 

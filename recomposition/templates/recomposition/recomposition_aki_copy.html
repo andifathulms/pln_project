@@ -282,13 +282,13 @@
                                 </td>
                             {% else %}
                                 {% if month >= 1 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
-                                    {% if realisasi_1 == "0" %}
+                                    {% if realisasi_1 == "0" or realisasi_1 == "0.0" %}
                                         <td class="cell"> - </td>
                                     {% else %}
                                         <td class="cell currency">{{realisasi_1|floatformat}}</td>
                                     {% endif %}
                                 {% else %} <!-- IF NOT SHOW RENCANA -->
-                                    {% if rencana_1 == "0" %}
+                                    {% if rencana_1 == "0" or rencana_1 == "0.0" %}
                                         <td class="cell"
                                         hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=1 %}" 
                                         hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
@@ -312,13 +312,13 @@
                                 </td>
                             {% else %}
                                 {% if month >= 2 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
-                                    {% if realisasi_2 == "0" %}
+                                    {% if realisasi_2 == "0" or realisasi_2 == "0.0" %}
                                         <td class="cell"> - </td>
                                     {% else %}
                                         <td class="cell currency">{{realisasi_2|floatformat}}</td>
                                     {% endif %}
                                 {% else %} <!-- IF NOT SHOW RENCANA -->
-                                    {% if rencana_2 == "0" %}
+                                    {% if rencana_2 == "0" or rencana_2 == "0.0" %}
                                         <td class="cell"
                                         hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=2 %}" 
                                         hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
@@ -342,13 +342,13 @@
                                 </td>
                             {% else %}
                                 {% if month >= 3 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
-                                    {% if realisasi_3 == "0" %}
+                                    {% if realisasi_3 == "0" or realisasi_3 == "0.0" %}
                                         <td class="cell"> - </td>
                                     {% else %}
                                         <td class="cell currency">{{realisasi_3|floatformat}}</td>
                                     {% endif %}
                                 {% else %} <!-- IF NOT SHOW RENCANA -->
-                                    {% if rencana_3 == "0" %}
+                                    {% if rencana_3 == "0" or rencana_3 == "0.0" %}
                                         <td class="cell"
                                         hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=3 %}" 
                                         hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
@@ -372,13 +372,13 @@
                                 </td>
                             {% else %}
                                 {% if month >= 4 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
-                                    {% if realisasi_4 == "0" %}
+                                    {% if realisasi_4 == "0" or realisasi_4 == "0.0" %}
                                         <td class="cell"> - </td>
                                     {% else %}
                                         <td class="cell currency">{{realisasi_4|floatformat}}</td>
                                     {% endif %}
                                 {% else %} <!-- IF NOT SHOW RENCANA -->
-                                    {% if rencana_4 == "0" %}
+                                    {% if rencana_4 == "0" or rencana_4 == "0.0" %}
                                         <td class="cell"
                                         hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=4 %}" 
                                         hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
@@ -402,13 +402,13 @@
                                 </td>
                             {% else %}
                                 {% if month >= 5 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
-                                    {% if realisasi_5 == "0" %}
+                                    {% if realisasi_5 == "0" or realisasi_5 == "0.0" %}
                                         <td class="cell"> - </td>
                                     {% else %}
                                         <td class="cell currency">{{realisasi_5|floatformat}}</td>
                                     {% endif %}
                                 {% else %} <!-- IF NOT SHOW RENCANA -->
-                                    {% if rencana_5 == "0" %}
+                                    {% if rencana_5 == "0" or rencana_5 == "0.0" %}
                                         <td class="cell"
                                         hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=5 %}" 
                                         hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
@@ -432,13 +432,13 @@
                                 </td>
                             {% else %}
                                 {% if month >= 6 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
-                                    {% if realisasi_6 == "0" %}
+                                    {% if realisasi_6 == "0" or realisasi_6 == "0.0" %}
                                         <td class="cell"> - </td>
                                     {% else %}
                                         <td class="cell currency">{{realisasi_6|floatformat}}</td>
                                     {% endif %}
                                 {% else %} <!-- IF NOT SHOW RENCANA -->
-                                    {% if rencana_6 == "0" %}
+                                    {% if rencana_6 == "0" or rencana_6 == "0.0" %}
                                         <td class="cell"
                                         hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=6 %}" 
                                         hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
@@ -462,13 +462,13 @@
                                 </td>
                             {% else %}
                                 {% if month >= 7 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
-                                    {% if realisasi_7 == "0" %}
+                                    {% if realisasi_7 == "0" or realisasi_7 == "0.0" %}
                                         <td class="cell"> - </td>
                                     {% else %}
                                         <td class="cell currency">{{realisasi_7|floatformat}}</td>
                                     {% endif %}
                                 {% else %} <!-- IF NOT SHOW RENCANA -->
-                                    {% if rencana_7 == "0" %}
+                                    {% if rencana_7 == "0" or rencana_7 == "0.0" %}
                                         <td class="cell"
                                         hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=7 %}" 
                                         hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
@@ -492,13 +492,13 @@
                                 </td>
                             {% else %}
                                 {% if month >= 8 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
-                                    {% if realisasi_8 == "0" %}
+                                    {% if realisasi_8 == "0" or realisasi_8 == "0.0" %}
                                         <td class="cell"> - </td>
                                     {% else %}
                                         <td class="cell currency">{{realisasi_8|floatformat}}</td>
                                     {% endif %}
                                 {% else %} <!-- IF NOT SHOW RENCANA -->
-                                    {% if rencana_8 == "0" %}
+                                    {% if rencana_8 == "0" or rencana_8 == "0.0" %}
                                         <td class="cell"
                                         hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=8 %}" 
                                         hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
@@ -522,13 +522,13 @@
                                 </td>
                             {% else %}
                                 {% if month >= 9 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
-                                    {% if realisasi_9 == "0" %}
+                                    {% if realisasi_9 == "0" or realisasi_9 == "0.0" %}
                                         <td class="cell"> - </td>
                                     {% else %}
                                         <td class="cell currency">{{realisasi_9|floatformat}}</td>
                                     {% endif %}
                                 {% else %} <!-- IF NOT SHOW RENCANA -->
-                                    {% if rencana_9 == "0" %}
+                                    {% if rencana_9 == "0" or rencana_9 == "0.0" %}
                                         <td class="cell"
                                         hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=9 %}" 
                                         hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
@@ -552,13 +552,13 @@
                                 </td>
                             {% else %}
                                 {% if month >= 10 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
-                                    {% if realisasi_10 == "0" %}
+                                    {% if realisasi_10 == "0" or realisasi_10 == "0.0" %}
                                         <td class="cell"> - </td>
                                     {% else %}
                                         <td class="cell currency">{{realisasi_10|floatformat}}</td>
                                     {% endif %}
                                 {% else %} <!-- IF NOT SHOW RENCANA -->
-                                    {% if rencana_10 == "0" %}
+                                    {% if rencana_10 == "0" or rencana_10 == "0.0" %}
                                         <td class="cell"
                                         hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=10 %}" 
                                         hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
@@ -582,13 +582,13 @@
                                 </td>
                             {% else %}
                                 {% if month >= 11 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
-                                    {% if realisasi_11 == "0" %}
+                                    {% if realisasi_11 == "0" or realisasi_11 == "0.0" %}
                                         <td class="cell"> - </td>
                                     {% else %}
                                         <td class="cell currency">{{realisasi_11|floatformat}}</td>
                                     {% endif %}
                                 {% else %} <!-- IF NOT SHOW RENCANA -->
-                                    {% if rencana_11 == "0" %}
+                                    {% if rencana_11 == "0" or rencana_11 == "0.0" %}
                                         <td class="cell"
                                         hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=11 %}" 
                                         hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
@@ -612,13 +612,13 @@
                                 </td>
                             {% else %}
                                 {% if month >= 12 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
-                                    {% if realisasi_12 == "0" %}
+                                    {% if realisasi_12 == "0" or realisasi_12 == "0.0" %}
                                         <td class="cell"> - </td>
                                     {% else %}
                                         <td class="cell currency">{{realisasi_12|floatformat}}</td>
                                     {% endif %}
                                 {% else %} <!-- IF NOT SHOW RENCANA -->
-                                    {% if rencana_12 == "0" %}
+                                    {% if rencana_12 == "0" or rencana_12 == "0.0" %}
                                         <td class="cell"
                                         hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=12 %}" 
                                         hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 

@@ -381,7 +381,7 @@ class LKAIViewCOPY(LoginRequiredMixin, View):
         context["lrpa"] = lrpa
 
         for data in lrpa:
-            print(data.prk.no_prk, data.prk.pk)
+            print(data.prk.no_prk, data.get_total_realisasi(), data.is_aki_completed())
 
         return render(request, 'monev/monev_lkai_copy.html', context)
 
