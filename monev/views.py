@@ -36,9 +36,7 @@ class DashboardView(LoginRequiredMixin, View):
         months = {1:"Januari", 2:"Februari", 3:"Maret", 4:"April", 5:"Mei", 6:"Juni", 7:"Juli", 8:"Agustus", 9:"September", 10:"Oktober", 11:"November", 12:"Desember"}
         context["month"] = months[this_month()]
 
-        last_lrpa = LRPA_File.objects.order_by('-file_export_date').first()
-        last_mou = FileMouPengalihan.objects.order_by('file_export_date').first()
-        file_lookup = Assigned_PRK.objects.get(pk=1) #MANUAL
+        last_lrpa = LRPA_File.objects.order_by('-pk').first()
 
         total_ai = 0
         total_aki = 0
@@ -47,9 +45,9 @@ class DashboardView(LoginRequiredMixin, View):
         data_1 = []
         data_1_total = []
         for idx,x in enumerate(pembayaran):
-            sum_ai = int(LRPA_Monitoring.objects.filter(file=last_lrpa,mekanisme_pembayaran=x).aggregate(Sum('ai_this_year'))['ai_this_year__sum'])
-            sum_aki = int(LRPA_Monitoring.objects.filter(file=last_lrpa,mekanisme_pembayaran=x).aggregate(Sum('aki_this_year'))['aki_this_year__sum'])
-            sum_realisasi = int(sum([m.sum_realisasi() for m in LRPA_Monitoring.objects.filter(file=last_lrpa,mekanisme_pembayaran=x)]))
+            sum_ai = int(PRKData.objects.filter(file_lrpa=last_lrpa,mekanisme_pembayaran=x).aggregate(Sum('ai_this_year'))['ai_this_year__sum'])
+            sum_aki = int(PRKData.objects.filter(file_lrpa=last_lrpa,mekanisme_pembayaran=x).aggregate(Sum('aki_this_year'))['aki_this_year__sum'])
+            sum_realisasi = int(sum([m.get_total_realisasi() for m in PRKData.objects.filter(file_lrpa=last_lrpa,mekanisme_pembayaran=x)]))
             pct = (sum_realisasi*100)/sum_aki
             sisa = sum_aki - sum_realisasi
 
@@ -69,8 +67,12 @@ class DashboardView(LoginRequiredMixin, View):
         total_akb = 0
         total_realisasi_bulan = 0
         for idx,x in enumerate(bpo):
-            sum_of_akb = int(sum([p.get_rencana_bulan(this_month()) for p in LRPA_Monitoring.objects.filter(file=last_lrpa, prk__kode_bpo=x)]))
-            sum_of_realisasi = int(sum([p.get_realisasi_bulan(this_month()) for p in LRPA_Monitoring.objects.filter(file=last_lrpa, prk__kode_bpo=x)]))
+            a = [int(float(p.get_rencana_month(this_month()))) for p in PRKData.objects.filter(file_lrpa=last_lrpa, prk__kode_bpo=x)]
+            b = [int(float(p.get_realisasi_month(this_month()))) for p in PRKData.objects.filter(file_lrpa=last_lrpa, prk__kode_bpo=x)]
+            c = [p.prk.no_prk for p in PRKData.objects.filter(file_lrpa=last_lrpa, prk__kode_bpo=x)]
+            print(x,len(a), len(b), len(c))
+            sum_of_akb = int(sum(a))
+            sum_of_realisasi = int(sum(b))
             sisa = sum_of_akb - sum_of_realisasi
             try:
                 pct = (sisa*100)/sum_of_akb
