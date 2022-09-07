@@ -93,9 +93,8 @@ class MonevView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         context = {}
         context["month"] = this_month()
-        last_lrpa = LRPA_File.objects.order_by('-file_export_date').first()
+        last_lrpa = LRPA_File.objects.order_by('-pk').first()
         last_mou = FileMouPengalihan.objects.order_by('file_export_date').first()
-        file_lookup = Assigned_PRK.objects.get(pk=1) #MANUAL
 
         month = this_month() #CHANGE LATER TO LAST MOU MONTH
 
@@ -111,20 +110,13 @@ class MonevView(LoginRequiredMixin, View):
         BPO_list = []
 
         for idx,data in enumerate(BPO_2):
-            query = LRPA_Monitoring.objects.filter(prk__kode_bpo=data, file=last_lrpa)
+            query = PRKData.objects.filter(prk__kode_bpo=data, file_lrpa=last_lrpa)
             count = query.count()
             sum_ai = query.aggregate(Sum('ai_this_year'))['ai_this_year__sum']
             sum_aki = query.aggregate(Sum('aki_this_year'))['aki_this_year__sum']
             realisasi = 0
             for x in query:
-                realisasi = realisasi + x.sum_realisasi()
-                try:
-                    mou = MouPengalihanData.objects.get(prk=x.prk, file=last_mou)
-                    realisasi = realisasi - x.get_realisasi_bulan(month) + mou.get_realisasi_bulan(month)
-                except ValueError:
-                    print("FLOAT")
-                except MouPengalihanData.DoesNotExist:
-                    realisasi = realisasi
+                realisasi = realisasi + x.get_total_realisasi()
             
             total_ai_bpo = total_ai_bpo + sum_ai
             total_aki_bpo = total_aki_bpo + sum_aki
@@ -140,7 +132,7 @@ class MonevView(LoginRequiredMixin, View):
         BPO_UPP_2 = ["UPP 1","UPP 2", "UPP 3", "UPP 4"]
 
         for idx,data in enumerate(BPO_UPP_2):
-            query = LRPA_Monitoring.objects.filter(prk__upp=data, file=last_lrpa)
+            query = PRKData.objects.filter(prk__upp=data, file_lrpa=last_lrpa)
             count = query.count()
             sum_ai = query.aggregate(Sum('ai_this_year'))['ai_this_year__sum']
             sum_aki = query.aggregate(Sum('aki_this_year'))['aki_this_year__sum']
@@ -148,14 +140,7 @@ class MonevView(LoginRequiredMixin, View):
             if not sum_aki: sum_aki = 0
             realisasi = 0
             for x in query:
-                realisasi = realisasi + x.sum_realisasi()
-                try:
-                    mou = MouPengalihanData.objects.get(prk=x.prk, file=last_mou)
-                    realisasi = realisasi - x.get_realisasi_bulan(month) + mou.get_realisasi_bulan(month)
-                except ValueError:
-                    print("FLOAT")
-                except MouPengalihanData.DoesNotExist:
-                    realisasi = realisasi
+                realisasi = realisasi + x.get_total_realisasi()
             
             total_ai_bpo = total_ai_bpo + sum_ai
             total_aki_bpo = total_aki_bpo + sum_aki
@@ -167,7 +152,7 @@ class MonevView(LoginRequiredMixin, View):
             BPO_list.append((BPO_UPP_1[idx],data,sum_ai,sum_aki,realisasi,sisa_aki,pct,count))
         
         context["BPO_list"] = BPO_list
-        context["count_bpo_total"] = LRPA_Monitoring.objects.filter(prk__kode_bpo__in=BPO_2, file=last_lrpa).count() + LRPA_Monitoring.objects.filter(prk__upp__in=BPO_UPP_2, file=last_lrpa).count()
+        context["count_bpo_total"] = PRKData.objects.filter(prk__kode_bpo__in=BPO_2, file_lrpa=last_lrpa).count() + PRKData.objects.filter(prk__upp__in=BPO_UPP_2, file_lrpa=last_lrpa).count()
         context["total_ai_bpo"] = total_ai_bpo
         context["total_aki_bpo"] = total_aki_bpo
         context["total_realisasi_bpo"] = total_realisasi_bpo
@@ -190,7 +175,7 @@ class MonevView(LoginRequiredMixin, View):
         count_a_total = 0
 
         for idx,data in enumerate(A_PRK_2):
-            query = LRPA_Monitoring.objects.filter(prk__kode_prk=data, file=last_lrpa)
+            query = PRKData.objects.filter(prk__kode_prk=data, file_lrpa=last_lrpa)
             count = query.count()
             sum_ai = query.aggregate(Sum('ai_this_year'))['ai_this_year__sum']
             sum_aki = query.aggregate(Sum('aki_this_year'))['aki_this_year__sum']
@@ -198,14 +183,7 @@ class MonevView(LoginRequiredMixin, View):
             if not sum_aki: sum_aki = 0
             realisasi = 0
             for x in query:
-                realisasi = realisasi + x.sum_realisasi()
-                try:
-                    mou = MouPengalihanData.objects.get(prk=x.prk, file=last_mou)
-                    realisasi = realisasi - x.get_realisasi_bulan(month) + mou.get_realisasi_bulan(month)
-                except ValueError:
-                    print("FLOAT")
-                except MouPengalihanData.DoesNotExist:
-                    realisasi = realisasi
+                realisasi = realisasi + x.get_total_realisasi()
             
             total_ai_a = total_ai_a + sum_ai
             total_aki_a = total_aki_a + sum_aki
@@ -217,7 +195,7 @@ class MonevView(LoginRequiredMixin, View):
             A_list.append((A_PRK_1[idx],data,sum_ai,sum_aki,realisasi,sisa_aki,pct,count))
         
         context["A_list"] = A_list
-        context["count_a_total"] = LRPA_Monitoring.objects.filter(prk__kode_prk__in=A_PRK_2, file=last_lrpa).count()
+        context["count_a_total"] = PRKData.objects.filter(prk__kode_prk__in=A_PRK_2, file_lrpa=last_lrpa).count()
         context["total_ai_a"] = total_ai_a
         context["total_aki_a"] = total_aki_a
         context["total_realisasi_a"] = total_realisasi_a
@@ -239,7 +217,7 @@ class MonevView(LoginRequiredMixin, View):
         count_b_total = 0
         
         for idx,data in enumerate(B_PRK_2):
-            query = LRPA_Monitoring.objects.filter(prk__kode_prk=data, file=last_lrpa)
+            query = PRKData.objects.filter(prk__kode_prk=data, file_lrpa=last_lrpa)
             count = query.count()
             sum_ai = query.aggregate(Sum('ai_this_year'))['ai_this_year__sum']
             sum_aki = query.aggregate(Sum('aki_this_year'))['aki_this_year__sum']
@@ -247,14 +225,7 @@ class MonevView(LoginRequiredMixin, View):
             if not sum_aki: sum_aki = 0
             realisasi = 0
             for x in query:
-                realisasi = realisasi + x.sum_realisasi()
-                try:
-                    mou = MouPengalihanData.objects.get(prk=x.prk, file=last_mou)
-                    realisasi = realisasi - x.get_realisasi_bulan(month) + mou.get_realisasi_bulan(month)
-                except ValueError:
-                    print("FLOAT")
-                except MouPengalihanData.DoesNotExist:
-                    realisasi = realisasi
+                realisasi = realisasi + x.get_total_realisasi()
             
             total_ai_b = total_ai_b + sum_ai
             total_aki_b = total_aki_b + sum_aki
@@ -266,7 +237,7 @@ class MonevView(LoginRequiredMixin, View):
             B_list.append((B_PRK_1[idx],data,sum_ai,sum_aki,realisasi,sisa_aki,pct,count))
         
         context["B_list"] = B_list
-        context["count_b_total"] = LRPA_Monitoring.objects.filter(prk__kode_prk__in=B_PRK_2, file=last_lrpa).count()
+        context["count_b_total"] = PRKData.objects.filter(prk__kode_prk__in=B_PRK_2, file_lrpa=last_lrpa).count()
         context["total_ai_b"] = total_ai_b
         context["total_aki_b"] = total_aki_b
         context["total_realisasi_b"] = total_realisasi_b
@@ -288,7 +259,7 @@ class MonevView(LoginRequiredMixin, View):
         count_c_total = 0
 
         for idx,data in enumerate(C_PRK_2):
-            query = LRPA_Monitoring.objects.filter(prk__kode_prk=data, file=last_lrpa)
+            query = PRKData.objects.filter(prk__kode_prk=data, file_lrpa=last_lrpa)
             count = query.count()
             sum_ai = query.aggregate(Sum('ai_this_year'))['ai_this_year__sum']
             sum_aki = query.aggregate(Sum('aki_this_year'))['aki_this_year__sum']
@@ -296,14 +267,7 @@ class MonevView(LoginRequiredMixin, View):
             if not sum_aki: sum_aki = 0
             realisasi = 0
             for x in query:
-                realisasi = realisasi + x.sum_realisasi()
-                try:
-                    mou = MouPengalihanData.objects.get(prk=x.prk, file=last_mou)
-                    realisasi = realisasi - x.get_realisasi_bulan(month) + mou.get_realisasi_bulan(month)
-                except ValueError:
-                    print("FLOAT")
-                except MouPengalihanData.DoesNotExist:
-                    realisasi = realisasi
+                realisasi = realisasi + x.get_total_realisasi()
             
             total_ai_c = total_ai_c + sum_ai
             total_aki_c = total_aki_c + sum_aki
@@ -315,7 +279,7 @@ class MonevView(LoginRequiredMixin, View):
             C_list.append((C_PRK_1[idx],data,sum_ai,sum_aki,realisasi,sisa_aki,pct,count))
 
         context["C_list"] = C_list
-        context["count_c_total"] = LRPA_Monitoring.objects.filter(prk__kode_prk__in=C_PRK_2, file=last_lrpa).count()
+        context["count_c_total"] = PRKData.objects.filter(prk__kode_prk__in=C_PRK_2, file_lrpa=last_lrpa).count()
         context["total_ai_c"] = total_ai_c
         context["total_aki_c"] = total_aki_c
         context["total_realisasi_c"] = total_realisasi_c
