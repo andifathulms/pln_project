@@ -15,7 +15,7 @@ from openpyxl import load_workbook
 from .models import LRPA_Monitoring, LRPA_File, PRK_Lookup, Assigned_PRK, MouPengalihanData, FileMouPengalihan
 from .forms import LRPAFileForm, MouFileForm
 
-from document.models import PRK
+from document.models import PRK, PRKData
 
 from datetime import datetime
 import sys
@@ -65,29 +65,6 @@ class DashboardView(LoginRequiredMixin, View):
         bpo = ["REN", "PPK", "OPK 1", "OPK 2", "K3L"]
         data_2 = []
         data_2_total = []
-        # for idx,x in enumerate(bpo):
-        #     prk = PRK_Lookup.objects.filter(file=file_lookup, kode_bpo=x).values_list('no_prk')
-        #     prk_1 = LRPA_Monitoring.objects.filter(file=last_lrpa,mekanisme_pembayaran="Pengalihan").values_list('no_prk')
-        #     prk_list = [p[0] for p in prk]
-        #     prk_list_1 = [p[0] for p in prk_1]
-
-        #     not_union = [p for p in prk_list if p not in prk_list_1]
-        #     union = list(set(prk_list).intersection(prk_list_1)) # intersection between pengalihan and bpo
-            
-        #     #ADD IF PENGALIHAN
-        #     sum_of_akb = int(sum([p.get_rencana_bulan(this_month()) for p in LRPA_Monitoring.objects.filter(no_prk__in=prk_list,file=last_lrpa)]))
-        #     sum_of_realisasi_0 = int(sum([p.get_realisasi_bulan(this_month()) for p in LRPA_Monitoring.objects.filter(no_prk__in=not_union,file=last_lrpa)]))
-        #     mou = MouPengalihanData.objects.filter(no_prk__in=union,file=last_mou)
-        #     #print(x)
-        #     #for p in mou: print(p.get_realisasi_bulan(this_month()),x)
-        #     sum_of_realisasi_1 = int(sum([p.get_realisasi_bulan(this_month()) if p else 0 for p in mou]))
-        #     sum_of_realisasi = sum_of_realisasi_0 + sum_of_realisasi_1
-        #     sisa = sum_of_akb - sum_of_realisasi
-        #     try:
-        #         pct = (sisa*100)/sum_of_akb
-        #     except:
-        #         pct = 0
-        #     data_2.append((x, sum_of_akb, sum_of_realisasi,sisa,pct))
         
         total_akb = 0
         total_realisasi_bulan = 0
@@ -359,7 +336,56 @@ class MonevView(LoginRequiredMixin, View):
 
         return render(request, 'monev/monev_view.html', context)
 
-class LKAIView(LoginRequiredMixin, View):
+class LKAIViewCOPY(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        context["month"] = this_month()
+        # ALL DOCUMENT NEEDED
+        if is_production():
+            skai_1 = DocSKAI.objects.get(pk=1)
+            skai_2 = DocSKAI.objects.get(pk=3)
+            skai_3 = DocSKAI.objects.get(pk=6)
+        else:
+            skai_1 = DocSKAI.objects.get(pk=8)
+            skai_2 = DocSKAI.objects.get(pk=10)
+            skai_3 = DocSKAI.objects.get(pk=19)
+        
+        last_lrpa = LRPA_File.objects.order_by('-pk').first()
+        last_mou = FileMouPengalihan.objects.order_by('file_export_date').first()
+
+        sq_1 = MacroData.objects.filter(macro_file=skai_1.macro.macro_file_1, prk=OuterRef('prk'))
+        sq_2 = MacroData.objects.filter(macro_file=skai_2.macro.macro_file_1, prk=OuterRef('prk'))
+        sq_3 = MacroData.objects.filter(macro_file=skai_3.macro.macro_file_1, prk=OuterRef('prk'))
+
+        #GET USER DIVISION, DETERMINE USER VIEW
+        division = request.user.division
+
+        if division == "Super Admin" or division == "ANG":
+            monitoring = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa)
+            context["for_div"] = "ALL"
+        else:
+            monitoring = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa, prk__rekap_user_induk=division)
+            context["for_div"] = division
+        
+        lrpa = monitoring. \
+               annotate(ai_1 = Round(Subquery(sq_1.values('ai_this_year')[:1])*1000), aki_1 = Round(Subquery(sq_1.values('aki_this_year')[:1])*1000), status_1 = sq_1.values('ang_status'),
+               ai_2 = Round(Subquery(sq_2.values('ai_this_year')[:1])*1000), aki_2 = Round(Subquery(sq_2.values('aki_this_year')[:1])*1000), status_2 = sq_2.values('ang_status'),
+               ai_3 = Round(Subquery(sq_3.values('ai_this_year')[:1])*1000), aki_3 = Round(Subquery(sq_3.values('aki_this_year')[:1])*1000), status_3 = sq_3.values('ang_status'),
+               sd_1 = sq_1.values('sumber_dana'), sd_2 = sq_2.values('sumber_dana'), sd_3 = sq_3.values('sumber_dana'),
+               )
+        
+        document = [skai_1, skai_2, last_lrpa, skai_3, last_mou]
+        context["document"] = document #OPTIMIZE LATER? #YES USING RELATION IN PRK DATA!
+
+        context["lrpa"] = lrpa
+
+        for data in lrpa:
+            print(data.prk.no_prk, data.prk.pk)
+
+        return render(request, 'monev/monev_lkai_copy.html', context)
+
+class LKAIView(LoginRequiredMixin, View): #DELETE LATER WITH TEMPLATE
 
     def get(self, request):
         context = {}
@@ -393,7 +419,8 @@ class LKAIView(LoginRequiredMixin, View):
         else:
             monitoring = LRPA_Monitoring.objects.select_related('prk').filter(file=last_lrpa, prk__rekap_user_induk=division)
             context["for_div"] = division
-        
+        print(last_lrpa)
+        print(monitoring)
         lrpa = monitoring. \
                annotate(ai_1 = Round(Subquery(sq_1.values('ai_this_year')[:1])*1000), aki_1 = Round(Subquery(sq_1.values('aki_this_year')[:1])*1000), status_1 = sq_1.values('ang_status'),
                ai_2 = Round(Subquery(sq_2.values('ai_this_year')[:1])*1000), aki_2 = Round(Subquery(sq_2.values('aki_this_year')[:1])*1000), status_2 = sq_2.values('ang_status'),
@@ -441,47 +468,62 @@ class UploadLRPA(LoginRequiredMixin, View):
             doc = doc_form.save(commit=False)
             doc.upload_by = request.user
             doc.save()
-            
+            # NEW WAYS INSERT DIRECTLY TO PRKData
             for rows in list_rows:
                 row = [cell.value for cell in ws[rows][start_col:end_col+1]]
-                try:
-                    lrpa = LRPA_Monitoring(
-                        file = doc,
-                        no_prk = row[0],
-                        prk = PRK.objects.get(no_prk=row[0]), #QUICK FIX, CHECK LATER
-                        disburse_year_before = row[9],
-                        jan_rencana_disburse = row[18],
-                        jan_realisasi_disburse = row[19],
-                        feb_rencana_disburse = row[20],
-                        feb_realisasi_disburse = row[21],
-                        mar_rencana_disburse = row[22],
-                        mar_realisasi_disburse = row[23],
-                        apr_rencana_disburse = row[24],
-                        apr_realisasi_disburse = row[25],
-                        mei_rencana_disburse = row[26],
-                        mei_realisasi_disburse = row[27],
-                        jun_rencana_disburse = row[28],
-                        jun_realisasi_disburse = row[29],
-                        jul_rencana_disburse = row[30],
-                        jul_realisasi_disburse = row[31],
-                        aug_rencana_disburse = row[32],
-                        aug_realisasi_disburse = row[33],
-                        sep_rencana_disburse = row[34],
-                        sep_realisasi_disburse = row[35],
-                        okt_rencana_disburse = row[36],
-                        okt_realisasi_disburse = row[37],
-                        nov_rencana_disburse = row[38],
-                        nov_realisasi_disburse = row[39],
-                        des_rencana_disburse = row[40],
-                        des_realisasi_disburse = row[41],
-                        mekanisme_pembayaran = row[14],
-                        ai_this_year = row[10],
-                        aki_this_year = row[11]
-                    )
 
-                    lrpa.save()
+                no_prk = row[0]
+                try:
+                    prk = PRK.objects.get(no_prk=row[0])
+                except PRK.DoesNotExist:
+                    prk = PRK(no_prk=no_prk).save()
+                    print("CREATED NEW PRK",no_prk)
+
+                try:
+                    prk_data = PRKData.objects.get(prk=prk, prk_data_year=2022) #QUICK FIX, USE THIS YEAR LATER
+                    print("USING PRK DATA FOR",no_prk)
+                except PRKData.DoesNotExist:
+                    prk_data = PRKData(prk=prk, prk_data_year=2022)
+                    prk_data.save()
+                    prk_data = PRKData.objects.get(prk=prk, prk_data_year=2022) #QUICK FIX, USE THIS YEAR LATER
+                    print("CREATED NEW PRK DATA", no_prk)
+                
+                try:
+                    prk_data.file_lrpa = doc
+                    prk_data.disburse_year_before = row[9]
+                    prk_data.jan_rencana = row[18]
+                    prk_data.jan_realisasi = row[19]
+                    prk_data.feb_rencana = row[20]
+                    prk_data.feb_realisasi = row[21]
+                    prk_data.mar_rencana = row[22]
+                    prk_data.mar_realisasi = row[23]
+                    prk_data.apr_rencana = row[24]
+                    prk_data.apr_realisasi = row[25]
+                    prk_data.mei_rencana = row[26]
+                    prk_data.mei_realisasi = row[27]
+                    prk_data.jun_rencana = row[28]
+                    prk_data.jun_realisasi = row[29]
+                    prk_data.jul_rencana = row[30]
+                    prk_data.jul_realisasi = row[31]
+                    prk_data.aug_rencana = row[32]
+                    prk_data.aug_realisasi = row[33]
+                    prk_data.sep_rencana = row[34]
+                    prk_data.sep_realisasi = row[35]
+                    prk_data.okt_rencana = row[36]
+                    prk_data.okt_realisasi = row[37]
+                    prk_data.nov_rencana = row[38]
+                    prk_data.nov_realisasi = row[39]
+                    prk_data.des_rencana = row[40]
+                    prk_data.des_realisasi = row[41]
+                    prk_data.mekanisme_pembayaran = row[14]
+                    prk_data.ai_this_year = row[10]
+                    prk_data.aki_this_year = row[11]
+                    prk_data.save()
+                    print("Saved", no_prk)
                 except Exception as e:
-                    print(e)
+                    exception_type, exception_object, exception_traceback = sys.exc_info()
+                    line_number = exception_traceback.tb_lineno
+                    print(e, line_number, exception_type, exception_object)
         else:
             print(doc_form.errors)
 
@@ -521,27 +563,39 @@ class UploadMouPengalihan(LoginRequiredMixin, View):
             for rows in list_rows:
                 row = [cell.value for cell in ws[rows][start_col:end_col+1]]
 
+                no_prk = row[0]
                 try:
-                    mou = MouPengalihanData(
-                        file = doc,
-                        no_prk = row[0],
-                        mou = row[3],
-                        ai_this_year = row[4],
-                        aki_this_year = row[5],
-                        jan = row[6],
-                        feb = row[7],
-                        mar = row[8],
-                        apr = row[9],
-                        mei = row[10],
-                        jun = row[11],
-                        jul = row[12],
-                        aug = row[13],
-                        sep = row[14],
-                        okt = row[15],
-                        nov = row[16],
-                        des = row[17]
-                    )
-                    mou.save()
+                    prk = PRK.objects.get(no_prk=row[0])
+                except PRK.DoesNotExist:
+                    prk = PRK(no_prk=no_prk).save()
+                    print("CREATED NEW PRK",no_prk)
+
+                try:
+                    prk_data = PRKData.objects.get(prk=prk, prk_data_year=2022) #QUICK FIX, USE THIS YEAR LATER
+                    print("USING PRK DATA FOR",no_prk)
+                except PRKData.DoesNotExist:
+                    prk_data = PRKData(prk=prk, prk_data_year=2022)
+                    prk_data.save()
+                    prk_data = PRKData.objects.get(prk=prk, prk_data_year=2022) #QUICK FIX, USE THIS YEAR LATER
+                    print("CREATED NEW PRK DATA", no_prk)
+                
+                try:
+                    prk_data.file_mou = doc
+                    prk_data.jan_pengalihan = row[6]
+                    prk_data.feb_pengalihan = row[7]
+                    prk_data.mar_pengalihan = row[8]
+                    prk_data.apr_pengalihan = row[9]
+                    prk_data.mei_pengalihan = row[10]
+                    prk_data.jun_pengalihan = row[11]
+                    prk_data.jul_pengalihan = row[12]
+                    prk_data.aug_pengalihan = row[13]
+                    prk_data.sep_pengalihan = row[14]
+                    prk_data.okt_pengalihan = row[15]
+                    prk_data.nov_pengalihan = row[16]
+                    prk_data.des_pengalihan = row[17]
+                    
+                    prk_data.save()
+                    print("Saved", no_prk)
                 except Exception as e:
                     exception_type, exception_object, exception_traceback = sys.exc_info()
                     line_number = exception_traceback.tb_lineno

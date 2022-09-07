@@ -8,12 +8,67 @@ from django.db.models.functions import Round
 from document.models import DocSKAI, MacroData
 
 from monev.models import LRPA_Monitoring, LRPA_File, MouPengalihanData, FileMouPengalihan
-from document.models import PRK
+from document.models import PRK, PRKData
 from monev.views import this_month, is_production
 
 from .models import UsulanRekomposisi, UsulanRekomposisiData
+from functools import reduce
+from operator import add
 
 from num2words import num2words
+
+class RecompositionAKICOPY(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        context["month"] = this_month()
+
+        last_lrpa = LRPA_File.objects.order_by('-pk').first()
+        last_mou = FileMouPengalihan.objects.order_by('file_export_date').first()
+
+        #GET USER DIVISION, DETERMINE USER VIEW
+        division = request.user.division
+
+        if division == "Super Admin" or division == "ANG":
+            monitoring = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa)
+            context["for_div"] = "ALL"
+        else:
+            monitoring = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa, prk__rekap_user_induk=division)
+            context["for_div"] = division
+
+        # CREATED INSTANCE DRAFT RECOMP IF THE FIRST TIME IN THIS MONTH
+        try :
+            draft = UsulanRekomposisi.objects.get(division=context["for_div"], for_month=this_month())
+        except:
+            draft = UsulanRekomposisi(
+                division=context["for_div"],
+                for_month=this_month()
+            )
+            draft.save()
+
+        sq_edit = UsulanRekomposisiData.objects.filter(file=draft, prk=OuterRef('prk'))
+        cols = ['edit_jan', 'edit_feb', 'edit_mar', 'edit_apr', 'edit_mei', 'edit_jun', 'edit_jul', 'edit_aug', 'edit_sep', 'edit_okt', 'edit_nov', 'edit_des']
+        expr = reduce(add, (F(col) for col in cols if F(col) is not None))
+        
+        lrpa = monitoring. \
+               annotate(
+               edit_jan = sq_edit.values('jan'),edit_feb = sq_edit.values('feb'),edit_mar = sq_edit.values('mar'),edit_apr = sq_edit.values('apr'),
+               edit_mei = sq_edit.values('mei'),edit_jun = sq_edit.values('jun'),edit_jul = sq_edit.values('jul'),edit_aug = sq_edit.values('aug'),
+               edit_sep = sq_edit.values('sep'),edit_okt = sq_edit.values('okt'),edit_nov = sq_edit.values('nov'),edit_des = sq_edit.values('des'),
+               notes=sq_edit.values('notes')
+               ).annotate(sum_edit = expr)
+        
+        document = [last_lrpa, last_mou]
+        context["document"] = document #OPTIMIZE LATER?
+
+        context["lrpa"] = lrpa
+        for data in lrpa:
+            try:
+                print(data.prk.no_prk, data.sum_edit, data.edit_okt)
+            except:
+                pass
+
+        return render(request, 'recomposition/recomposition_aki_copy.html', context)
 
 class RecompositionAKI(LoginRequiredMixin, View):
 
@@ -55,7 +110,7 @@ class RecompositionAKI(LoginRequiredMixin, View):
                edit_jan = sq_edit.values('jan'),edit_feb = sq_edit.values('feb'),edit_mar = sq_edit.values('mar'),edit_apr = sq_edit.values('apr'),
                edit_mei = sq_edit.values('mei'),edit_jun = sq_edit.values('jun'),edit_jul = sq_edit.values('jul'),edit_aug = sq_edit.values('aug'),
                edit_sep = sq_edit.values('sep'),edit_okt = sq_edit.values('okt'),edit_nov = sq_edit.values('nov'),edit_des = sq_edit.values('des')
-               )
+               ).annotate(sum_edit =  F('edit_jan')+ F('edit_feb')+ F('edit_mar')+ F('edit_apr')+ F('edit_mei')+ F('edit_jun')+ F('edit_jul')+ F('edit_aug')+ F('edit_sep')+ F('edit_okt')+ F('edit_nov')+ F('edit_des'))
         
         document = [last_lrpa, last_mou]
         context["document"] = document #OPTIMIZE LATER?
@@ -63,7 +118,7 @@ class RecompositionAKI(LoginRequiredMixin, View):
         context["lrpa"] = lrpa
 
         for data in lrpa:
-            print(data.no_prk, data.prk.pk)
+            print(data.no_prk, data.sum_edit, data.edit_okt)
 
         return render(request, 'recomposition/recomposition_aki.html', context)
 
@@ -71,22 +126,29 @@ class UsulanRekomposisiEdit(LoginRequiredMixin, View):
     
     def get(self, request, pk, month, *args, **kwargs):
         context = {}
-        months = {1:"Januari", 2:"Februari", 3:"Maret", 4:"April", 5:"Mei", 6:"Juni", 7:"Juli", 8:"Agustus", 9:"September", 10:"Oktober", 11:"November", 12:"Desember"}
+        months = {1:"Januari", 2:"Februari", 3:"Maret", 4:"April", 5:"Mei", 6:"Juni", 7:"Juli", 8:"Agustus", 9:"September", 10:"Oktober", 11:"November", 12:"Desember", 0:"pass"}
 
         prk = PRK.objects.get(pk=pk)
         context["data"] = prk
 
         last_lrpa = LRPA_File.objects.order_by('-file_export_date').first()
         prk_lrpa = LRPA_Monitoring.objects.get(file=last_lrpa, prk=prk)
-        value = prk_lrpa.get_rencana_bulan(month) #MANUAL
+
+        if month != 0:
+            value = prk_lrpa.get_rencana_bulan(month) #MANUAL
+            context["words"] = num2words(value , lang='id')
+        else:
+            value = None
         
         try:
             draft = UsulanRekomposisi.objects.get(division=request.user.division, for_month=this_month())
             prk_draft = UsulanRekomposisiData.objects.get(file=draft, prk=prk)
             value_1 = prk_draft.get_rencana_bulan(month) #MANUAL
+            notes = prk_draft.notes
         except:
             value_1 = 0
-
+            notes = ""
+        
         context["value"] = str(value)
 
         if value_1:
@@ -94,10 +156,10 @@ class UsulanRekomposisiEdit(LoginRequiredMixin, View):
         else:
             context["value_draft"] = str(value)
 
-        context["words"] = num2words(value , lang='id')
         context["this_month"] = month
         context["month"] = months[month]
         context["selisih"] = str(value) #MANUAL
+        context["notes"] = notes
 
         return render(request, 'recomposition/snippets/modal_edit.html', context)
 
@@ -134,27 +196,43 @@ class InlineAKBEdit(LoginRequiredMixin, View):
 
     def post(self, request):
         context = {}
-        
+
         data = request.POST
         prk = PRK.objects.get(no_prk = data["no_prk"])
-        val = data["value"]
-
-        # GET OR CREATE UsulanRekomposisiData
-
+        
+        context["data"] = prk
+        context["this_month"] = data["this_month"]
+        
         # UsulanRekomposisi should be created this time        
         division = request.user.division
         draft = UsulanRekomposisi.objects.get(division=division, for_month=this_month()) #add period later
-        try:
-            data_rekom = UsulanRekomposisiData.objects.get(file=draft, prk=prk)
-            data_rekom.insertToMonth(data["this_month"], int(val))
-        except:
-            data_rekom = UsulanRekomposisiData(file=draft, prk=prk)
-            data_rekom.save()
-            data_rekom.insertToMonth(data["this_month"], int(val))
+        
+        if data["notes"]:
+            notes = data["notes"]
+            try:
+                data_rekom = UsulanRekomposisiData.objects.get(file=draft, prk=prk)
+                data_rekom.notes = notes
+                data_rekom.save()
+            except:
+                data_rekom = UsulanRekomposisiData(file=draft, prk=prk, notes=notes)
+                data_rekom.save()
+                data_rekom.insertToMonth(data["this_month"], int(val))
+            
+            context["notes"] = notes
+        else:
+            val = data["value"]
 
-        edit_akb = val
-        context["edit_akb"] = edit_akb
-        context["data"] = prk
-        context["this_month"] = data["this_month"]
+            # GET OR CREATE UsulanRekomposisiData
+
+            try:
+                data_rekom = UsulanRekomposisiData.objects.get(file=draft, prk=prk)
+                data_rekom.insertToMonth(data["this_month"], int(val))
+            except:
+                data_rekom = UsulanRekomposisiData(file=draft, prk=prk)
+                data_rekom.save()
+                data_rekom.insertToMonth(data["this_month"], int(val))
+
+            edit_akb = val
+            context["edit_akb"] = edit_akb
 
         return render(request, 'recomposition/snippets/inline_edit_cell_akb.html', context)

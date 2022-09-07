@@ -2,7 +2,6 @@ from django.db import models
 from datetime import date
 
 from account.models import Account
-from document.models import PRK
 
 class LRPA_File(models.Model):
     lrpa_file               = models.FileField(upload_to='monev/lrpa')
@@ -15,7 +14,7 @@ class LRPA_File(models.Model):
 class LRPA_Monitoring(models.Model):
     file                    = models.ForeignKey('LRPA_File', on_delete=models.CASCADE, blank=True, null=True)
     no_prk                  = models.CharField(max_length=100, blank=True, null=True)
-    prk                     = models.ForeignKey(PRK, on_delete=models.CASCADE, blank=True, null=True)
+    prk                     = models.ForeignKey('document.PRK', on_delete=models.CASCADE, blank=True, null=True)
     disburse_year_before    = models.CharField(max_length=100, blank=True, null=True)
     mekanisme_pembayaran    = models.CharField(max_length=100, blank=True, null=True)
     jan_rencana_disburse    = models.CharField(max_length=100, blank=True, null=True)
@@ -102,7 +101,7 @@ class FileMouPengalihan(models.Model):
 class MouPengalihanData(models.Model):
     file                    = models.ForeignKey('FileMouPengalihan', on_delete=models.CASCADE, blank=True, null=True)
     no_prk                  = models.CharField(max_length=100, blank=True, null=True)
-    prk                     = models.ForeignKey(PRK, on_delete=models.CASCADE, blank=True, null=True)
+    prk                     = models.ForeignKey('document.PRK', on_delete=models.CASCADE, blank=True, null=True)
     mou                     = models.CharField(max_length=255, blank=True, null=True)
     ai_this_year            = models.FloatField(blank=True, null=True)
     aki_this_year           = models.FloatField(blank=True, null=True)

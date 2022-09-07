@@ -1,0 +1,819 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load document_tags %}
+{% block style %}
+
+<style>
+    td {
+        vertical-align: middle;
+        text-align: center;
+        color: #161616;
+    }
+
+    table#dataTableLKAI{
+        background-color: #FCFCFC !important;
+        border-spacing: 0;
+        color: #161616;
+        overflow: hidden;
+    }
+
+    table#dataTableLKAI>tbody>tr:hover {
+        background-color: rgba(68, 151, 152, 0.1);
+    }
+
+    .cell-disabled{
+        background-color: #CFD2CF;
+        opacity: 0.1;
+    }
+
+    .currency{
+        text-align: right !important;
+        min-width: 160px;
+    }
+
+    .currency::before{
+        content: "Rp.";
+        float: left;
+        padding-right: 4px;
+    }
+
+    .sum-cell{
+        background-color: #161616;
+        color: #FCFCFC;
+        text-align: center !important;
+    }
+    .cell{
+        min-width: 150px;
+    }
+    .past{
+        background-color: #FFE162;
+        color: #100720;
+    }
+    .current{
+        background-color: #FFFFDE;
+        color: #100720;
+    }
+    .future{
+        background-color: #377D71;
+        color: #100720;
+    }
+
+    .mou{
+        background-color: blanchedalmond !important;
+    }
+
+    .copy_container{
+        display: flex;
+        justify-content: space-between;
+        top: 0px;
+        left: 0px;
+        /* width: 240px; */
+        padding: 2px 2px;
+        font-size: 18px;
+        color: #161616;
+        border-radius: 8px 8px 0 0;
+        cursor: pointer;
+    }
+
+    .copy{
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        align-items: center;
+        opacity: 0.6;
+        transition: all 0.1s ease;
+    }
+
+    .tooltip{
+        position: absolute;
+        top: 30px;
+        left: -30px;
+        background: #161616;
+        padding: 10px 15px;
+        display: flex;
+        justify-content: center;
+        color: #fff;
+        font-size: 14px;
+        border-radius: 4px;
+        letter-spacing: 1px;
+        opacity: 0;
+    }
+
+    .tooltip.appear {
+        animation: appear 1s ease;
+    }
+
+    @keyframes appear {
+        0% {
+            opacity: 0;
+        }
+        20% {
+            transform: translateY(10px);
+            opacity: 1;
+        }
+        80% {
+            transform: translateY(0px);
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+</style>
+{% endblock style%}
+
+{% block content %}
+<div class="container-fluid">
+
+    <div class="row" id="div-1">
+    </div>
+    <!-- DataTales Example -->
+    <div class="mb-4 shadow card">
+        <div class="py-3 card-header">
+            <div class="row">
+                <div class="col-8">
+                    <h6 class="m-0 font-weight-bold" style="color: #fff;">Monev LKAI 2022 (Viewing PRK for {{for_div}})</h6>
+                </div>
+                <div class="col-4 ">
+                    <button class="btn btn-info btn-icon-split btn-sm float-right" data-toggle="modal" data-target="#dataSource">
+                        <span class="icon text-white-50">
+                            <i class="fa-solid fa-arrow-pointer"></i>
+                        </span>
+                        <span class="text">View Data Source</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTableMonev" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <td class="sum-cell" colspan="5">Total</td>
+                            <td class="sum-cell" id="total_ai_1"></td>
+                            <td class="sum-cell" id="total_aki_1"></td>
+                            <td class="sum-cell" id="total_ai_2"></td>
+                            <td class="sum-cell" id="total_aki_2"></td>
+                            <td class="sum-cell" id="total_ai_3"></td>
+                            <td class="sum-cell" id="total_aki_3"></td>
+                            <td class="sum-cell" id="total_ai_lrpa"></td>
+                            <td class="sum-cell" id="total_aki_lrpa"></td>
+                            <td class="sum-cell" id="jan_akb"></td>
+                            <td class="sum-cell" id="jan_real"></td>
+                            <td class="sum-cell" id="feb_akb"></td>
+                            <td class="sum-cell" id="feb_real"></td>
+                            <td class="sum-cell" id="mar_akb"></td>
+                            <td class="sum-cell" id="mar_real"></td>
+                            <td class="sum-cell" id="apr_akb"></td>
+                            <td class="sum-cell" id="apr_real"></td>
+                            <td class="sum-cell" id="mei_akb"></td>
+                            <td class="sum-cell" id="mei_real"></td>
+                            <td class="sum-cell" id="jun_akb"></td>
+                            <td class="sum-cell" id="jun_real"></td>
+                            <td class="sum-cell" id="jul_akb"></td>
+                            <td class="sum-cell" id="jul_real"></td>
+                            <td class="sum-cell" id="aug_akb"></td>
+                            <td class="sum-cell" id="aug_real"></td>
+                            <td class="sum-cell" id="sep_akb"></td>
+                            <td class="sum-cell" id="sep_real"></td>
+                            <td class="sum-cell" id="okt_akb"></td>
+                            <td class="sum-cell" id="okt_real"></td>
+                            <td class="sum-cell" id="nov_akb"></td>
+                            <td class="sum-cell" id="nov_real"></td>
+                            <td class="sum-cell" id="des_akb"></td>
+                            <td class="sum-cell" id="des_real"></td>
+                            <td class="sum-cell" id="total_realisasi"></td>
+                            <td class="sum-cell" id="sisa_aki"></td>
+                        </tr>
+                        <tr>
+                            <th rowspan="2">No</th>
+                            <th rowspan="2">No PRK</th>
+                            <th rowspan="2">Program Utama/Proyek</th>
+                            <th rowspan="2">Uraian Kegiatan</th>
+                            <th rowspan="2">Status</th>
+                            <th colspan="2">SKAI Tahun 2022</th>
+                            <th colspan="2">SKAI Revisi 1 Tahun 2022</th>
+                            <th colspan="2">SKAI Revisi 2 Tahun 2022</th>
+                            <th colspan="2">LRPA {{document.2.file_export_date}}</th>
+                            <th colspan="24">Rencana/Realisasi 2022</th>
+                            <th rowspan="2">Total Realisasi</th>
+                            <th rowspan="2">Sisa AKI</th>
+                            <th rowspan="2">Kode PRK</th>
+                            <th rowspan="2">Kode BPO</th>
+                            <th rowspan="2">Rekap User Induk</th>
+                            <th rowspan="2">Sumber Dana</th>
+                            <th rowspan="2">Mekanisme Pembayaran</th>
+                        </tr>
+                        <tr>
+                            <th>AI</th>
+                            <th>AKI</th>
+                            <th>AI</th>
+                            <th>AKI</th>
+                            <th>AI</th>
+                            <th>AKI</th>
+                            <th>AI</th>
+                            <th>AKI</th>
+
+                            {% if month > 1 %}<th class="past"> {% elif month == 1 %} <th class="current">{% else %}<th class="future">{% endif %} AKB Januari</th>
+                            {% if month > 1 %}<th class="past"> {% elif month == 1 %} <th class="current">{% else %}<th class="future">{% endif %} Januari</th>
+                            {% if month > 2 %}<th class="past"> {% elif month == 2 %} <th class="current">{% else %}<th class="future">{% endif %}AKB Februari</th>
+                            {% if month > 2 %}<th class="past"> {% elif month == 2 %} <th class="current">{% else %}<th class="future">{% endif %}Februari</th>
+                            {% if month > 3 %}<th class="past"> {% elif month == 3 %} <th class="current">{% else %}<th class="future">{% endif %}AKB Maret</th>
+                            {% if month > 3 %}<th class="past"> {% elif month == 3 %} <th class="current">{% else %}<th class="future">{% endif %}Maret</th>
+                            {% if month > 4 %}<th class="past"> {% elif month == 4 %} <th class="current">{% else %}<th class="future">{% endif %}AKB April</th>
+                            {% if month > 4 %}<th class="past"> {% elif month == 4 %} <th class="current">{% else %}<th class="future">{% endif %}April</th>
+                            {% if month > 5 %}<th class="past"> {% elif month == 5 %} <th class="current">{% else %}<th class="future">{% endif %}AKB Mei</th>
+                            {% if month > 5 %}<th class="past"> {% elif month == 5 %} <th class="current">{% else %}<th class="future">{% endif %}Mei</th>
+                            {% if month > 6 %}<th class="past"> {% elif month == 6 %} <th class="current">{% else %}<th class="future">{% endif %}AKB Juni</th>
+                            {% if month > 6 %}<th class="past"> {% elif month == 6 %} <th class="current">{% else %}<th class="future">{% endif %}Juni</th>
+                            {% if month > 7 %}<th class="past"> {% elif month == 7 %} <th class="current">{% else %}<th class="future">{% endif %}AKB Juli</th>
+                            {% if month > 7 %}<th class="past"> {% elif month == 7 %} <th class="current">{% else %}<th class="future">{% endif %}Juli</th>
+                            {% if month > 8 %}<th class="past"> {% elif month == 8 %} <th class="current">{% else %}<th class="future">{% endif %}AKB Agustus</th>
+                            {% if month > 8 %}<th class="past"> {% elif month == 8 %} <th class="current">{% else %}<th class="future">{% endif %}Agustus</th>
+                            {% if month > 9 %}<th class="past"> {% elif month == 9 %} <th class="current">{% else %}<th class="future">{% endif %}AKB September</th>
+                            {% if month > 9 %}<th class="past"> {% elif month == 9 %} <th class="current">{% else %}<th class="future">{% endif %}September</th>
+                            {% if month > 10 %}<th class="past"> {% elif month == 10 %} <th class="current">{% else %}<th class="future">{% endif %}AKB Oktober</th>
+                            {% if month > 10 %}<th class="past"> {% elif month == 10 %} <th class="current">{% else %}<th class="future">{% endif %}Oktober</th>
+                            {% if month > 11 %}<th class="past"> {% elif month == 11 %} <th class="current">{% else %}<th class="future">{% endif %}AKB November</th>
+                            {% if month > 11 %}<th class="past"> {% elif month == 11 %} <th class="current">{% else %}<th class="future">{% endif %}November</th>
+                            {% if month > 12 %}<th class="past"> {% elif month == 12 %} <th class="current">{% else %}<th class="future">{% endif %}AKB Desember</th>
+                            {% if month > 12 %}<th class="past"> {% elif month == 12 %} <th class="current">{% else %}<th class="future">{% endif %}Desember</th>
+                        </tr>
+                        
+                    </thead>
+                    <tbody id="macro-table" class="table-group-divider">
+                        {% for data in lrpa %}
+                        <tr>
+                            <td style="max-width: 5px; padding: 2px 2px;">{{forloop.counter}}</td>
+                            <!-- NO PRK -->
+                            <td>
+                                <div id="id-{{data.pk}}" class="copy_container">
+                                    <p style="margin: auto;">{{data.prk.no_prk}}</p>
+                                    <div id="copy-{{data.pk}}" class="copy">
+                                        <span class="tooltip">Copied PRK Number</span>
+                                        <i class="material-icons">content_copy</i>
+                                    </div>
+                                </div>
+                            </td>
+                            <!-- PROGRAM UTAMA -->
+                            <td style="min-width: 165px; text-align: justify;">{{data.prk.program_utama}}</td>
+                            
+                            <!-- Kegiatan Uraian -->
+                            <td style="min-width: 330px; text-align: justify;">{{data.prk.keg_uraian}}</td>
+                            
+                            <!-- Status -->
+                            {% if data.status_1 %}
+                            <td>{{data.status_1}}</td>
+                            {% else %}
+                            <td>{{data.status_3}}</td>
+                            {% endif %}
+                            
+                            <!-- AI and AKI For SKAI 1 -->
+                            {% if data.ai_1 != 0 %}
+                            <td class="currency" >{{data.ai_1|floatformat}}</td>
+                            {% else %}
+                            <td>-</td>
+                            {% endif %}
+
+                            {% if data.aki_1 != 0 %}
+                            <td class="currency" >{{data.aki_1|floatformat}}</td>
+                            {% else %}
+                            <td>-</td>
+                            {% endif %}
+
+                            <!-- AI and AKI For SKAI 2 -->
+                            {% if data.ai_2 != 0 %}
+                            <td class="currency" >{{data.ai_2|floatformat}}</td>
+                            {% else %}
+                            <td>-</td>
+                            {% endif %}
+                            
+                            {% if data.aki_2 != 0 %}
+                            <td class="currency" >{{data.aki_2|floatformat}}</td>
+                            {% else %}
+                            <td>-</td>
+                            {% endif %}
+
+                            <!-- AI and AKI For SKAI 3 -->
+                            {% if data.ai_3 != 0 %}
+                            <td class="currency" >{{data.ai_3|floatformat}}</td>
+                            {% else %}
+                            <td>-</td>
+                            {% endif %}
+                            
+                            {% if data.aki_3 != 0 %}
+                            <td class="currency" >{{data.aki_3|floatformat}}</td>
+                            {% else %}
+                            <td>-</td>
+                            {% endif %}
+
+                            <!-- AI and AKI For LRPA -->
+                            {% if data.ai_this_year != 0 %}
+                            <td class="currency" >{{data.real_ai}}</td>
+                            {% else %}
+                            <td> - </td>
+                            {% endif %}
+
+                            {% if data.ai_this_year != 0 %}
+                            <td class="currency" >{{data.real_aki}}</td>
+                            {% else %}
+                            <td> - </td>
+                            {% endif %}
+
+                            <!-- Disburse data, taken from LRPA -->
+                            {% call_method data 'get_rencana_month' 1 as rencana_1 %}
+                            {% call_method data 'get_rencana_month' 2 as rencana_2 %}
+                            {% call_method data 'get_rencana_month' 3 as rencana_3 %}
+                            {% call_method data 'get_rencana_month' 4 as rencana_4 %}
+                            {% call_method data 'get_rencana_month' 5 as rencana_5 %}
+                            {% call_method data 'get_rencana_month' 6 as rencana_6 %}
+                            {% call_method data 'get_rencana_month' 7 as rencana_7 %}
+                            {% call_method data 'get_rencana_month' 8 as rencana_8 %}
+                            {% call_method data 'get_rencana_month' 9 as rencana_9 %}
+                            {% call_method data 'get_rencana_month' 10 as rencana_10 %}
+                            {% call_method data 'get_rencana_month' 11 as rencana_11 %}
+                            {% call_method data 'get_rencana_month' 12 as rencana_12 %}
+
+                            {% call_method data 'get_realisasi_month' 1 as realisasi_1 %}
+                            {% call_method data 'get_realisasi_month' 2 as realisasi_2 %}
+                            {% call_method data 'get_realisasi_month' 3 as realisasi_3 %}
+                            {% call_method data 'get_realisasi_month' 4 as realisasi_4 %}
+                            {% call_method data 'get_realisasi_month' 5 as realisasi_5 %}
+                            {% call_method data 'get_realisasi_month' 6 as realisasi_6 %}
+                            {% call_method data 'get_realisasi_month' 7 as realisasi_7 %}
+                            {% call_method data 'get_realisasi_month' 8 as realisasi_8 %}
+                            {% call_method data 'get_realisasi_month' 9 as realisasi_9 %}
+                            {% call_method data 'get_realisasi_month' 10 as realisasi_10 %}
+                            {% call_method data 'get_realisasi_month' 11 as realisasi_11 %}
+                            {% call_method data 'get_realisasi_month' 12 as realisasi_12 %}
+
+                            {% if rencana_1 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{rencana_1|floatformat}}</td>
+                            {% endif %}
+
+                            {% if realisasi_1 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{realisasi_1|floatformat}}</td>
+                            {% endif %}
+
+                            {% if rencana_2 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{rencana_2|floatformat}}</td>
+                            {% endif %}
+
+                            {% if realisasi_2 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{realisasi_2|floatformat}}</td>
+                            {% endif %}
+
+                            {% if rencana_3 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{rencana_3|floatformat}}</td>
+                            {% endif %}
+
+                            {% if realisasi_3 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{realisasi_3|floatformat}}</td>
+                            {% endif %}
+
+                            {% if rencana_4 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{rencana_4|floatformat}}</td>
+                            {% endif %}
+
+                            {% if realisasi_4 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{realisasi_4|floatformat}}</td>
+                            {% endif %}
+
+                            {% if rencana_5 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{rencana_5|floatformat}}</td>
+                            {% endif %}
+
+                            {% if realisasi_5 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{realisasi_5|floatformat}}</td>
+                            {% endif %}
+
+                            {% if rencana_6 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{rencana_6|floatformat}}</td>
+                            {% endif %}
+
+                            {% if realisasi_6 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{realisasi_6|floatformat}}</td>
+                            {% endif %}
+
+                            {% if rencana_7 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{rencana_7|floatformat}}</td>
+                            {% endif %}
+
+                            {% if realisasi_7 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{realisasi_7|floatformat}}</td>
+                            {% endif %}
+
+                            {% if rencana_8 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{rencana_8|floatformat}}</td>
+                            {% endif %}
+
+                            {% if realisasi_8 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{realisasi_8|floatformat}}</td>
+                            {% endif %}
+
+                            {% if rencana_9 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{rencana_9|floatformat}}</td>
+                            {% endif %}
+
+                            {% if realisasi_9 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{realisasi_9|floatformat}}</td>
+                            {% endif %}
+
+                            {% if rencana_10 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{rencana_10|floatformat}}</td>
+                            {% endif %}
+
+                            {% if realisasi_10 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{realisasi_10|floatformat}}</td>
+                            {% endif %}
+
+                            {% if rencana_11 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{rencana_11|floatformat}}</td>
+                            {% endif %}
+
+                            {% if realisasi_11 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{realisasi_11|floatformat}}</td>
+                            {% endif %}
+
+                            {% if rencana_12 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{rencana_12|floatformat}}</td>
+                            {% endif %}
+
+                            {% if realisasi_12 == "0" %}
+                            <td class="cell"> - </td>
+                            {% else %}
+                            <td class="cell currency">{{realisasi_12|floatformat}}</td>
+                            {% endif %}
+
+
+                            {% if data.get_total_realisasi != 0 %}
+                            <td class="currency">{{data.get_total_realisasi}}</td>
+                            {% else %}
+                            <td> - </td>
+                            {% endif %}
+
+                            {% if data.get_sisa_aki != 0 %}
+                            <td class="currency">{{data.get_sisa_aki}}</td>
+                            {% else %}
+                            <td> - </td>
+                            {% endif %}
+
+                            <!-- PRK Kode -->
+                            {% if data.prk.kode_prk %}
+                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.prk.pk type=1 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-1-{{data.prk.pk}}">{{data.prk.kode_prk}}</td>
+                            {% else %}
+                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.prk.pk type=1 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-1-{{data.prk.pk}}">-</td>
+                            {% endif %}
+
+                            {% if data.prk.kode_bpo %}
+                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.prk.pk type=2 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-2-{{data.prk.pk}}">{{data.prk.kode_bpo}}</td>
+                            {% else %}
+                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.prk.pk type=2 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-2-{{data.prk.pk}}">-</td>
+                            {% endif %}
+
+                            {% if data.prk.rekap_user_induk %}
+                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.prk.pk type=3 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-3-{{data.prk.pk}}">{{data.prk.rekap_user_induk}}</td>
+                            {% else %}
+                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.prk.pk type=3 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-3-{{data.prk.pk}}">-</td>
+                            {% endif %}
+                            <!-- Sumber Dana -->
+                            {% if data.sd_1 %}
+                            <td>{{data.sd_1}}</td>
+                            {% else %}
+                            <td>{{data.sd_3}}</td>
+                            {% endif %}
+                            
+
+                            {% if data.mekanisme_pembayaran %}
+                            <td>{{data.mekanisme_pembayaran}}</td>
+                            {% else %}
+                            <td> - </td>
+                            {% endif %}
+                            
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modals-here"></div>
+
+<!-- Modal Data Source -->
+<div class="modal fade" id="dataSource" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Data Source</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="container-fluid">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>File</th>
+                            <th>Name/Keyword</th>
+                            <th>Tanggal Dokumen/File</th>
+                            <th style="background-color: #161616 !important;">Tanggal Upload</th>
+                            <th style="background-color: #161616 !important;">Diupload oleh</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>SKAI</td>
+                            <td><a href="">{{document.0.keyword}}</a></td>
+                            <td>{{document.0.document.published_date|date:"d M Y"}}</td>
+                            <td>{{document.0.document.upload_date}}</td>
+                            <td>{{document.0.document.uploader}}</td>
+                        </tr>
+                        <tr>
+                            <td>SKAI</td>
+                            <td><a href="">{{document.3.keyword}}</a></td>
+                            <td>{{document.3.document.published_date|date:"d M Y"}}</td>
+                            <td>{{document.3.document.upload_date}}</td>
+                            <td>{{document.3.document.uploader}}</td>
+                        </tr>
+                        <tr>
+                            <td>SKAI</td>
+                            <td><a href="">{{document.1.keyword}}</a></td>
+                            <td>{{document.1.document.published_date|date:"d M Y"}}</td>
+                            <td>{{document.1.document.upload_date}}</td>
+                            <td>{{document.1.document.uploader}}</td>
+                        </tr>
+                        <tr>
+                            <td>LRPA</td>
+                            <td>LRPA bulan : {{document.2.for_month}}</td>
+                            <td>{{document.2.file_export_date|date:"d M Y"}}</td>
+                            <td>{{document.2.upload_date}}</td>
+                            <td>{{document.2.upload_by}}</td>
+                        </tr>
+                        <tr>
+                            <td>Daftar MOU Pengalihan</td>
+                            <td>Tarikan FIX bulan : {{document.4.for_month}}</td>
+                            <td>{{document.4.file_export_date|date:"d M Y"}}</td>
+                            <td>{{document.4.upload_date}}</td>
+                            <td>{{document.4.upload_by}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+        </div>
+        
+      </div>
+    </div>
+</div>
+  
+{% endblock content %}
+
+{% block script %}
+
+<script>
+    $(document).ready(function () {
+        var table = $('#dataTableMonev').DataTable({
+            scrollY: 600,
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            keys: true,
+            paging: true,
+            dom: 'BQlfrtip',
+            // dom: "<'row'<'col-sm-6'Bl><'col-sm-6'f>>" +"<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ],
+            fixedColumns:{
+                leftColumns: 4
+            },
+            drawCallback: function(){
+                var api = this.api();
+                var intVal = function (i) {
+                    return parseInt(i) || 0;
+                };
+                
+                function myFunc(total, num) {
+                    return intVal(total) + intVal(num);
+                }
+                var data_ai_1 = api.column(5, {search: 'applied'}).data();
+                var data_aki_1 = api.column(6, {search: 'applied'}).data();
+                var data_ai_2 = api.column(7, {search: 'applied'}).data();
+                var data_aki_2 = api.column(8, {search: 'applied'}).data();
+                var data_ai_3 = api.column(9, {search: 'applied'}).data();
+                var data_aki_3 = api.column(10, {search: 'applied'}).data();
+                var ai_lrpa = api.column(11, {search: 'applied'}).data();
+                var aki_lrpa = api.column(12, {search: 'applied'}).data();
+
+                var jan_akb = api.column(13, {search: 'applied'}).data();
+                var jan_real = api.column(14, {search: 'applied'}).data();
+                var feb_akb = api.column(15, {search: 'applied'}).data();
+                var feb_real = api.column(16, {search: 'applied'}).data();
+                var mar_akb = api.column(17, {search: 'applied'}).data();
+                var mar_real = api.column(18, {search: 'applied'}).data();
+                var apr_akb = api.column(19, {search: 'applied'}).data();
+                var apr_real = api.column(20, {search: 'applied'}).data();
+                var mei_akb = api.column(21, {search: 'applied'}).data();
+                var mei_real = api.column(22, {search: 'applied'}).data();
+                var jun_akb = api.column(23, {search: 'applied'}).data();
+                var jun_real = api.column(24, {search: 'applied'}).data();
+                var jul_akb = api.column(25, {search: 'applied'}).data();
+                var jul_real = api.column(26, {search: 'applied'}).data();
+                var aug_akb = api.column(27, {search: 'applied'}).data();
+                var aug_real = api.column(28, {search: 'applied'}).data();
+                var sep_akb = api.column(29, {search: 'applied'}).data();
+                var sep_real = api.column(30, {search: 'applied'}).data();
+                var okt_akb = api.column(31, {search: 'applied'}).data();
+                var okt_real = api.column(32, {search: 'applied'}).data();
+                var nov_akb = api.column(33, {search: 'applied'}).data();
+                var nov_real = api.column(34, {search: 'applied'}).data();
+                var des_akb = api.column(35, {search: 'applied'}).data();
+                var des_real = api.column(36, {search: 'applied'}).data();
+
+                var total_realisasi = api.column(37, {search: 'applied'}).data();
+                var sisa_aki = api.column(38, {search: 'applied'}).data();
+
+                //alert( Object.keys(data_ai_1).length );
+
+                var listColumn = [data_ai_1, data_aki_1, data_ai_2, data_aki_2, data_ai_3, data_aki_3, ai_lrpa, aki_lrpa, jan_akb, jan_real, 
+                feb_akb, feb_real, mar_akb, mar_real, apr_akb, apr_real, mei_akb, mei_real, jun_akb, jun_real, jul_akb, jul_real,
+                aug_akb, aug_real, sep_akb, sep_real, okt_akb, okt_real, nov_akb, nov_real, des_akb, des_real, total_realisasi, sisa_aki]
+
+                var reduceColumn = []
+                for (var obj in listColumn){
+                    var data = listColumn[obj];
+                    //console.log(data);
+                    Object.keys(data).forEach(function(key){
+                        if(typeof data[key] === 'string'){
+                            data[key] = intVal(data[key].replaceAll(',',''))
+                        }
+                    })
+                    reduceColumn.push(data.reduce(myFunc))
+                }
+
+                console.log(reduceColumn);
+
+                $('#total_ai_1').html(Number(reduceColumn[0]).toLocaleString('id'));
+                $('#total_aki_1').html(Number(reduceColumn[1]).toLocaleString('id'));
+                $('#total_ai_2').html(Number(reduceColumn[2]).toLocaleString('id'));
+                $('#total_aki_2').html(Number(reduceColumn[3]).toLocaleString('id'));
+                $('#total_ai_3').html(Number(reduceColumn[4]).toLocaleString('id'));
+                $('#total_aki_3').html(Number(reduceColumn[5]).toLocaleString('id'));
+                $('#total_ai_lrpa').html(Number(reduceColumn[6]).toLocaleString('id'));
+                $('#total_aki_lrpa').html(Number(reduceColumn[7]).toLocaleString('id'));
+                $('#jan_akb').html(Number(reduceColumn[8]).toLocaleString('id'));
+                $('#jan_real').html(Number(reduceColumn[9]).toLocaleString('id'));
+                $('#feb_akb').html(Number(reduceColumn[10]).toLocaleString('id'));
+                $('#feb_real').html(Number(reduceColumn[11]).toLocaleString('id'));
+                $('#mar_akb').html(Number(reduceColumn[12]).toLocaleString('id'));
+                $('#mar_real').html(Number(reduceColumn[13]).toLocaleString('id'));
+                $('#apr_akb').html(Number(reduceColumn[14]).toLocaleString('id'));
+                $('#apr_real').html(Number(reduceColumn[15]).toLocaleString('id'));
+                $('#mei_akb').html(Number(reduceColumn[16]).toLocaleString('id'));
+                $('#mei_real').html(Number(reduceColumn[17]).toLocaleString('id'));
+                $('#jun_akb').html(Number(reduceColumn[18]).toLocaleString('id'));
+                $('#jun_real').html(Number(reduceColumn[19]).toLocaleString('id'));
+                $('#jul_akb').html(Number(reduceColumn[20]).toLocaleString('id'));
+                $('#jul_real').html(Number(reduceColumn[21]).toLocaleString('id'));
+                $('#aug_akb').html(Number(reduceColumn[22]).toLocaleString('id'));
+                $('#aug_real').html(Number(reduceColumn[23]).toLocaleString('id'));
+                $('#sep_akb').html(Number(reduceColumn[24]).toLocaleString('id'));
+                $('#sep_real').html(Number(reduceColumn[25]).toLocaleString('id'));
+                $('#okt_akb').html(Number(reduceColumn[26]).toLocaleString('id'));
+                $('#okt_real').html(Number(reduceColumn[27]).toLocaleString('id'));
+                $('#nov_akb').html(Number(reduceColumn[28]).toLocaleString('id'));
+                $('#nov_real').html(Number(reduceColumn[29]).toLocaleString('id'));
+                $('#des_akb').html(Number(reduceColumn[30]).toLocaleString('id'));
+                $('#des_real').html(Number(reduceColumn[31]).toLocaleString('id'));
+                $('#total_realisasi').html(Number(reduceColumn[32]).toLocaleString('id'));
+                $('#sisa_aki').html(Number(reduceColumn[33]).toLocaleString('id'));
+
+                
+            }
+        });
+
+        $.fn.dataTable.tables( { visible: true, api: true } ).scroller.measure();
+        // new $.fn.dataTable.FixedHeader( table ).scroller.measure();
+    });
+
+    $(function() {
+        // Check the initial Poistion of the Sticky Header
+        var stickyHeaderTop = $('#dataTableMonev').offset().top;
+        $(window).scroll(function() {
+            if ($(window).scrollTop() > stickyHeaderTop) {
+                $('.dataTables_scrollHead, .DTFC_LeftHeadWrapper').css('transform', 'translateY(0%)');
+                $('.DTFC_LeftHeadWrapper').css({position: 'fixed',top: '0px',zIndex: '1',left: 'auto'});
+                $('.dataTables_scrollHead').css({position: 'fixed',top: '0px', zIndex: '1' });
+                $('.DTFC_ScrollWrapper').css({height: ''});
+            }
+            else {
+                $('.DTFC_LeftHeadWrapper, .DTFC_LeftHeadWrapper').css({position: 'relative',top: '0px'});
+                $('.dataTables_scrollHead').css({position: 'relative', top: '0px'});
+                $('.dataTables_scrollHead').css('transform', 'translateY(0%)');
+            }
+
+        });
+    });
+</script>
+
+<script>
+
+    function closeModal() {
+        var container = document.getElementById("modals-here")
+        console.log(container)
+        var backdrop = document.getElementById("modal-backdrop")
+        var modal = document.getElementById("modal")
+
+        modal.classList.remove("show")
+        backdrop.classList.remove("show")
+
+        setTimeout(function() {
+            container.removeChild(backdrop)
+            container.removeChild(modal)
+        }, 200)
+    }
+
+    htmx.on("htmx:beforeSwap", (e) => {
+        // Empty response not targeting #modals-here => hide the modal
+        console.log("Before Swap")
+        console.log(e.detail.target.id)
+        if (e.detail.target.id != "modals-here") {
+            console.log("If")
+            closeModal()
+            e.detail.shouldSwap = false
+        }
+    })
+
+
+    $("[id^=copy-").on("click", function(e){
+        e.preventDefault();
+
+        //find the number of the parent
+        let num = $(this).parent().attr("id").slice("id-".length);
+        //let elem = $("#id-" + num);
+        let elem = document.getElementById("id-"+num);
+        
+        //copy the text
+        let $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($(elem).children(":first").text()).select();
+        document.execCommand("copy");
+        
+        $temp.remove();
+
+        $(this).children(".tooltip").addClass("appear").delay(1000).queue(function( next ){
+            $(this).removeClass("appear"); 
+            $(this).dequeue();
+        });
+    });
+</script>
+{% endblock script %}

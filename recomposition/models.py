@@ -1,6 +1,6 @@
 from django.db import models
 
-from document.models import PRK
+# from document.models import PRK
 from account.models import Account
 
 class UsulanPeriod(models.Model):
@@ -19,7 +19,7 @@ class UsulanRekomposisi(models.Model):
 
 class UsulanRekomposisiData(models.Model):
     file            = models.ForeignKey('UsulanRekomposisi', on_delete=models.CASCADE)
-    prk             = models.ForeignKey(PRK, on_delete=models.CASCADE, blank=True, null=True)
+    prk             = models.ForeignKey('document.PRK', on_delete=models.CASCADE, blank=True, null=True)
     jan             = models.IntegerField(blank=True, null=True)
     feb             = models.IntegerField(blank=True, null=True)
     mar             = models.IntegerField(blank=True, null=True)
@@ -43,6 +43,9 @@ class UsulanRekomposisiData(models.Model):
         }
 
         return switch[month]
+    
+    def sum_usulan(self):
+        return int(self.jan or 0) + int(self.feb or 0) + int(self.mar or 0) + int(self.apr or 0) + int(self.mei or 0) + int(self.jun or 0) + int(self.jul or 0) + int(self.aug or 0) + int(self.sep or 0) + int(self.okt or 0) + int(self.nov or 0) + int(self.des or 0)
     
     def insertToMonth(self, monthS, value):
         month = int(monthS)

@@ -1,4 +1,11 @@
+{% if edit_akb %}
 <td class="currency" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.pk month=this_month %}" 
 hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
 _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
 id="target-{{this_month}}-{{data.pk}}">{{edit_akb}}</td>
+{% else %}
+<td class="cell" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.pk month=this_month %}" 
+hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+_="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+id="target-{{this_month}}-{{data.pk}}">{{notes}}</td>
+{% endif %}

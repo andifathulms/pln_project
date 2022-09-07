@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'import_export',
     'storages',
     'channels',
+    'mathfilters',
     
     'account',
     
