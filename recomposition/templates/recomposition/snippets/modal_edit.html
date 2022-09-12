@@ -14,7 +14,7 @@
                         {% csrf_token %}
                         <div class="form-group">
                             <label for="formGroupExampleInput">No PRK</label>
-                            <input type="text" class="form-control" name="prk" id="formGroupExampleInput" 
+                            <input type="text" class="form-control" name="prk" 
                             value="{{data.no_prk}}" disabled/>
                             <input type="hidden" name="no_prk" value={{data.no_prk}}>
                             <input type="hidden" name="this_month" value={{this_month}}>
@@ -31,7 +31,8 @@
                                 <div class="input-group-prepend">
                                   <div class="input-group-text">Rp.</div>
                                 </div>
-                                <input type="number" class="form-control" name="value-former" id="formGroupExampleInput" value="{{value}}" disabled/>
+                                <input type="number" class="form-control" name="value-former" value="{{value}}" disabled/>
+                                <input type="hidden" name="hidden_value_former" value={{value}}>
                             </div>
                         </div>
                         <div class="form-group">
@@ -40,7 +41,7 @@
                                 <div class="input-group-prepend">
                                   <div class="input-group-text">Rp.</div>
                                 </div>
-                                <input type="number" class="form-control" name="value" id="formGroupExampleInput" value="{{value_draft}}"
+                                <input type="number" class="form-control" name="value" value="{{value_draft}}"
                                 hx-get="{% url 'recomposition:recomposition-onchgvalue' former_value=value %}"
                                 hx-target="#onChgArea" hx-trigger="keyup" hx-swap="innerHTML"/>
                             </div>
@@ -58,12 +59,18 @@
                             </div>
                         </div>
                         {% endif %}
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" onclick="closeModal()">Close</button>
-                            <button type="submit" class="btn btn-primary">Save changes</button>
+                        <div class="form-group modal-footer p-0">
+                            <div class="btn-group d-flex w-100" role="group">
+                                {% if this_month != 0 %}
+                                <button type="button" name="delete" hx-post="{% url 'recomposition:akb-delete' %}" hx-target="#target-{{this_month}}-{{data.pk}}" hx-swap="outerHTML" class="btn btn-danger w-100" {%if not is_month %}disabled{% endif %}>Delete changes</button>
+                                {% endif %}
+                                <button type="button" class="btn btn-secondary w-100" onclick="closeModal()">Close</button>
+                                <button type="submit" name="save" class="btn btn-primary w-100" >Save changes</button>
+                            </div>
                         </div>
                     </form>
                 </div>
-        </div>
-	</div>
+            </div>
+	    </div>
+    </div>
 </div>

@@ -29,7 +29,9 @@
     .completed{
         background-color: #377D71 !important;
     }
-
+    .no-aki{
+        background-color: darkgray !important;
+    }
     .currency{
         text-align: right !important;
         min-width: 160px;
@@ -257,6 +259,8 @@
                         <tr>
                             {% if data.is_aki_completed %}
                             <td class= "completed" style="max-width: 5px; padding: 2px 2px;">{{forloop.counter}}</td>
+                            {% elif data.aki_this_year == 0 %}
+                            <td class= "no-aki" style="max-width: 5px; padding: 2px 2px;">{{forloop.counter}}</td>
                             {% else %}
                             <td style="max-width: 5px; padding: 2px 2px;">{{forloop.counter}}</td>
                             {% endif %}

@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import UsulanRekomposisi, UsulanRekomposisiData
+from .models import UsulanRekomposisiAKI, UsulanRekomposisiAKIData, UsulanPeriod
 
-admin.site.register(UsulanRekomposisi)
-admin.site.register(UsulanRekomposisiData)
+admin.site.register(UsulanRekomposisiAKI)
+admin.site.register(UsulanRekomposisiAKIData)
+admin.site.register(UsulanPeriod)

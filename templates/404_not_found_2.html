@@ -1,0 +1,426 @@
+{% extends 'base.html' %}
+
+{% block style %}
+<style>
+    @import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300);
+    ::selection {
+        background-color: rgba(0,0,0,0.2);
+    }
+
+    ::-moz-selection {
+        background-color: rgba(0,0,0,0.2);
+    }
+
+    #noscript-warning {
+        width: 100%;
+        text-align: center;
+        background-color: rgba(0,0,0,0.2);
+        font-weight: 300;
+        color: white;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    /* === WRAP === */
+
+    .container-403{
+        background-color: #335B67;
+    }
+    #content{
+        background: -ms-radial-gradient(ellipse at center,  #335B67 0%, #2C3E50 100%) fixed no-repeat;
+        background: -moz-radial-gradient(ellipse at center,  #335B67 0%, #2C3E50 100%) fixed no-repeat;
+        background: -o-radial-gradient(ellipse at center, #335B67 0%, #2C3E50 100%) fixed no-repeat;
+        background: -webkit-gradient(radial, center center, 0, center center, 497, color-stop(0, #335B67), color-stop(1, #2C3E50));
+        background: -webkit-radial-gradient(ellipse at center,  #335B67 0%, #2C3E50 100%) fixed no-repeat;
+        background: radial-gradient(ellipse at center, #335B67 0%, #2C3E50 100%) fixed no-repeat;
+        background-color: #335B67;
+    }
+    #wrap {
+        background-color: #335B67;
+        background: -ms-radial-gradient(ellipse at center,  #335B67 0%, #2C3E50 100%) fixed no-repeat;
+        background: -moz-radial-gradient(ellipse at center,  #335B67 0%, #2C3E50 100%) fixed no-repeat;
+        background: -o-radial-gradient(ellipse at center, #335B67 0%, #2C3E50 100%) fixed no-repeat;
+        background: -webkit-gradient(radial, center center, 0, center center, 497, color-stop(0, #335B67), color-stop(1, #2C3E50));
+        background: -webkit-radial-gradient(ellipse at center,  #335B67 0%, #2C3E50 100%) fixed no-repeat;
+        background: radial-gradient(ellipse at center, #335B67 0%, #2C3E50 100%) fixed no-repeat;
+        font-family: 'Source Sans Pro', sans-serif;
+        -webkit-font-smoothing: antialiased;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        padding: 15px;
+    }
+
+
+
+    /* === MAIN TEXT CONTENT === */
+
+    #main-content {
+        float: right;
+        max-width: 45%;
+        color: white;
+        font-weight: 300;
+        font-size: 18px;
+        padding-bottom: 40px;
+        line-height: 28px;
+    }
+
+    #main-content h1 {
+        margin: 0px;
+        font-weight: 400;
+        font-size: 42px;
+        margin-bottom: 40px;
+        line-height: normal;
+    }
+    
+    /* === WORDSEARCH === */
+
+    #wordsearch {
+        width: 45%;
+        float: left;
+    }
+
+    #wordsearch ul {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    #wordsearch ul li {
+        float: left;
+        width: 12%;
+        background-color: rgba(0,0,0,.2);
+        list-style: none;
+        margin-right: 0.5%;
+        margin-bottom: 0.5%;
+        padding: 0;
+        display: block;
+        text-align: center;
+        color: rgba(255,255,255,0.7);
+        text-transform: uppercase;
+        overflow: hidden;
+        font-size: 24px;
+        font-size: 1.6vw;
+        font-weight: 300;
+        transition: background-color 0.75s ease;
+        -moz-transition: background-color 0.75s ease;
+        -webkit-transition: background-color 0.75s ease;
+        -o-transition: background-color 0.75s ease;
+    }
+
+    #wordsearch ul li.selected {
+        background-color: rgba(26,188,156,0.7);
+        color: rgba(255,255,255,1);
+        font-weight: 400;
+    }
+
+    #wordsearch ul li.selected-1 {
+        background-color: rgba(232, 38, 38, 0.7);
+        color: rgba(255,255,255,1);
+        font-weight: 400;
+    }
+
+
+    /* === RESPONSIVE CSS === */
+
+    @media all and (max-width: 899px) {
+        #wrap { width: 90%; }
+    }
+
+    @media all and (max-width: 799px) {
+        #wrap { width: 90%; height: auto; margin-top: 40px; top: 0%; }
+        #wordsearch { width: 90%; float: none; margin:0 auto; }
+        #wordsearch ul li { font-size: 4vw; }
+        #main-content { float: none; width: 90%; max-width: 90%; margin:0 auto; margin-top: 30px; text-align: justify; }
+        #main-content h1 { text-align: left; }
+        #search input[type='text'] { width: 84%; }
+        #search .input-search { width: 15%; }
+    }
+
+    @media all and (max-width: 499px) {
+        #main-content h1 { font-size: 28px; }
+    }
+</style>
+{% endblock style%}
+
+{% block content %}
+<div id="wrap">
+    <div id="wordsearch">
+      <ul>
+        <li class="li-word sixteen">p</li>
+
+        <li class="li-word">v</li>
+
+        <li class="li-word">n</li>
+
+        <li class="li-word">z</li>
+
+        <li class="li-word">i</li>
+
+        <li class="li-word">x</li>
+
+        <li class="li-word">m</li>
+
+        <li class="li-word">e</li>
+
+        <li class="li-word">t</li>
+
+        <li class="li-word seventeen">l</li>
+
+        <li class="li-word">x</li>
+
+        <li class="li-word">l</li>
+
+        <li class="li-word one">4</li>
+
+        <li class="li-word two">0</li>
+
+        <li class="li-word three">4</li>
+
+        <li class="li-word">y</li>
+
+        <li class="li-word">y</li>
+
+        <li class="li-word">w</li>
+
+        <li class="li-word eighteen">n</li>
+
+        <li class="li-word">b</li>
+
+        <li class="li-word">o</li>
+
+        <li class="li-word">q</li>
+
+        <li class="li-word">d</li>
+
+        <li class="li-word">y</li>
+
+        <li class="li-word">p</li>
+
+        <li class="li-word">a</li>
+
+        <li class="li-word four">p</li>
+
+        <li class="li-word five">a</li>
+
+        <li class="li-word six">g</li>
+
+        <li class="li-word seven">e</li>
+
+        <li class="li-word">v</li>
+
+        <li class="li-word">j</li>
+
+        <li class="li-word">a</li>
+
+        <li class="li-word eight">n</li>
+
+        <li class="li-word nine">o</li>
+
+        <li class="li-word ten">t</li>
+
+        <li class="li-word nineteen">u</li>
+
+        <li class="li-word">c</li>
+
+        <li class="li-word">e</li>
+
+        <li class="li-word">w</li>
+
+        <li class="li-word">v</li>
+
+        <li class="li-word">x</li>
+
+        <li class="li-word">e</li>
+
+        <li class="li-word">p</li>
+
+        <li class="li-word">c</li>
+
+        <li class="li-word twenty">i</li>
+
+        <li class="li-word">h</li>
+
+        <li class="li-word">q</li>
+
+        <li class="li-word">e</li>
+
+        <li class="li-word eleven">f</li>
+
+        <li class="li-word twelve">o</li>
+
+        <li class="li-word thirteen">u</li>
+
+        <li class="li-word fourteen">n</li>
+
+        <li class="li-word fifteen">d</li>
+
+        <li class="li-word twentyone">p</li>
+
+        <li class="li-word">w</li>
+
+        <li class="li-word">q</li>
+
+        <li class="li-word">v</li>
+
+        <li class="li-word">o</li>
+
+        <li class="li-word">s</li>
+
+        <li class="li-word">m</li>
+
+        <li class="li-word">v</li>
+
+        <li class="li-word">f</li>
+
+        <li class="li-word">u</li>
+      </ul>
+    </div>
+
+    <div id="main-content">
+      <h1>We couldn't find what you were looking for.</h1>
+
+      <p>Unfortunately the page you were looking for could not be found. It may be
+      temporarily unavailable, moved or no longer exist.</p>
+
+      <p>Check the URL you entered for any mistakes and try again. Alternatively, search
+      for whatever is missing or take a look around the rest of our site.</p>
+    </div>
+</div>
+{% endblock content %}
+
+{% block script %}
+
+<script>
+    $(function () {
+        var liWidth = $(".li-word").css("width");
+        $(".li-word").css("height", liWidth);
+        $(".li-word").css("lineHeight", liWidth);
+        var totalHeight = $("#wordsearch").css("width");
+        $("#wordsearch").css("height", totalHeight);
+    });
+    causeRepaintsOn = $("h1, h2, h3, p");
+    $(window).resize(function () {
+        causeRepaintsOn.css("z-index", 1);
+    });
+    $(window).on('resize', function () {
+        var liWidth = $(".one").css("width");
+        $("#li-word").css("height", liWidth);
+        $("#li-word").css("lineHeight", liWidth);
+        var totalHeight = $("#wordsearch").css("width");
+        $("#wordsearch").css("height", totalHeight);
+    });
+
+
+
+    $(function () {
+        /* 4 */
+        $(this).delay(1500).queue(function () {
+            $(".one").addClass("selected");
+            $(this).dequeue();
+        })
+        /* 0 */
+        .delay(500).queue(function () {
+            $(".two").addClass("selected");
+            $(this).dequeue();
+        })
+        /* 4 */
+        .delay(500).queue(function () {
+            $(".three").addClass("selected");
+            $(this).dequeue();
+        })
+        /* P */
+        .delay(500).queue(function () {
+            $(".four").addClass("selected");
+            $(this).dequeue();
+        })
+        /* A */
+        .delay(500).queue(function () {
+            $(".five").addClass("selected");
+            $(this).dequeue();
+        })
+        /* G */
+        .delay(500).queue(function () {
+            $(".six").addClass("selected");
+            $(this).dequeue();
+        })
+        /* E */
+        .delay(500).queue(function () {
+            $(".seven").addClass("selected");
+            $(this).dequeue();
+        })
+        /* N */
+        .delay(500).queue(function () {
+            $(".eight").addClass("selected");
+            $(this).dequeue();
+        })
+        /* O */
+        .delay(500).queue(function () {
+            $(".nine").addClass("selected");
+            $(this).dequeue();
+        })
+        /* T */
+        .delay(500).queue(function () {
+            $(".ten").addClass("selected");
+            $(this).dequeue();
+        })
+        /* F */
+        .delay(500).queue(function () {
+            $(".eleven").addClass("selected");
+            $(this).dequeue();
+        })
+        /* O */
+        .delay(500).queue(function () {
+            $(".twelve").addClass("selected");
+            $(this).dequeue();
+        })
+        /* U */
+        .delay(500).queue(function () {
+            $(".thirteen").addClass("selected");
+            $(this).dequeue();
+        })
+        /* N */
+        .delay(500).queue(function () {
+            $(".fourteen").addClass("selected");
+            $(this).dequeue();
+        })
+        /* D */
+        .delay(500).queue(function () {
+            $(".fifteen").addClass("selected");
+            $(this).dequeue()
+        })
+        /* P */
+        .delay(500).queue(function () {
+            $(".sixteen").addClass("selected-1");
+            $(this).dequeue()
+        })
+        /* L */
+        .delay(500).queue(function () {
+            $(".seventeen").addClass("selected-1");
+            $(this).dequeue()
+        })
+        /* N */
+        .delay(500).queue(function () {
+            $(".eighteen").addClass("selected-1");
+            $(this).dequeue()
+        })
+        /* U */
+        .delay(500).queue(function () {
+            $(".nineteen").addClass("selected-1");
+            $(this).dequeue()
+        })
+        /* I */
+        .delay(500).queue(function () {
+            $(".twenty").addClass("selected-1");
+            $(this).dequeue()
+        })
+        /* P */
+        .delay(500).queue(function () {
+            $(".twentyone").addClass("selected-1");
+            $(this).dequeue()
+        });
+
+    });
+
+</script>
+
+{% endblock script %}

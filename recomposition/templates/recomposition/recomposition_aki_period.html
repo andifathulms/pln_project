@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load humanize %}
+{% load static %}
+
+{% block style %}
+<style>
+    td {
+        vertical-align: middle;
+        text-align: center;
+        color: #161616;
+        
+    }
+</style>
+{% endblock style%}
+
+{% block content %}
+<div class="container-fluid">   
+    <div class="mb-4 shadow card">
+        <div class="py-3 card-header">
+            <div class="row">
+                <div class="col-8">
+                    <h6 class="m-0 font-weight-bold" style="color: #fff;">Daftar Jadwal Rekomposisi</h6>
+                </div>
+                <div class="col-4 ">
+                    <a href="{% url 'recomposition:recomposition-periode-create' %}" class="btn btn-success btn-icon-split btn-sm float-right mr-1">
+                        <span class="icon text-white-50">
+                            <i class="fa-solid fa-file-arrow-up"></i>
+                        </span>
+                        <span class="text">Tambah Jadwal</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Dari</th>
+                            <th>Sampai</th>
+                            <th>Rekom AKI</th>
+                            <th>Rekom AKB</th>
+                            <th style="background-color: #161616;">Dibuat oleh</th>
+                            <th style="background-color: #161616;">Status</th>
+                        </tr>   
+                    </thead>
+                    <tbody>
+                        {% for data in period %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{data.start_date_str}}</td>
+                            <td>{{data.end_date_str}}</td>
+
+                            {% if data.for_rekom_aki %}
+                            <td><i class="fa-solid fa-square-check"></i></td>
+                            {% else %}
+                            <td><i class="fa-solid fa-circle-xmark"></i></td>
+                            {% endif %}
+                            
+                            {% if data.for_rekom_akb %}
+                            <td><i class="fa-solid fa-square-check"></i></td>
+                            {% else %}
+                            <td><i class="fa-solid fa-circle-xmark"></i></td>
+                            {% endif %}
+
+                            <td>{{data.created_by.name}}</td>
+                            
+                            {% if data.status == 0 %}
+                            <td>Berjalan</td>
+                            {% elif data.status == 1 %}
+                            <td>Selesai</td>
+                            {% else %}
+                            <td>Belum</td>
+                            {% endif %}
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block script %}
+<script>
+    
+</script>
+
+
+{% endblock script %}

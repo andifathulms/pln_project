@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load document_tags %}
 {% load mathfilters %}
 
 {% block style %}
@@ -38,6 +39,27 @@
         padding-right: 4px;
     }
 
+    .error-li{
+        font-weight: 600;
+        color: firebrick;
+    }
+
+    .info{
+        border-style: dashed;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+    }
+
+    .edited{
+        background-color: #FFF38C;
+    }
+    .plus{
+        background-color: #377D71;
+    }
+    .minus{
+        background-color: brown;
+    }
     .sum-cell{
         background-color: #161616;
         color: #FCFCFC;
@@ -128,24 +150,52 @@
 
     <div class="row" id="div-1">
     </div>
-    <!-- DataTales Example -->
     <div class="mb-4 shadow card">
         <div class="py-3 card-header">
-            <div class="row">
+            <div class="row"S>
                 <div class="col-8">
-                    <h6 class="m-0 font-weight-bold" style="color: #fff;">Usulan Rekomposisi AKI (Viewing PRK for {{for_div}})</h6>
+                    <h6 class="m-0 font-weight-bold" style="color: #fff;">Usulan Rekomposisi AKI bidang {{for_div}}</h6>
+                    <h6 class="m-0 font-weight-bold" style="color: #fff;">Periode Rekomposisi {{period.start_date}} - {{period.end_date}}</h6>
                 </div>
                 <div class="col-4 ">
-                    <button class="btn btn-info btn-icon-split btn-sm float-right" data-toggle="modal" data-target="#dataSource">
+                    <button class="btn btn-info btn-icon-split float-right" data-toggle="modal" data-target="#dataSource">
                         <span class="icon text-white-50">
                             <i class="fa-solid fa-arrow-pointer"></i>
                         </span>
-                        <span class="text">View Data Source</span>
+                        <span class="text">Data Source</span>
                     </button>
+                    <form method="GET" enctype="multipart/form-data">
+                        <button class="btn btn-success btn-icon-split float-right mr-1" name="check-data" value="check-data">
+                            <span class="icon text-white-50">
+                                <i class="fa-solid fa-magnifying-glass-dollar"></i>
+                            </span>
+                            <span class="text">Check Data</span>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
         <div class="card-body">
+            {% if show_error %}
+            <div class="row">
+            {% else %}
+            <div class="row d-none">
+            {% endif %}
+                <div class="info col-8">
+                    <ul class="m-0">
+                        <li class="error-li">{{error_count_msg}}</li>
+                        <li class="error-li">{{aki_error}}</li>
+                        {% for missing_note in missing_notes %}
+                        <li class="error-li">{{missing_note}}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-4" style="text-align: center;">
+                    <button class="btn btn-success btn-lg w-100" {% if error_count != 0 %}disabled{% endif %}>Kirim Rekomposisi AKI</button>
+                    <p style="font-weight: 800; color:#161616;">Setelah dikirim data tidak dapat diubah lagi</p>
+                </div>
+            </div>
+            
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTableMonev" width="100%" cellspacing="0">
                     <thead>
@@ -168,6 +218,7 @@
                             <td class="sum-cell" id="des"></td>
                             <td class="sum-cell" id="total_realisasi"></td>
                             <td class="sum-cell" id="sisa_aki"></td>
+                            <td class="sum-cell" id="selisih"></td>
                         </tr>
                         <tr>
                             <th rowspan="2">No</th>
@@ -213,7 +264,7 @@
                             <!-- NO PRK -->
                             <td>
                                 <div id="id-{{data.pk}}" class="copy_container">
-                                    <p style="margin: auto;">{{data.prk.no_prk}}</p>
+                                    <p style="margin: auto;">{{data.0.prk.no_prk}}</p>
                                     <div id="copy-{{data.pk}}" class="copy">
                                         <span class="tooltip">Copied PRK Number</span>
                                         <i class="material-icons">content_copy</i>
@@ -221,475 +272,477 @@
                                 </div>
                             </td>
                             <!-- PROGRAM UTAMA -->
-                            <td style="min-width: 165px; text-align: justify;">{{data.prk.program_utama}}</td>
+                            <td style="min-width: 165px; text-align: justify;">{{data.0.prk.program_utama}}</td>
                             
                             <!-- Kegiatan Uraian -->
-                            <td style="min-width: 330px; text-align: justify;">{{data.prk.keg_uraian}}</td>
+                            <td style="min-width: 330px; text-align: justify;">{{data.0.prk.keg_uraian}}</td>
 
                             <!-- AI and AKI For LRPA -->
-                            {% if data.ai_this_year != 0 %}
-                            <td class="currency" >{{data.real_ai}}</td>
+                            {% if data.0.ai_this_year != 0 %}
+                            <td class="currency" >{{data.0.real_ai}}</td>
                             {% else %}
                             <td> - </td>
                             {% endif %}
 
-                            {% if data.ai_this_year != 0 %}
-                            <td class="currency" >{{data.real_aki}}</td>
+                            {% if data.0.ai_this_year != 0 %}
+                            <td class="currency" >{{data.0.real_aki}}</td>
                             {% else %}
                             <td> - </td>
                             {% endif %}
 
                             <!-- Revisi Usulan -->
-                            {% if data.ai_this_year != 0 %}
-                            <td class="currency" >{{data.real_aki}}</td>
+                            {% if data.0.ai_this_year != 0 %}
+                            {% if data.3 > 0 %}
+                            <td class="currency plus">
+                            {% elif data.3 < 0 %}
+                            <td class="currency minus">
+                            {% else %}
+                            <td class="currency">
+                            {% endif %}
+                                {{data.2}}
+                            </td>
                             {% else %}
                             <td> - </td>
                             {% endif %}
+
+                            {% call_method data.0 'get_rencana_month' 1 as rencana_1 %}
+                            {% call_method data.0 'get_rencana_month' 2 as rencana_2 %}
+                            {% call_method data.0 'get_rencana_month' 3 as rencana_3 %}
+                            {% call_method data.0 'get_rencana_month' 4 as rencana_4 %}
+                            {% call_method data.0 'get_rencana_month' 5 as rencana_5 %}
+                            {% call_method data.0 'get_rencana_month' 6 as rencana_6 %}
+                            {% call_method data.0 'get_rencana_month' 7 as rencana_7 %}
+                            {% call_method data.0 'get_rencana_month' 8 as rencana_8 %}
+                            {% call_method data.0 'get_rencana_month' 9 as rencana_9 %}
+                            {% call_method data.0 'get_rencana_month' 10 as rencana_10 %}
+                            {% call_method data.0 'get_rencana_month' 11 as rencana_11 %}
+                            {% call_method data.0 'get_rencana_month' 12 as rencana_12 %}
+
+                            {% call_method data.0 'get_realisasi_month' 1 as realisasi_1 %}
+                            {% call_method data.0 'get_realisasi_month' 2 as realisasi_2 %}
+                            {% call_method data.0 'get_realisasi_month' 3 as realisasi_3 %}
+                            {% call_method data.0 'get_realisasi_month' 4 as realisasi_4 %}
+                            {% call_method data.0 'get_realisasi_month' 5 as realisasi_5 %}
+                            {% call_method data.0 'get_realisasi_month' 6 as realisasi_6 %}
+                            {% call_method data.0 'get_realisasi_month' 7 as realisasi_7 %}
+                            {% call_method data.0 'get_realisasi_month' 8 as realisasi_8 %}
+                            {% call_method data.0 'get_realisasi_month' 9 as realisasi_9 %}
+                            {% call_method data.0 'get_realisasi_month' 10 as realisasi_10 %}
+                            {% call_method data.0 'get_realisasi_month' 11 as realisasi_11 %}
+                            {% call_method data.0 'get_realisasi_month' 12 as realisasi_12 %}
 
                             <!-- Disburse data, taken from LRPA -->
-                            {% if data.edit_jan %}
-                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=1 %}" 
+                            {% if data.1.jan %} <!--IF THERE IS AN EDIT-->
+                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=1 %}" 
                                         hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
                                         _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-1-{{data.prk.pk}}">{{data.edit_jan}}</td>
+                                        id="target-1-{{data.0.prk.pk}}">{{data.1.jan}}
+                                </td>
                             {% else %}
-                                {% if month >= 1 %}
-                                    {% if data.mou_jan and month == 1 %}
-                                        <td class="cell currency mou">{{data.mou_jan|floatformat}}</td>
-                                    {% elif data.jan_realisasi_disburse != "0" %}
-                                        <td class="currency" >{{data.jan_realisasi_disburse|floatformat}}</td>
+                                {% if month >= 1 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_1 == "0" or realisasi_1 == "0.0" %}
+                                        <td class="cell"> - </td>
                                     {% else %}
-                                        <td class="cell" > - </td>
+                                        <td class="cell currency">{{realisasi_1|floatformat}}</td>
                                     {% endif %}
-                                {% else %}
-                                    {% if data.jan_rencana_disburse != "0" %}
-                                        <td class="cell currency"
-                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=1 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-1-{{data.prk.pk}}">{{data.jan_rencana_disburse|floatformat}}</td>
-                                    {% else %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_1 == "0" or rencana_1 == "0.0" %}
                                         <td class="cell"
-                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=1 %}" 
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=1 %}" 
                                         hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
                                         _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-1-{{data.prk.pk}}"> - </td>
+                                        id="target-1-{{data.0.prk.pk}}"> - </td>
+                                    {% else %}
+                                        <td class="cell currency"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=1 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-1-{{data.0.prk.pk}}">{{rencana_1|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+
+                            {% if data.1.feb %} <!--IF THERE IS AN EDIT-->
+                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=2 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-2-{{data.0.prk.pk}}">{{data.1.feb}}
+                                </td>
+                            {% else %}
+                                {% if month >= 2 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_2 == "0" or realisasi_2 == "0.0" %}
+                                        <td class="cell"> - </td>
+                                    {% else %}
+                                        <td class="cell currency">{{realisasi_2|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_2 == "0" or rencana_2 == "0.0" %}
+                                        <td class="cell"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=2 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-2-{{data.0.prk.pk}}"> - </td>
+                                    {% else %}
+                                        <td class="cell currency"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=2 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-2-{{data.0.prk.pk}}">{{rencana_2|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+
+                            {% if data.1.mar %} <!--IF THERE IS AN EDIT-->
+                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=3 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-3-{{data.0.prk.pk}}">{{data.1.mar}}
+                                </td>
+                            {% else %}
+                                {% if month >= 3 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_3 == "0" or realisasi_3 == "0.0" %}
+                                        <td class="cell"> - </td>
+                                    {% else %}
+                                        <td class="cell currency">{{realisasi_3|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_3 == "0" or rencana_3 == "0.0" %}
+                                        <td class="cell"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=3 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-3-{{data.0.prk.pk}}"> - </td>
+                                    {% else %}
+                                        <td class="cell currency"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=3 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-3-{{data.0.prk.pk}}">{{rencana_3|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+
+                            {% if data.1.apr %} <!--IF THERE IS AN EDIT-->
+                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=4 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-4-{{data.0.prk.pk}}">{{data.1.apr}}
+                                </td>
+                            {% else %}
+                                {% if month >= 4 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_4 == "0" or realisasi_4 == "0.0" %}
+                                        <td class="cell"> - </td>
+                                    {% else %}
+                                        <td class="cell currency">{{realisasi_4|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_4 == "0" or rencana_4 == "0.0" %}
+                                        <td class="cell"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=4 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-4-{{data.0.prk.pk}}"> - </td>
+                                    {% else %}
+                                        <td class="cell currency"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=4 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-4-{{data.0.prk.pk}}">{{rencana_4|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+
+                            {% if data.1.mei %} <!--IF THERE IS AN EDIT-->
+                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=5 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-5-{{data.0.prk.pk}}">{{data.1.mei}}
+                                </td>
+                            {% else %}
+                                {% if month >= 5 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_5 == "0" or realisasi_5 == "0.0" %}
+                                        <td class="cell"> - </td>
+                                    {% else %}
+                                        <td class="cell currency">{{realisasi_5|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_5 == "0" or rencana_5 == "0.0" %}
+                                        <td class="cell"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=5 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-5-{{data.0.prk.pk}}"> - </td>
+                                    {% else %}
+                                        <td class="cell currency"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=5 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-5-{{data.0.prk.pk}}">{{rencana_5|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+
+                            {% if data.1.jun %} <!--IF THERE IS AN EDIT-->
+                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=6 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-6-{{data.0.prk.pk}}">{{data.1.jun}}
+                                </td>
+                            {% else %}
+                                {% if month >= 6 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_6 == "0" or realisasi_6 == "0.0" %}
+                                        <td class="cell"> - </td>
+                                    {% else %}
+                                        <td class="cell currency">{{realisasi_6|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_6 == "0" or rencana_6 == "0.0" %}
+                                        <td class="cell"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=6 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-6-{{data.0.prk.pk}}"> - </td>
+                                    {% else %}
+                                        <td class="cell currency"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=6 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-6-{{data.0.prk.pk}}">{{rencana_6|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+
+                            {% if data.1.jul %} <!--IF THERE IS AN EDIT-->
+                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=7 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-7-{{data.0.prk.pk}}">{{data.1.jul}}
+                                </td>
+                            {% else %}
+                                {% if month >= 7 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_7 == "0" or realisasi_7 == "0.0" %}
+                                        <td class="cell"> - </td>
+                                    {% else %}
+                                        <td class="cell currency">{{realisasi_7|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_7 == "0" or rencana_7 == "0.0" %}
+                                        <td class="cell"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=7 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-7-{{data.0.prk.pk}}"> - </td>
+                                    {% else %}
+                                        <td class="cell currency"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=7 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-7-{{data.0.prk.pk}}">{{rencana_7|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+
+                            {% if data.1.aug %} <!--IF THERE IS AN EDIT-->
+                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=8 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-8-{{data.0.prk.pk}}">{{data.1.aug}}
+                                </td>
+                            {% else %}
+                                {% if month >= 8 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_8 == "0" or realisasi_8 == "0.0" %}
+                                        <td class="cell"> - </td>
+                                    {% else %}
+                                        <td class="cell currency">{{realisasi_8|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_8 == "0" or rencana_8 == "0.0" %}
+                                        <td class="cell"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=8 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-8-{{data.0.prk.pk}}"> - </td>
+                                    {% else %}
+                                        <td class="cell currency"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=8 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-8-{{data.0.prk.pk}}">{{rencana_8|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+
+                            {% if data.1.sep %} <!--IF THERE IS AN EDIT-->
+                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=9 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-9-{{data.0.prk.pk}}">{{data.1.sep}}
+                                </td>
+                            {% else %}
+                                {% if month >= 9 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_9 == "0" or realisasi_9 == "0.0" %}
+                                        <td class="cell"> - </td>
+                                    {% else %}
+                                        <td class="cell currency">{{realisasi_9|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_9 == "0" or rencana_9 == "0.0" %}
+                                        <td class="cell"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=9 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-9-{{data.0.prk.pk}}"> - </td>
+                                    {% else %}
+                                        <td class="cell currency"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=9 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-9-{{data.0.prk.pk}}">{{rencana_9|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
+
+                            {% if data.1.okt %} <!--IF THERE IS AN EDIT-->
+                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=10 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-10-{{data.0.prk.pk}}">{{data.1.okt}}
+                                </td>
+                            {% else %}
+                                {% if month >= 10 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_10 == "0" or realisasi_10 == "0.0" %}
+                                        <td class="cell"> - </td>
+                                    {% else %}
+                                        <td class="cell currency">{{realisasi_10|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_10 == "0" or rencana_10 == "0.0" %}
+                                        <td class="cell"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=10 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-10-{{data.0.prk.pk}}"> - </td>
+                                    {% else %}
+                                        <td class="cell currency"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=10 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-10-{{data.0.prk.pk}}">{{rencana_10|floatformat}}</td>
                                     {% endif %}
                                 {% endif %}
                             {% endif %}
                             
-                            {% if data.edit_feb %}
-                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=2 %}" 
+                            {% if data.1.nov %} <!--IF THERE IS AN EDIT-->
+                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=11 %}" 
                                         hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
                                         _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-2-{{data.prk.pk}}">{{data.edit_feb}}</td>
+                                        id="target-11-{{data.0.prk.pk}}">{{data.1.nov}}
+                                </td>
                             {% else %}
-                                {% if month >= 2 %}
-                                    {% if data.mou_feb and month == 2 %}
-                                        <td class="cell currency mou">{{data.mou_feb|floatformat}}</td>
-                                    {% elif data.feb_realisasi_disburse != "0" %}
-                                        <td class="currency">{{data.feb_realisasi_disburse|floatformat}}</td>
-                                    {% else %}
+                                {% if month >= 11 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_11 == "0" or realisasi_11 == "0.0" %}
                                         <td class="cell"> - </td>
-                                    {% endif %}
-                                {% else %}
-                                    {% if data.mou_feb and month < 2 %}
-                                        <td class="cell currency mou" 
-                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=2 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-2-{{data.prk.pk}}">{{data.mou_feb|floatformat}}</td>
-                                    {% elif data.feb_rencana_disburse != "0" %}
-                                        <td class="currency" 
-                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=2 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-2-{{data.prk.pk}}">{{data.feb_rencana_disburse|floatformat}}</td>
                                     {% else %}
-                                        <td class="cell" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=2 %}" 
+                                        <td class="cell currency">{{realisasi_11|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_11 == "0" or rencana_11 == "0.0" %}
+                                        <td class="cell"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=11 %}" 
                                         hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
                                         _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-2-{{data.prk.pk}}"> - </td>
+                                        id="target-11-{{data.0.prk.pk}}"> - </td>
+                                    {% else %}
+                                        <td class="cell currency"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=11 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-11-{{data.0.prk.pk}}">{{rencana_11|floatformat}}</td>
                                     {% endif %}
                                 {% endif %}
                             {% endif %}
                             
-                            {% if data.edit_mar %}
-                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=3 %}" 
+                            {% if data.1.des %} <!--IF THERE IS AN EDIT-->
+                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=12 %}" 
                                         hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
                                         _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-3-{{data.prk.pk}}">{{data.edit_mar}}</td>
+                                        id="target-12-{{data.0.prk.pk}}">{{data.1.des}}
+                                </td>
                             {% else %}
-                                {% if month >= 3 %}
-                                    {% if data.mou_mar and month == 3 %}
-                                        <td class="cell currency mou">{{data.mou_mar|floatformat}}</td>
-                                    {% elif data.mar_realisasi_disburse != "0" %}
-                                        <td class="currency">{{data.mar_realisasi_disburse|floatformat}}</td>
-                                    {% else %}
+                                {% if month >= 12 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_12 == "0" or realisasi_12 == "0.0" %}
                                         <td class="cell"> - </td>
-                                    {% endif %}
-                                {% else %}
-                                    {% if data.mou_mar and month < 3 %}
-                                        <td class="cell currency mou" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=3 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-3-{{data.prk.pk}}">{{data.mou_mar|floatformat}}</td>
-                                    {% elif data.mar_rencana_disburse != "0" %}
-                                        <td class="currency" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=3 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-3-{{data.prk.pk}}">{{data.mar_rencana_disburse|floatformat}}</td>
                                     {% else %}
-                                        <td class="cell" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=3 %}" 
+                                        <td class="cell currency">{{realisasi_12|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_12 == "0" or rencana_12 == "0.0" %}
+                                        <td class="cell"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=12 %}" 
                                         hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
                                         _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-3-{{data.prk.pk}}"> - </td>
+                                        id="target-12-{{data.0.prk.pk}}"> - </td>
+                                    {% else %}
+                                        <td class="cell currency"
+                                        hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=12 %}" 
+                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                                        id="target-12-{{data.0.prk.pk}}">{{rencana_12|floatformat}}</td>
                                     {% endif %}
                                 {% endif %}
                             {% endif %}
 
-                            {% if data.edit_apr %}
-                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=4 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-4-{{data.prk.pk}}">{{data.edit_apr}}</td>
-                            {% else %}
-                                {% if month >= 4 %}
-                                    {% if data.mou_apr and month == 4 %}
-                                        <td class="cell currency mou">{{data.mou_apr|floatformat}}</td>
-                                    {% elif data.apr_realisasi_disburse != "0" %}
-                                        <td class="currency">{{data.apr_realisasi_disburse|floatformat}}</td>
-                                    {% else %}
-                                        <td class="cell"> - </td>
-                                    {% endif %}
-                                {% else %}
-                                    {% if data.mou_apr and month < 4 %}
-                                        <td class="cell currency mou" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=4 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-4-{{data.prk.pk}}">{{data.mou_apr|floatformat}}</td>
-                                    {% elif data.apr_rencana_disburse != "0" %}
-                                        <td class="currency" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=4 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-4-{{data.prk.pk}}">{{data.apr_rencana_disburse|floatformat}}</td>
-                                    {% else %}
-                                        <td class="cell" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=4 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-4-{{data.prk.pk}}"> - </td>
-                                    {% endif %}
-                                {% endif %}
-                            {% endif %}
-
-                            {% if data.edit_mei %}
-                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=5 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-5-{{data.prk.pk}}">{{data.edit_mei}}</td>
-                            {% else %}
-                                {% if month >= 5 %}
-                                    {% if data.mou_mei and month == 5 %}
-                                        <td class="cell currency mou">{{data.mou_mei|floatformat}}</td>
-                                    {% elif data.mei_realisasi_disburse != "0" %}
-                                        <td class="currency">{{data.mei_realisasi_disburse|floatformat}}</td>
-                                    {% else %}
-                                        <td class="cell"> - </td>
-                                    {% endif %}
-                                {% else %}
-                                    {% if data.mou_mei and month < 5 %}
-                                        <td class="cell currency mou" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=5 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-5-{{data.prk.pk}}">{{data.mou_mei|floatformat}}</td>
-                                    {% elif data.mei_rencana_disburse != "0" %}
-                                        <td class="currency" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=5 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-5-{{data.prk.pk}}">{{data.mei_rencana_disburse|floatformat}}</td>
-                                    {% else %}
-                                        <td class="cell" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=5 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-5-{{data.prk.pk}}"> - </td>
-                                    {% endif %}
-                                {% endif %}
-                            {% endif %}
-
-                            {% if data.edit_jun %}
-                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=6 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-6-{{data.prk.pk}}">{{data.edit_jun}}</td>
-                            {% else %}
-                                {% if month >= 6 %}
-                                    {% if data.mou_jun and month == 6 %}
-                                        <td class="cell currency mou">{{data.mou_jun|floatformat}}</td>
-                                    {% elif data.jun_realisasi_disburse != "0" %}
-                                        <td class="currency">{{data.jun_realisasi_disburse|floatformat}}</td>
-                                    {% else %}
-                                        <td class="cell"> - </td>
-                                    {% endif %}
-                                {% else %}
-                                    {% if data.mou_jun and month < 6 %}
-                                        <td class="cell currency mou" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=6 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-6-{{data.prk.pk}}">{{data.mou_jun|floatformat}}</td>
-                                    {% elif data.jun_rencana_disburse != "0" %}
-                                        <td class="currency" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=6 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-6-{{data.prk.pk}}">{{data.jun_rencana_disburse|floatformat}}</td>
-                                    {% else %}
-                                        <td class="cell" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=6 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-6-{{data.prk.pk}}"> - </td>
-                                    {% endif %}
-                                {% endif %}
-                            {% endif %}
-
-                            {% if data.edit_jul %}
-                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=7 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-7-{{data.prk.pk}}">{{data.edit_jul}}</td>
-                            {% else %}
-                                {% if month >= 7 %}
-                                    {% if data.mou_jul and month == 7 %}
-                                        <td class="cell currency mou">{{data.mou_jul|floatformat}}</td>
-                                    {% elif data.jul_realisasi_disburse != "0" %}
-                                        <td class="currency">{{data.jul_realisasi_disburse|floatformat}}</td>
-                                    {% else %}
-                                        <td class="cell"> - </td>
-                                    {% endif %}
-                                {% else %}
-                                    {% if data.mou_jul and month < 7 %}
-                                        <td class="cell currency mou" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=7 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-7-{{data.prk.pk}}">{{data.mou_jul|floatformat}}</td>
-                                    {% elif data.jul_rencana_disburse != "0" %}
-                                        <td class="currency" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=7 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-7-{{data.prk.pk}}">{{data.jul_rencana_disburse|floatformat}}</td>
-                                    {% else %}
-                                        <td class="cell" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=7 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-7-{{data.prk.pk}}"> - </td>
-                                    {% endif %}
-                                {% endif %}
-                            {% endif %}
-                            
-                            {% if data.edit_aug %}
-                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=8 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-8-{{data.prk.pk}}">{{data.edit_aug}}</td>
-                            {% else %}
-                                {% if month >= 8 %}
-                                    {% if data.mou_aug and month == 8 %}
-                                        <td class="cell currency mou">{{data.mou_aug|floatformat}}</td>
-                                    {% elif data.aug_realisasi_disburse != "0" %}
-                                        <td class="currency">{{data.aug_realisasi_disburse|floatformat}}</td>
-                                    {% else %}
-                                        <td class="cell"> - </td>
-                                    {% endif %}
-                                {% else %}
-                                    {% if data.mou_aug and month < 8 %}
-                                        <td class="cell currency mou" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=8 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-8-{{data.prk.pk}}">{{data.mou_aug|floatformat}}</td>
-                                    {% elif data.aug_rencana_disburse != "0" %}
-                                        <td class="currency" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=8 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-8-{{data.prk.pk}}">{{data.aug_rencana_disburse|floatformat}}</td>
-                                    {% else %}
-                                        <td class="cell" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=8 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-8-{{data.prk.pk}}"> - </td>
-                                    {% endif %}
-                                {% endif %}
-                            {% endif %}
-
-                            {% if data.edit_sep %}
-                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=9 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-9-{{data.prk.pk}}">{{data.edit_sep}}</td>
-                            {% else %}
-                                {% if month >= 9 %}
-                                    {% if data.mou_sep and month == 9 %}
-                                        <td class="cell currency mou">{{data.mou_sep|floatformat}}</td>
-                                    {% elif data.sep_realisasi_disburse != "0" %}
-                                        <td class="currency">{{data.sep_realisasi_disburse|floatformat}}</td>
-                                    {% else %}
-                                        <td class="cell"> - </td>
-                                    {% endif %}
-                                {% else %}
-                                    {% if data.mou_sep and month < 9 %}
-                                        <td class="cell currency mou" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=9 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-9-{{data.prk.pk}}">{{data.mou_sep|floatformat}}</td>
-                                    {% elif data.sep_rencana_disburse != "0" %}
-                                        <td class="currency" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=9 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-9-{{data.prk.pk}}">{{data.sep_rencana_disburse|floatformat}}</td>
-                                    {% else %}
-                                        <td class="cell" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=9 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-9-{{data.prk.pk}}"> - </td>
-                                    {% endif %}
-                                {% endif %}
-                            {% endif %}
-                            
-                            {% if data.edit_okt %}
-                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=10 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-10-{{data.prk.pk}}">{{data.edit_okt}}</td>
-                            {% else %}
-                                {% if month >= 10 %}
-                                    {% if data.mou_okt and month == 10 %}
-                                        <td class="cell currency mou">{{data.mou_okt|floatformat}}</td>
-                                    {% elif data.okt_realisasi_disburse != "0" %}
-                                        <td class="currency">{{data.okt_realisasi_disburse|floatformat}}</td>
-                                    {% else %}
-                                        <td class="cell"> - </td>
-                                    {% endif %}
-                                {% else %}
-                                    {% if data.mou_okt and month < 10 %}
-                                        <td class="cell currency mou" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=10 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-10-{{data.prk.pk}}">{{data.mou_sep|floatformat}}</td>
-                                    {% elif data.okt_rencana_disburse != "0" %}
-                                        <td class="currency" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=10 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-10-{{data.prk.pk}}">{{data.okt_rencana_disburse|floatformat}}</td>
-                                    {% else %}
-                                        <td class="cell" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=10 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-10-{{data.prk.pk}}"> - </td>
-                                    {% endif %}
-                                {% endif %}
-                            {% endif %}
-                            
-                            {% if data.edit_nov %}
-                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=11 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-11-{{data.prk.pk}}">{{data.edit_nov}}</td>
-                            {% else %}
-                                {% if month >= 11 %}
-                                    {% if data.mou_nov and month == 11 %}
-                                        <td class="cell currency mou">{{data.mou_nov|floatformat}}</td>
-                                    {% elif data.nov_realisasi_disburse != "0" %}
-                                        <td class="currency">{{data.nov_realisasi_disburse|floatformat}}</td>
-                                    {% else %}
-                                        <td class="cell"> - </td>
-                                    {% endif %}
-                                {% else %}
-                                    {% if data.mou_nov and month < 11 %}
-                                        <td class="cell currency mou" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=11 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-11-{{data.prk.pk}}">{{data.mou_nov|floatformat}}</td>
-                                    {% elif data.nov_rencana_disburse != "0" %}
-                                        <td class="currency" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=11 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-11-{{data.prk.pk}}">{{data.nov_rencana_disburse|floatformat}}</td>
-                                    {% else %}
-                                        <td class="cell" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=11 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-11-{{data.prk.pk}}"> - </td>
-                                    {% endif %}
-                                {% endif %}
-                            {% endif %}
-
-                            {% if data.edit_des %}
-                                <td class="cell currency edited" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=12 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-12-{{data.prk.pk}}">{{data.edit_des}}</td>
-                            {% else %}
-                                {% if month >= 12 %}
-                                    {% if data.mou_des and month == 12 %}
-                                        <td class="cell currency mou">{{data.mou_des|floatformat}}</td>
-                                    {% elif data.des_realisasi_disburse != "0" %}
-                                        <td class="currency">{{data.des_realisasi_disburse|floatformat}}</td>
-                                    {% else %}
-                                        <td class="cell"> - </td>
-                                    {% endif %}
-                                {% else %}
-                                    {% if data.mou_des and month < 12 %}
-                                        <td class="cell currency mou" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=12 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-12-{{data.prk.pk}}">{{data.mou_des|floatformat}}</td>
-                                    {% elif data.des_rencana_disburse != "0" %}
-                                        <td class="currency" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=12 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-12-{{data.prk.pk}}">{{data.des_rencana_disburse|floatformat}}</td>
-                                    {% else %}
-                                        <td class="cell" hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.prk.pk month=12 %}" 
-                                        hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
-                                        _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
-                                        id="target-12-{{data.prk.pk}}"> - </td>
-                                    {% endif %}
-                                {% endif %}
-                            {% endif %}
-
-                            {% if data.sum_realisasi != 0 %}
-                            <td class="currency">{{data.sum_realisasi}}</td>
+                            {% if data.0.get_total_realisasi != 0 %}
+                            <td class="currency">{{data.0.get_total_realisasi}}</td>
                             {% else %}
                             <td> - </td>
                             {% endif %}
 
-                            {% if data.sisa_aki != 0 %}
-                            <td class="currency">{{data.sisa_aki}}</td>
+                            {% if data.0.get_sisa_aki != 0 %}
+                            <td class="currency">{{data.0.get_sisa_aki}}</td>
                             {% else %}
                             <td> - </td>
                             {% endif %}
-
-                            <td>{{data.sum_realisasi|sub:data.sum_edit}} </td>
-                            <td></td>
+                            
+                            {% if data.3 != 0 %}
+                            <td class="currency">{{data.3}}</td>
+                            {% else %}
+                            <td> - </td>
+                            {% endif %}
+                                                        
+                            {% if data.1.notes %}
+                            <td hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=0 %}" 
+                            hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                            _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                            id="target-0-{{data.0.prk.pk}}">{{data.1.notes}}</td>
+                            {% else %}
+                            <td hx-get="{% url 'recomposition:recomposition-edit-prk' pk=data.0.prk.pk month=0 %}" 
+                            hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" 
+                            _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" 
+                            id="target-0-{{data.0.prk.pk}}">-</td>
+                            {% endif %}
 
                             <!-- PRK Kode -->
-                            {% if data.prk.kode_prk %}
-                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.prk.pk type=1 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-1-{{data.prk.pk}}">{{data.prk.kode_prk}}</td>
+                            {% if data.0.prk.kode_prk %}
+                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.0.prk.pk type=1 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-1-{{data.0.prk.pk}}">{{data.0.prk.kode_prk}}</td>
                             {% else %}
-                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.prk.pk type=1 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-1-{{data.prk.pk}}">-</td>
+                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.0.prk.pk type=1 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-1-{{data.0.prk.pk}}">-</td>
                             {% endif %}
 
-                            {% if data.prk.kode_bpo %}
-                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.prk.pk type=2 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-2-{{data.prk.pk}}">{{data.prk.kode_bpo}}</td>
+                            {% if data.0.prk.kode_bpo %}
+                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.0.prk.pk type=2 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-2-{{data.0.prk.pk}}">{{data.0.prk.kode_bpo}}</td>
                             {% else %}
-                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.prk.pk type=2 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-2-{{data.prk.pk}}">-</td>
+                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.0.prk.pk type=2 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-2-{{data.0.prk.pk}}">-</td>
                             {% endif %}
 
-                            {% if data.prk.rekap_user_induk %}
-                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.prk.pk type=3 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-3-{{data.prk.pk}}">{{data.prk.rekap_user_induk}}</td>
+                            {% if data.0.prk.rekap_user_induk %}
+                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.0.prk.pk type=3 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-3-{{data.0.prk.pk}}">{{data.0.prk.rekap_user_induk}}</td>
                             {% else %}
-                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.prk.pk type=3 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-3-{{data.prk.pk}}">-</td>
+                            <td hx-get="{% url 'monev:monev-edit-prk' pk=data.0.prk.pk type=3 %}" hx-target="#modals-here" hx-trigger="click" hx-swap="innerHTML" _="on htmx:afterOnLoad wait 10ms then add .show to #modal then add .show to #modal-backdrop" id="target-3-{{data.0.prk.pk}}">-</td>
                             {% endif %}
 
-                            {% if data.mekanisme_pembayaran %}
-                            <td>{{data.mekanisme_pembayaran}}</td>
+                            {% if data.0.mekanisme_pembayaran %}
+                            <td>{{data.0.mekanisme_pembayaran}}</td>
                             {% else %}
                             <td> - </td>
                             {% endif %}
@@ -729,39 +782,18 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>SKAI</td>
-                            <td><a href="">{{document.0.keyword}}</a></td>
-                            <td>{{document.0.document.published_date|date:"d M Y"}}</td>
-                            <td>{{document.0.document.upload_date}}</td>
-                            <td>{{document.0.document.uploader}}</td>
-                        </tr>
-                        <tr>
-                            <td>SKAI</td>
-                            <td><a href="">{{document.3.keyword}}</a></td>
-                            <td>{{document.3.document.published_date|date:"d M Y"}}</td>
-                            <td>{{document.3.document.upload_date}}</td>
-                            <td>{{document.3.document.uploader}}</td>
-                        </tr>
-                        <tr>
-                            <td>SKAI</td>
-                            <td><a href="">{{document.1.keyword}}</a></td>
-                            <td>{{document.1.document.published_date|date:"d M Y"}}</td>
-                            <td>{{document.1.document.upload_date}}</td>
-                            <td>{{document.1.document.uploader}}</td>
-                        </tr>
-                        <tr>
                             <td>LRPA</td>
-                            <td>LRPA bulan : {{document.2.for_month}}</td>
-                            <td>{{document.2.file_export_date|date:"d M Y"}}</td>
-                            <td>{{document.2.upload_date}}</td>
-                            <td>{{document.2.upload_by}}</td>
+                            <td>LRPA bulan : {{document.0.for_month}}</td>
+                            <td>{{document.0.file_export_date|date:"d M Y"}}</td>
+                            <td>{{document.0.upload_date}}</td>
+                            <td>{{document.0.upload_by}}</td>
                         </tr>
                         <tr>
                             <td>Daftar MOU Pengalihan</td>
-                            <td>Tarikan FIX bulan : {{document.4.for_month}}</td>
-                            <td>{{document.4.file_export_date|date:"d M Y"}}</td>
-                            <td>{{document.4.upload_date}}</td>
-                            <td>{{document.4.upload_by}}</td>
+                            <td>Lembar kerja pengalihan : {{document.1.for_month}}</td>
+                            <td>{{document.1.file_export_date|date:"d M Y"}}</td>
+                            <td>{{document.1.upload_date}}</td>
+                            <td>{{document.1.upload_by}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -823,10 +855,11 @@
 
                 var total_realisasi = api.column(19, {search: 'applied'}).data();
                 var sisa_aki = api.column(20, {search: 'applied'}).data();
+                var selisih = api.column(21, {search: 'applied'}).data();
 
                 //alert( Object.keys(data_ai_1).length );
 
-                var listColumn = [ai_lrpa, aki_lrpa,revisi_usulan, jan, feb, mar, apr, mei, jun, jul, aug, sep, okt, nov, des, total_realisasi, sisa_aki]
+                var listColumn = [ai_lrpa, aki_lrpa,revisi_usulan, jan, feb, mar, apr, mei, jun, jul, aug, sep, okt, nov, des, total_realisasi, sisa_aki, selisih]
 
                 var reduceColumn = []
                 for (var obj in listColumn){
@@ -860,6 +893,7 @@
 
                 $('#total_realisasi').html(Number(reduceColumn[15]).toLocaleString('id'));
                 $('#sisa_aki').html(Number(reduceColumn[16]).toLocaleString('id'));
+                $('#selisih').html(Number(reduceColumn[17]).toLocaleString('id'));
             }
         });
 
@@ -906,15 +940,27 @@
 
     htmx.on("htmx:beforeSwap", (e) => {
         // Empty response not targeting #onChgArea => hide the modal
-        console.log("Before Swap")
-        console.log(e.detail.target.id)
         if (e.detail.target.id != "onChgArea") {
-            console.log("If")
             closeModal()
             e.detail.shouldSwap = false
         }
     })
 
+    htmx.on("htmx:afterSwap", (e) => {
+        // Empty response not targeting #onChgArea => hide the modal
+        console.log("After Swap")
+        if (e.detail.target.id != "onChgArea") {
+            console.log("not onchanged")
+            console.log(e.detail.requestConfig)
+            console.log(e.detail.requestConfig.triggeringEvent.submitter.name)
+            if (e.detail.requestConfig.triggeringEvent.submitter.name == "delete"){
+                htmx.removeClass(htmx.find('#'+e.detail.target.id), 'edited', 1000);
+            }else{
+                htmx.addClass(htmx.find('#'+e.detail.target.id), 'edited', 1000);
+            }
+            
+        }
+    })
 
     $("[id^=copy-").on("click", function(e){
         e.preventDefault();

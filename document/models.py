@@ -8,7 +8,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 
 from notification.models import Notification
 from monev.models import LRPA_File, FileMouPengalihan
-from recomposition.models import UsulanRekomposisiData
+from recomposition.models import UsulanRekomposisiAKIData
 
 from datetime import datetime
 
