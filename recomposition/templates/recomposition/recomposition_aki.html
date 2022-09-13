@@ -152,7 +152,7 @@
     </div>
     <div class="mb-4 shadow card">
         <div class="py-3 card-header">
-            <div class="row"S>
+            <div class="row">
                 <div class="col-8">
                     <h6 class="m-0 font-weight-bold" style="color: #fff;">Usulan Rekomposisi AKI bidang {{for_div}}</h6>
                     <h6 class="m-0 font-weight-bold" style="color: #fff;">Periode Rekomposisi {{period.start_date}} - {{period.end_date}}</h6>
@@ -164,8 +164,8 @@
                         </span>
                         <span class="text">Data Source</span>
                     </button>
-                    <form method="GET" enctype="multipart/form-data">
-                        <button class="btn btn-success btn-icon-split float-right mr-1" name="check-data" value="check-data">
+                    <form method="GET" enctype="multipart/form-data"> {% csrf_token %}
+                        <button class="btn btn-success btn-icon-split float-right mr-1" name="check-data" value="ok">
                             <span class="icon text-white-50">
                                 <i class="fa-solid fa-magnifying-glass-dollar"></i>
                             </span>
@@ -191,8 +191,11 @@
                     </ul>
                 </div>
                 <div class="col-4" style="text-align: center;">
-                    <button class="btn btn-success btn-lg w-100" {% if error_count != 0 %}disabled{% endif %}>Kirim Rekomposisi AKI</button>
-                    <p style="font-weight: 800; color:#161616;">Setelah dikirim data tidak dapat diubah lagi</p>
+                    <form method="POST" enctype="multipart/form-data"> {% csrf_token %}
+                        <input type="hidden" name="draft-pk" value="{{draft_pk}}">
+                        <button class="btn btn-success btn-lg w-100" name="send-data" value="ok" {% if error_count != 0 %}disabled{% endif %}>Kirim Rekomposisi AKI</button>
+                        <p style="font-weight: 800; color:#161616;">Setelah dikirim data tidak dapat diubah lagi</p>
+                    </form>
                 </div>
             </div>
             
