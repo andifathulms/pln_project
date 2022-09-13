@@ -247,6 +247,10 @@ class PRKData(models.Model):
             else:
                 return self.des_rencana
 
+    def get_current_month_realisasi(self):
+        month = this_month()
+        return int(float(self.get_realisasi_month(month)))
+    
     def get_total_realisasi(self):
         return sum([int(float(self.get_realisasi_month(i))) for i in range(1,13)])
     
@@ -254,7 +258,7 @@ class PRKData(models.Model):
         return self.real_aki() - self.get_total_realisasi()
     
     def get_usulan(self):
-        usulan = UsulanRekomposisiData.objects.filter(prk=self.prk).first()
+        usulan = UsulanRekomposisiAKIData.objects.filter(prk=self.prk).first()
         return usulan
     
     def get_sisa_aki_pct(self):

@@ -116,6 +116,8 @@ class RecompositionAKI(LoginRequiredMixin, View):
                             temp_usulan = temp_usulan + int(float(data.get_rencana_month(i) or 0))
                             if usulan_data.prk.no_prk == "2019.USLU.5.001": print(i, int(float(data.get_rencana_month(i) or 0)))
                     
+                    temp_usulan -= data.get_current_month_realisasi()
+                    
                     selisih_usulan = temp_usulan - data.real_aki()
 
                     combine_list.append((data,usulan_data,temp_usulan,selisih_usulan))
