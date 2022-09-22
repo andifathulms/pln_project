@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import View
 
-from django.db.models import Sum, OuterRef, Subquery, F, Value
+from django.db.models import Sum, OuterRef, Subquery, F, Value, Count, Case, When
 from django.db.models.functions import Round
 from document.models import DocSKAI, MacroData
 
@@ -67,7 +67,7 @@ class RecompositionAKI(LoginRequiredMixin, View):
         context = {}
         context["month"] = this_month()
         combine_list = []
-
+        rekap_list = []
         # GET LATEST PERIOD
         period = UsulanPeriod.objects.order_by('-pk').first()
         context["period"] = period
@@ -83,17 +83,29 @@ class RecompositionAKI(LoginRequiredMixin, View):
         division = request.user.division
 
         if division in ["ANG", "KEU", "Super Admin"]:
+            
             # GET ALL VIEW
             rekap_user = ["REN", "PPK", "OPK 1", "OPK 2", "K3L"]
             
             total_usulan = 0
             missing_notes = []
             
+            for_div = ""
+
             for user in rekap_user:
                 lrpa = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa, prk__rekap_user_induk=user)
                 
                 #GET LATEST DRAFT
                 draft = UsulanRekomposisiAKI.objects.get(division=user, period=period)
+                query_data = UsulanRekomposisiAKIData.objects.filter(file=draft, prk__rekap_user_induk=user)
+                count_chg  = query_data.aggregate(chg=Count(Case(When(is_changed=True, then=1))))
+                rekap_list.append((user,count_chg["chg"],draft.last_edit_date, draft.is_publish, draft.proposed_by, draft.upload_date))
+
+                if draft.is_publish == False:
+                    continue
+                
+                for_div += user
+                for_div += " "
 
                 #IF USULAN DATA NOT CREATED YET
                 if not draft.is_data_created:
@@ -110,11 +122,9 @@ class RecompositionAKI(LoginRequiredMixin, View):
                     temp_usulan = data.get_total_realisasi()
                     for i in range(this_month(),13):
                         if usulan_data.get_rencana_bulan(i):
-                            temp_usulan = temp_usulan + usulan_data.get_rencana_bulan(i)
-                            if usulan_data.prk.no_prk == "2019.USLU.5.001": print(i, usulan_data.get_rencana_bulan(i))
+                            temp_usulan += usulan_data.get_rencana_bulan(i)
                         else:
-                            temp_usulan = temp_usulan + int(float(data.get_rencana_month(i) or 0))
-                            if usulan_data.prk.no_prk == "2019.USLU.5.001": print(i, int(float(data.get_rencana_month(i) or 0)))
+                            temp_usulan += int(float(data.get_rencana_month(i) or 0))
                     
                     temp_usulan -= data.get_current_month_realisasi()
                     
@@ -127,7 +137,14 @@ class RecompositionAKI(LoginRequiredMixin, View):
                         msg_notes = "PRK : " + str(usulan_data.prk.no_prk) + " terdapat perubahan AKB tetapi tidak mencantumkan notes"
                         missing_notes.append((msg_notes))
 
-            context["for_div"] = "ALL"
+            context["for_div"] = for_div
+            document = [last_lrpa, last_mou]
+            context["document"] = document #OPTIMIZE LATER?
+
+            context["lrpa"] = combine_list
+            context["rekap_list"] = rekap_list
+
+            return render(request, 'recomposition/recomposition_aki_admin.html', context)
         else:
             lrpa = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa, prk__rekap_user_induk=division)
             context["for_div"] = division
@@ -149,7 +166,6 @@ class RecompositionAKI(LoginRequiredMixin, View):
                 
                 draft.is_data_created = True
                 draft.save()
-
         
             total_usulan = 0
             missing_notes = []
@@ -212,6 +228,8 @@ class RecompositionAKI(LoginRequiredMixin, View):
         context = {}
         draft = UsulanRekomposisiAKI.objects.get(pk=request.POST["draft-pk"])
         draft.is_publish = True
+        draft.proposed_by = request.user
+        draft.upload_date = datetime.now()
         draft.save()
 
         if request.user.division not in ["ANG", "KEU", "Super Admin"] and draft.is_publish == True:
@@ -258,12 +276,10 @@ class UsulanRekomposisiEdit(LoginRequiredMixin, View):
         except:
             value_1 = 0
             notes = ""
-
-        if value_1:
-            context["value_draft"] = str(int(float(value_1)))
-        else:
-            context["value_draft"] = str(int(float(value or 0)))
-
+        
+        context["value_draft"] = str(int(float(value_1))) if value_1 else str(int(float(value or 0)))
+        context["current_month"] = this_month()
+        context["current_month_realisasi"] = str(prk_data.get_current_month_realisasi())
         context["this_month"] = month
         context["month"] = months[month]
         context["selisih"] = str(value) #MANUAL
@@ -338,6 +354,9 @@ class InlineAKBEdit(LoginRequiredMixin, View):
                     data_rekom.is_changed = True
                     data_rekom.save()
                 
+                draft.last_edit_date = datetime.now()
+                draft.save()
+                
                 context["notes"] = data["notes"]
             
             if "value" in data:
@@ -350,6 +369,9 @@ class InlineAKBEdit(LoginRequiredMixin, View):
                     data_rekom.save()
                 
                 context["edit_akb"] = data["value"]
+
+                draft.last_edit_date = datetime.now()
+                draft.save()
         
         else:
             data_rekom.insertToMonth(data["this_month"], None)

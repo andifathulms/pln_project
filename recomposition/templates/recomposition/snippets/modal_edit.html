@@ -35,8 +35,19 @@
                                 <input type="hidden" name="hidden_value_former" value={{value}}>
                             </div>
                         </div>
+                        {% if this_month == current_month %}
                         <div class="form-group">
-                            <label for="formGroupExampleInput">Perubahan Realisasi {{month}}</label>
+                            <label for="formGroupExampleInput">Realisasi Berjalan</label>
+                            <div class="input-group mb-2">
+                                <div class="input-group-prepend">
+                                  <div class="input-group-text">Rp.</div>
+                                </div>
+                                <input type="number" class="form-control" name="value-former" value="{{current_month_realisasi}}" disabled/>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="form-group">
+                            <label for="formGroupExampleInput">Perubahan Rencana Realisasi {{month}}</label>
                             <div class="input-group mb-2">
                                 <div class="input-group-prepend">
                                   <div class="input-group-text">Rp.</div>
