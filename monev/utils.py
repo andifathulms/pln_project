@@ -11,7 +11,7 @@ def this_month():
     return datetime.now().month
 
 def is_production():
-    return False
+    return True
 
 def get_last_lrpa():
     return LRPA_File.objects.order_by('-pk').first()
