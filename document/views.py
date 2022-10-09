@@ -504,7 +504,7 @@ class Assign_PRK(UserPassesTestMixin, View):
                 continue
 
         return render(request, 'document/json_dumps.html', context)
-
+        
     def post(self, request, *args, **kwargs):
         pass
 

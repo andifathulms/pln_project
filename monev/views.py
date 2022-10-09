@@ -1,34 +1,18 @@
 from django.shortcuts import render
-
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import View
-
-from django.db import models
 from django.db.models import Sum, OuterRef, Subquery, F, Value
 from django.db.models.functions import Round
-from django.http import HttpResponse
 
-from document.models import DocSKAI, MacroData
+from document.models import DocSKAI, MacroData, PRK, PRKData
 
 from openpyxl import load_workbook
 
 from .models import LRPA_Monitoring, LRPA_File, PRK_Lookup, Assigned_PRK, MouPengalihanData, FileMouPengalihan
 from .forms import LRPAFileForm, MouFileForm
+from .utils import safe_div, this_month, is_production, get_last_lrpa, get_all_prk_last_lrpa
 
-from document.models import PRK, PRKData
-
-from datetime import datetime
 import sys
-
-def safe_div(x,y):
-    if y==0: return 0
-    return x/y
-
-def this_month():
-    return datetime.now().month
-
-def is_production():
-    return True
 
 class DashboardView(LoginRequiredMixin, View):
     def get(self, request):
@@ -67,9 +51,9 @@ class DashboardView(LoginRequiredMixin, View):
         total_akb = 0
         total_realisasi_bulan = 0
         for idx,x in enumerate(bpo):
-            a = [int(float(p.get_rencana_month(this_month()))) for p in PRKData.objects.filter(file_lrpa=last_lrpa, prk__kode_bpo=x)]
-            b = [int(float(p.get_realisasi_month(this_month()))) for p in PRKData.objects.filter(file_lrpa=last_lrpa, prk__kode_bpo=x)]
-            c = [p.prk.no_prk for p in PRKData.objects.filter(file_lrpa=last_lrpa, prk__kode_bpo=x)]
+            a = [int(float(p.get_rencana_month(this_month()))) for p in PRKData.objects.filter(file_lrpa=last_lrpa, prk__rekap_user_induk=x)]
+            b = [int(float(p.get_realisasi_month(this_month()))) for p in PRKData.objects.filter(file_lrpa=last_lrpa, prk__rekap_user_induk=x)]
+            c = [p.prk.no_prk for p in PRKData.objects.filter(file_lrpa=last_lrpa, prk__rekap_user_induk=x)]
             print(x,len(a), len(b), len(c))
             sum_of_akb = int(sum(a))
             sum_of_realisasi = int(sum(b))
@@ -79,7 +63,8 @@ class DashboardView(LoginRequiredMixin, View):
             except:
                 pct = 0
             data_2.append((x, sum_of_akb, sum_of_realisasi,sisa,pct))
-
+            a_copy = [value for value in a if value != 0]
+            print(x, len(a_copy), a_copy)
             total_akb = total_akb + sum_of_akb
             total_realisasi_bulan = total_realisasi_bulan + sum_of_realisasi
         
@@ -317,7 +302,7 @@ class LKAIViewCOPY(LoginRequiredMixin, View):
             skai_2 = DocSKAI.objects.get(pk=10)
             skai_3 = DocSKAI.objects.get(pk=19)
         
-        last_lrpa = LRPA_File.objects.order_by('-pk').first()
+        last_lrpa = get_last_lrpa()
         last_mou = FileMouPengalihan.objects.order_by('file_export_date').first()
 
         sq_1 = MacroData.objects.filter(macro_file=skai_1.macro.macro_file_1, prk=OuterRef('prk'))
@@ -328,10 +313,10 @@ class LKAIViewCOPY(LoginRequiredMixin, View):
         division = request.user.division
 
         if division == "Super Admin" or division == "ANG":
-            monitoring = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa)
+            monitoring = get_all_prk_last_lrpa()
             context["for_div"] = "ALL"
         else:
-            monitoring = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa, prk__rekap_user_induk=division)
+            monitoring = get_all_prk_last_lrpa(rekap_user_induk=division)
             context["for_div"] = division
         
         lrpa = monitoring. \
@@ -380,13 +365,12 @@ class LKAIView(LoginRequiredMixin, View): #DELETE LATER WITH TEMPLATE
         division = request.user.division
 
         if division == "Super Admin" or division == "ANG":
-            monitoring = LRPA_Monitoring.objects.select_related('prk').filter(file=last_lrpa)
+            monitoring = PRKData.objects.select_related('prk').filter(file=last_lrpa)
             context["for_div"] = "ALL"
         else:
-            monitoring = LRPA_Monitoring.objects.select_related('prk').filter(file=last_lrpa, prk__rekap_user_induk=division)
+            monitoring = PRKData.objects.select_related('prk').filter(file=last_lrpa, prk__rekap_user_induk=division)
             context["for_div"] = division
-        print(last_lrpa)
-        print(monitoring)
+        
         lrpa = monitoring. \
                annotate(ai_1 = Round(Subquery(sq_1.values('ai_this_year')[:1])*1000), aki_1 = Round(Subquery(sq_1.values('aki_this_year')[:1])*1000), status_1 = sq_1.values('ang_status'),
                ai_2 = Round(Subquery(sq_2.values('ai_this_year')[:1])*1000), aki_2 = Round(Subquery(sq_2.values('aki_this_year')[:1])*1000), status_2 = sq_2.values('ang_status'),

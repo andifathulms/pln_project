@@ -1,0 +1,478 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load document_tags %}
+{% load mathfilters %}
+
+{% block style %}
+
+<style>
+    td {
+        vertical-align: middle;
+        text-align: center;
+        color: #161616;
+    }
+
+    .cell-disabled{
+        background-color: #CFD2CF;
+        opacity: 0.1;
+    }
+
+    .currency{
+        text-align: right !important;
+        min-width: 160px;
+    }
+
+    .currency::before{
+        content: "Rp.";
+        float: left;
+        padding-right: 4px;
+    }
+
+    .error-li{
+        font-weight: 600;
+        color: firebrick;
+    }
+
+    .info{
+        border-style: dashed;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+    }
+
+    .edited{
+        background-color: #F8F3D4;
+    }
+    .plus{
+        background-color: #11999E;
+    }
+    .minus{
+        background-color: #E84545;
+    }
+    .sum-cell{
+        background-color: #222831;
+        color: #FCFCFC;
+        text-align: center !important;
+    }
+    .cell{
+        min-width: 150px;
+    }
+    .past{
+        background-color: #2B2E4A;
+        color: #FFFFDE;
+    }
+    .current{
+        background-color: #FFFFDE;
+        color: #100720;
+    }
+    .future{
+        background-color: #40514E;
+        color: #FFFFDE;
+    }
+
+    .mou{
+        background-color: blanchedalmond !important;
+    }
+
+    .copy_container{
+        display: flex;
+        justify-content: space-between;
+        top: 0px;
+        left: 0px;
+        /* width: 240px; */
+        padding: 2px 2px;
+        font-size: 18px;
+        color: #161616;
+        border-radius: 8px 8px 0 0;
+        cursor: pointer;
+    }
+
+    .copy{
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        align-items: center;
+        opacity: 0.6;
+        transition: all 0.1s ease;
+    }
+
+    .tooltip{
+        position: absolute;
+        top: 30px;
+        left: -30px;
+        background: #161616;
+        padding: 10px 15px;
+        display: flex;
+        justify-content: center;
+        color: #fff;
+        font-size: 14px;
+        border-radius: 4px;
+        letter-spacing: 1px;
+        opacity: 0;
+    }
+
+    .tooltip.appear {
+        animation: appear 1s ease;
+    }
+
+    @keyframes appear {
+        0% {
+            opacity: 0;
+        }
+        20% {
+            transform: translateY(10px);
+            opacity: 1;
+        }
+        80% {
+            transform: translateY(0px);
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+</style>
+{% endblock style%}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="mb-4 shadow card">
+        <div class="py-3 card-header">
+            <div class="row">
+                <div class="col-8">
+                    <h6 class="m-0 font-weight-bold" style="color: #fff;">Output E-Budget</h6>
+                </div>
+                <div class="col-4 ">
+                    
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTableMonev" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">No</th>
+                            <th rowspan="2">No PRK</th>
+                            <th rowspan="2">Program Utama/Proyek</th>
+                            <th rowspan="2">Uraian</th>
+                            <th rowspan="2">Status</th>
+                            <th rowspan="2">Sumber Dana</th>
+                            <th rowspan="2">NO BA Komite</th>
+                            <th rowspan="2" style="min-width: 100px;">AI Tahun 2022</th> <!-- MANUAL -->
+                            <th rowspan="2" style="min-width: 100px;">AKI Tahun 2022</th>
+                            <th rowspan="2" style="min-width: 100px;">AKI Tahun 2023</th>
+                            <th rowspan="2" style="min-width: 100px;">AKI Tahun 2024</th>
+                            <th rowspan="2" style="min-width: 100px;">AKI Tahun 2025</th>
+                            <th rowspan="2" style="min-width: 100px;">AKI Tahun 2026</th>
+                            <th rowspan="2" style="min-width: 100px;">AKI Setelah Tahun 2026</th>
+                            <th colspan="2">Januari</th>
+                            <th colspan="2">Februari</th>
+                            <th colspan="2">Maret</th>
+                            <th colspan="2">April</th>
+                            <th colspan="2">Mei</th>
+                            <th colspan="2">Juni</th>
+                            <th colspan="2">Juli</th>
+                            <th colspan="2">Agustus</th>
+                            <th colspan="2">September</th>
+                            <th colspan="2">Oktober</th>
+                            <th colspan="2">November</th>
+                            <th colspan="2">Desember</th>
+                            <th rowspan="2">AKI Rekomposisi Tahun</th>
+                            <th rowspan="2">AKI yang belum diterbitkan</th>
+                            <th rowspan="2">Total AKI Rekomposisi</th>
+                            <th rowspan="2">AKI Sebelum Rekomposisi</th>
+                            <th rowspan="2">Tambah Kurang</th>
+                            <th rowspan="2">AKI nilai minimum bulan berjalan</th>
+                            <th rowspan="2">Cek Realsasi dan AKI</th>
+                            <th rowspan="2">Cek AKI dan AI</th>
+                            <th rowspan="2">Cek AKI 5 Tahun</th>
+                            <th rowspan="2">Cek AKI Minus</th>
+                        </tr>
+                        <tr>
+                            <th>Progress Fisik (%)</th>
+                            <th style="min-width: 100px;">
+                                {% if 1 < month %}
+                                Realisasi Disburse
+                                {% else %}
+                                Rencana Disburse
+                                {% endif %}
+                            </th>
+                            <th>Progress Fisik (%)</th>
+                            <th style="min-width: 100px;">
+                                {% if 2 < month %}
+                                Realisasi Disburse
+                                {% else %}
+                                Rencana Disburse
+                                {% endif %}
+                            </th>
+                            <th>Progress Fisik (%)</th>
+                            <th style="min-width: 100px;">
+                                {% if 3 < month %}
+                                Realisasi Disburse
+                                {% else %}
+                                Rencana Disburse
+                                {% endif %}
+                            </th>
+                            <th>Progress Fisik (%)</th>
+                            <th style="min-width: 100px;">
+                                {% if 4 < month %}
+                                Realisasi Disburse
+                                {% else %}
+                                Rencana Disburse
+                                {% endif %}
+                            </th>
+                            <th>Progress Fisik (%)</th>
+                            <th style="min-width: 100px;">
+                                {% if 5 < month %}
+                                Realisasi Disburse
+                                {% else %}
+                                Rencana Disburse
+                                {% endif %}
+                            </th>
+                            <th>Progress Fisik (%)</th>
+                            <th style="min-width: 100px;">
+                                {% if 6 < month %}
+                                Realisasi Disburse
+                                {% else %}
+                                Rencana Disburse
+                                {% endif %}
+                            </th>
+                            <th>Progress Fisik (%)</th>
+                            <th style="min-width: 100px;">
+                                {% if 7 < month %}
+                                Realisasi Disburse
+                                {% else %}
+                                Rencana Disburse
+                                {% endif %}
+                            </th>
+                            <th>Progress Fisik (%)</th>
+                            <th style="min-width: 100px;">
+                                {% if 8 < month %}
+                                Realisasi Disburse
+                                {% else %}
+                                Rencana Disburse
+                                {% endif %}
+                            </th>
+                            <th>Progress Fisik (%)</th>
+                            <th style="min-width: 100px;">
+                                {% if 9 < month %}
+                                Realisasi Disburse
+                                {% else %}
+                                Rencana Disburse
+                                {% endif %}
+                            </th>
+                            <th>Progress Fisik (%)</th>
+                            <th style="min-width: 100px;">
+                                {% if 10 < month %}
+                                Realisasi Disburse
+                                {% else %}
+                                Rencana Disburse
+                                {% endif %}
+                            </th>
+                            <th>Progress Fisik (%)</th>
+                            <th style="min-width: 100px;">
+                                {% if 11 < month %}
+                                Realisasi Disburse
+                                {% else %}
+                                Rencana Disburse
+                                {% endif %}
+                            </th>
+                            <th>Progress Fisik (%)</th>
+                            <th style="min-width: 100px;">
+                                {% if 12 < month %}
+                                Realisasi Disburse
+                                {% else %}
+                                Rencana Disburse
+                                {% endif %}
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in all_data %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ data.0.prk.no_prk }}</td>
+                            <td style="min-width: 165px; text-align: justify;">{{ data.0.prk.program_utama }}</td>
+                            <td style="min-width: 330px; text-align: justify;">{{ data.0.prk.keg_uraian }}</td>
+                            <td>{{ data.0.status }}</td>
+                            <td>{{ data.0.sumber_dana }}</td>
+                            <td></td>
+                            <td>{{ data.0.real_ai }}</td>
+                            <td>{{ data.0.real_aki }}</td>
+                            <td>{{ data.0.aki_n1|floatformat }}</td>
+                            <td>{{ data.0.aki_n2|floatformat }}</td>
+                            <td>{{ data.0.aki_n3|floatformat }}</td>
+                            <td>{{ data.0.aki_n4|floatformat }}</td>
+                            <td>{{ data.0.aki_after_n1|floatformat }}</td>
+
+                            {% call_method data.0 'get_realisasi_month' 1 as realisasi_1 %}
+                            {% call_method data.0 'get_realisasi_month' 2 as realisasi_2 %}
+                            {% call_method data.0 'get_realisasi_month' 3 as realisasi_3 %}
+                            {% call_method data.0 'get_realisasi_month' 4 as realisasi_4 %}
+                            {% call_method data.0 'get_realisasi_month' 5 as realisasi_5 %}
+                            {% call_method data.0 'get_realisasi_month' 6 as realisasi_6 %}
+                            {% call_method data.0 'get_realisasi_month' 7 as realisasi_7 %}
+                            {% call_method data.0 'get_realisasi_month' 8 as realisasi_8 %}
+                            {% call_method data.0 'get_realisasi_month' 9 as realisasi_9 %}
+                            {% call_method data.0 'get_realisasi_month' 10 as realisasi_10 %}
+                            {% call_method data.0 'get_realisasi_month' 11 as realisasi_11 %}
+                            {% call_method data.0 'get_realisasi_month' 12 as realisasi_12 %}
+
+                            <td></td>
+                            <td>{{realisasi_1|floatformat}}</td>
+                            <td></td>
+                            <td>{{realisasi_2|floatformat}}</td>
+                            <td></td>
+                            <td>{{realisasi_3|floatformat}}</td>
+                            <td></td>
+                            <td>{{realisasi_4|floatformat}}</td>
+                            <td></td>
+                            <td>{{realisasi_5|floatformat}}</td>
+                            <td></td>
+                            <td>{{realisasi_6|floatformat}}</td>
+                            <td></td>
+                            <td>{{realisasi_7|floatformat}}</td>
+                            <td></td>
+                            <td>{{realisasi_8|floatformat}}</td>
+                            <td></td>
+                            <td>{{realisasi_9|floatformat}}</td>
+                            <td></td>
+                            <td>{{realisasi_10|floatformat}}</td>
+                            <td></td>
+                            <td>{{realisasi_11|floatformat}}</td>
+                            <td></td>
+                            <td>{{realisasi_12|floatformat}}</td>
+
+                            <td>{{ data.5 }}</td>
+                            <td>{{ data.6 }}</td>
+
+                            {% if data.4 %}
+                            <td>{{ data.2 }}</td>
+                            {% else %}
+                            <td>{{ data.0.real_aki }}</td>
+                            {% endif %}
+
+                            <td>{{ data.0.real_aki }}</td>
+                            <td>{{ data.3 }}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modals-here"></div>
+
+  
+{% endblock content %}
+
+{% block script %}
+
+<script>
+    $(document).ready(function () {
+        
+        var table = $('#dataTableMonev').DataTable({
+            scrollY: 600,
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            keys: true,
+            dom: 'BQlfrtip',
+            fixedColumns:{
+                leftColumns: 2
+            },
+        });
+        
+    });
+
+    $(function() {
+        // Check the initial Poistion of the Sticky Header
+        var stickyHeaderTop = $('#dataTableMonev').offset().top;
+        $(window).scroll(function() {
+            if ($(window).scrollTop() > stickyHeaderTop) {
+                $('.dataTables_scrollHead, .DTFC_LeftHeadWrapper').css('transform', 'translateY(0%)');
+                $('.DTFC_LeftHeadWrapper').css({position: 'fixed',top: '0px',zIndex: '1',left: 'auto'});
+                $('.dataTables_scrollHead').css({position: 'fixed',top: '0px', zIndex: '1' });
+                $('.DTFC_ScrollWrapper').css({height: ''});
+            }
+            else {
+                $('.DTFC_LeftHeadWrapper, .DTFC_LeftHeadWrapper').css({position: 'relative',top: '0px'});
+                $('.dataTables_scrollHead').css({position: 'relative', top: '0px'});
+                $('.dataTables_scrollHead').css('transform', 'translateY(0%)');
+            }
+
+        });
+    });
+</script>
+
+<script>
+    function closeModal() {
+        var container = document.getElementById("modals-here")
+        console.log(container)
+        var backdrop = document.getElementById("modal-backdrop")
+        var modal = document.getElementById("modal")
+
+        modal.classList.remove("show")
+        backdrop.classList.remove("show")
+
+        setTimeout(function() {
+            container.removeChild(backdrop)
+            container.removeChild(modal)
+        }, 200)
+    }
+
+    htmx.on("htmx:beforeSwap", (e) => {
+        // Empty response not targeting #onChgArea => hide the modal
+        if (e.detail.target.id != "onChgArea") {
+            closeModal()
+            e.detail.shouldSwap = false
+        }
+    })
+
+    htmx.on("htmx:afterSwap", (e) => {
+        // Empty response not targeting #onChgArea => hide the modal
+        console.log("After Swap")
+        if (e.detail.target.id != "onChgArea") {
+            console.log("not onchanged")
+            console.log(e.detail.requestConfig)
+            console.log(e.detail.requestConfig.triggeringEvent.submitter.name)
+            if (e.detail.requestConfig.triggeringEvent.submitter.name == "delete"){
+                htmx.removeClass(htmx.find('#'+e.detail.target.id), 'edited', 1000);
+            }else{
+                htmx.addClass(htmx.find('#'+e.detail.target.id), 'edited', 1000);
+            }
+            
+        }
+    })
+
+    $("[id^=copy-").on("click", function(e){
+        e.preventDefault();
+
+        //find the number of the parent
+        let num = $(this).parent().attr("id").slice("id-".length);
+        //let elem = $("#id-" + num);
+        let elem = document.getElementById("id-"+num);
+        
+        //copy the text
+        let $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($(elem).children(":first").text()).select();
+        document.execCommand("copy");
+        
+        $temp.remove();
+
+        $(this).children(".tooltip").addClass("appear").delay(1000).queue(function( next ){
+            $(this).removeClass("appear"); 
+            $(this).dequeue();
+        });
+    });
+</script>
+{% endblock script %}

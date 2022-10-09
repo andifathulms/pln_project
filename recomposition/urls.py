@@ -2,6 +2,8 @@ from django.urls import path
 
 from .views import(
     RecompositionAKI,
+    RecompositionAKB,
+    RecompositionOutput,
     RecompositionPeriodCreate,
     UsulanRekomposisiEdit,
     OnChangeValue,
@@ -14,6 +16,8 @@ app_name = 'recomposition'
 
 urlpatterns = [
     path('recomposition-aki', RecompositionAKI.as_view(), name='recomposition-aki'),
+    path('recomposition-akb', RecompositionAKB.as_view(), name='recomposition-akb'),
+    path('recomposition-aki-output', RecompositionOutput.as_view(), name='recomposition-output'),
     path('recomposition-periode', RecompositionPeriod.as_view(), name='recomposition-periode'),
     path('recomposition-periode-create', RecompositionPeriodCreate.as_view(), name='recomposition-periode-create'),
     path('edit-prk/<int:pk>/<int:month>/', UsulanRekomposisiEdit.as_view(), name='recomposition-edit-prk'),

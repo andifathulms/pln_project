@@ -155,9 +155,6 @@
         <li class="col nav-item" role="presentation">
             <button class="nav-link w-100" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-2" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Rekap Usulan</button>
         </li>
-        <li class="col nav-item" role="presentation">
-            <button class="nav-link w-100" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-3" type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Output E-Budget</button>
-        </li>
     </ul>
     <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active" id="pills-1" role="tabpanel" aria-labelledby="pills-home-tab" tabindex="0">
@@ -788,6 +785,8 @@
                                 <tr>
                                     <th>User Induk</th>
                                     <th>PRK Rekom</th>
+                                    <th>Total AKI</th>
+                                    <th>Total AKI Usulan</th>
                                     <th>Last Edit</th>
                                     <th style="max-width: 60px;">Is Publish</th>
                                     <th>Publish By</th>
@@ -800,7 +799,8 @@
                                 <tr>
                                     <td>{{doc.0}}</td>
                                     <td>{{doc.1}}</td>
-
+                                    <td>{{doc.6}}</td>
+                                    <td>{{doc.7}}</td>
                                     {% if doc.2 %}
                                         <td>{{doc.2}}</td>
                                     {% else %}
@@ -831,9 +831,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="tab-pane fade" id="pills-3" role="tabpanel" aria-labelledby="pills-profile-tab" tabindex="0">
-
         </div>
     </div>
 </div>
@@ -893,13 +890,13 @@
 
 <script>
     $(document).ready(function () {
+        
         var table = $('#dataTableMonev').DataTable({
             scrollY: 600,
             scrollX: true,
             scrollCollapse: true,
             paging: true,
             keys: true,
-            paging: true,
             dom: 'BQlfrtip',
             // dom: "<'row'<'col-sm-6'Bl><'col-sm-6'f>>" +"<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
             buttons: [
@@ -981,6 +978,7 @@
 
         $.fn.dataTable.tables( { visible: true, api: true } ).scroller.measure();
         // new $.fn.dataTable.FixedHeader( table ).scroller.measure();
+        
     });
 
     $(function() {

@@ -100,62 +100,62 @@ class PRKData(models.Model):
     def get_realisasi_month(self, m):
         month = this_month()
         if m == 1:
-            if self.jan_pengalihan and month > m:
+            if self.jan_pengalihan and month == m:
                 return self.jan_pengalihan
             else:
                 return self.jan_realisasi
         elif m == 2:
-            if self.feb_pengalihan and month > m:
+            if self.feb_pengalihan and month == m:
                 return self.feb_pengalihan
             else:
                 return self.feb_realisasi
         elif m == 3:
-            if self.mar_pengalihan and month > m:
+            if self.mar_pengalihan and month == m:
                 return self.mar_pengalihan
             else:
                 return self.mar_realisasi
         elif m == 4:
-            if self.apr_pengalihan and month > m:
+            if self.apr_pengalihan and month == m:
                 return self.apr_pengalihan
             else:
                 return self.apr_realisasi
         elif m == 5:
-            if self.mei_pengalihan and month > m:
+            if self.mei_pengalihan and month == m:
                 return self.mei_pengalihan
             else:
                 return self.mei_realisasi
         elif m == 6:
-            if self.jun_pengalihan and month > m:
+            if self.jun_pengalihan and month == m:
                 return self.jun_pengalihan
             else:
                 return self.jun_realisasi
         elif m == 7:
-            if self.jul_pengalihan and month > m:
+            if self.jul_pengalihan and month == m:
                 return self.jul_pengalihan
             else:
                 return self.jul_realisasi
         elif m == 8:
-            if self.aug_pengalihan and month > m:
+            if self.aug_pengalihan and month == m:
                 return self.aug_pengalihan
             else:
                 return self.aug_realisasi
         elif m == 9:
-            if self.sep_pengalihan and month > m:
+            if self.sep_pengalihan and month == m:
                 return self.sep_pengalihan
             else:
                 return self.sep_realisasi
         elif m == 10:
-            if self.okt_pengalihan and month > m:
+            if self.okt_pengalihan and month == m:
                 return self.okt_pengalihan
             else:
                 return self.okt_realisasi
         elif m == 11:
-            if self.nov_pengalihan and month > m:
+            if self.nov_pengalihan and month == m:
                 return self.nov_pengalihan
             else:
                 return self.nov_realisasi
         elif m == 12:
-            if self.des_pengalihan and month > m:
+            if self.des_pengalihan and month == m:
                 return self.des_pengalihan
             else:
                 return self.des_realisasi
@@ -266,6 +266,21 @@ class PRKData(models.Model):
     
     def is_aki_completed(self):
         return self.get_sisa_aki_pct() >= 99
+    
+    def alternate_aki(self):
+        list_a = [self.jan_rencana, self.feb_rencana, self.mar_rencana, self.apr_rencana, self.mei_rencana, self.jun_rencana,
+                  self.jul_rencana, self.aug_rencana, self.sep_rencana, self.okt_rencana, self.nov_rencana, self.des_rencana]
+        list_b = [self.jan_realisasi, self.feb_realisasi, self.mar_realisasi, self.apr_realisasi, self.mei_realisasi, self.jun_realisasi,
+                  self.jul_realisasi, self.aug_realisasi, self.sep_realisasi, self.okt_realisasi, self.nov_realisasi, self.des_realisasi]
+        
+        sum = 0
+        for i in range(1,13):
+            if i < this_month():
+                sum += int(float(list_b[i-1]))
+            else:
+                sum += int(float(list_a[i-1]))
+        
+        return sum
 
 class Document(models.Model):
     document_number     = models.CharField(max_length=100)
@@ -392,6 +407,14 @@ class MacroData(models.Model):
     @property
     def real_aki(self):
         return round(self.aki_this_year * 1000)
+    
+    @property
+    def real_aki_n1(self):
+        return round(self.aki_n1_year * 1000)
+    
+    @property
+    def real_aki_n2(self):
+        return round(self.aki_n2_year * 1000)
     
     def ai_in_million(self):
         return self.ai_this_year/1000
