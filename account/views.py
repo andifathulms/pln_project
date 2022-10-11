@@ -4,11 +4,21 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.views import View
 
+from django_login_history.models import Login
+
 from account.forms import AccountAuthenticationForm, RegistrationForm
 
 from division.models import Division
 from document.models import DocSKAI
 from .models import Account
+
+class LoginHistory(LoginRequiredMixin, View):
+    def get(self, request):
+        context = {}
+
+        context["login"] = Login.objects.all().order_by('-date')
+
+        return render(request, 'account/login_history.html', context)
 
 class DashboardView(LoginRequiredMixin,View):
     def get(self, request, *args, **kwargs):

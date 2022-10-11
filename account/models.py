@@ -38,7 +38,7 @@ class MyAccountManager(BaseUserManager):
 
 class Account(AbstractBaseUser):
     email                   = models.EmailField(verbose_name="email", max_length=60, unique=True)
-    name                    = models.CharField(max_length=50, unique=True)
+    username                = models.CharField(max_length=50, unique=True)
     division                = models.CharField(max_length=100)
     role                    = models.CharField(max_length=100)
     date_joined				= models.DateTimeField(verbose_name='date joined', auto_now_add=True)
@@ -51,12 +51,12 @@ class Account(AbstractBaseUser):
     notifications   		= GenericRelation(Notification)	
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']
+    REQUIRED_FIELDS = ['username']
 
     objects = MyAccountManager()
 
     def __str__(self):
-        return self.name
+        return self.username
     
     def has_perm(self, perm, obj=None):
         return self.is_admin

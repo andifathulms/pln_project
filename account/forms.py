@@ -24,7 +24,7 @@ class RegistrationForm(UserCreationForm):
 
 	class Meta:
 		model = Account
-		fields = ('name', 'email','division','role', 'password1', 'password2', )
+		fields = ('username', 'email','division','role', 'password1', 'password2', )
 
 	def clean_email(self):
 		email = self.cleaned_data['email'].lower()
@@ -34,10 +34,10 @@ class RegistrationForm(UserCreationForm):
 			return email
 		raise forms.ValidationError('Email "%s" is already in use.' % account)
 
-	def clean_name(self):
-		name = self.cleaned_data['name']
+	def clean_username(self):
+		username = self.cleaned_data['username']
 		try:
-			account = Account.objects.exclude(pk=self.instance.pk).get(name=name)
+			account = Account.objects.exclude(pk=self.instance.pk).get(username=username)
 		except Account.DoesNotExist:
-			return name
-		raise forms.ValidationError('Name "%s" is already in use.' % name)
+			return username
+		raise forms.ValidationError('Username "%s" is already in use.' % username)

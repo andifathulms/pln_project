@@ -44,7 +44,7 @@
 
     <!-- Nav Item - Dashboard -->
     <li class="nav-item">
-        <a class="nav-link" href="{% url 'home' %}">
+        <a class="nav-link" href="{% url 'home' %}" target="_blank" rel="noopener noreferrer">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
     </li>
@@ -71,9 +71,9 @@
                 <div id="collapseInnerTwo" class="collapse">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Jenis SKAI</h6>
-                        <a class="collapse-item" href="{% url 'document:doc-list-skai' 1 %}">SKAI Terbit</a>
-                        <a class="collapse-item" href="{% url 'document:doc-list-skai' 2 %}">SKAI Usulan</a>
-                        <a class="collapse-item" href="{% url 'document:doc-list-skai' 3 %}">Semua SKAI</a>
+                        <a class="collapse-item" href="{% url 'document:doc-list-skai' 1 %}" target="_blank" rel="noopener noreferrer">SKAI Terbit</a>
+                        <a class="collapse-item" href="{% url 'document:doc-list-skai' 2 %}" target="_blank" rel="noopener noreferrer">SKAI Usulan</a>
+                        <a class="collapse-item" href="{% url 'document:doc-list-skai' 3 %}" target="_blank" rel="noopener noreferrer">Semua SKAI</a>
                     </div>
                 </div>
                 <a class="collapse-item" style="white-space: normal; !important" href="{% url 'document:doc-skai-compare' %}">Perbandingan SKAI</a>
@@ -99,9 +99,9 @@
         <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Monev</h6>
-                <a class="collapse-item" style="white-space: normal; !important" href="{% url 'monev:lkai-view' %}">Monev LKAI</a>
-                <a class="collapse-item" style="white-space: normal; !important" href="{% url 'monev:monev-view' %}">Monev Rekap</a>
-                <a class="collapse-item" style="white-space: normal; !important" href="{% url 'monev:monev-list-file' %}">File Monev</a>
+                <a class="collapse-item" style="white-space: normal; !important" href="{% url 'monev:lkai-view' %}" target="_blank" rel="noopener noreferrer">Monev LKAI</a>
+                <a class="collapse-item" style="white-space: normal; !important" href="{% url 'monev:monev-view' %}" target="_blank" rel="noopener noreferrer">Monev Rekap</a>
+                <a class="collapse-item" style="white-space: normal; !important" href="{% url 'monev:monev-list-file' %}" target="_blank" rel="noopener noreferrer">File Monev</a>
             </div>
         </div>
     </li>
@@ -135,6 +135,13 @@
 
     <!-- Divider -->
     <!-- <hr class="sidebar-divider d-none d-md-block"> -->
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'account:login-history' %}" target="_blank" rel="noopener noreferrer">
+            <i class="fa-solid fa-key"></i>
+            <span>Login History</span></a>
+    </li>
 
     <!-- Sidebar Toggler (Sidebar) -->
     <div class="text-center d-none d-md-inline">

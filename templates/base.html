@@ -58,8 +58,8 @@
         }
         
         thead {
-            background-color: #112D4E;
-            color: #fff;
+            background-color: #003865;
+            color: #FCF8E8;
         }
 
         th.dtfc-fixed-left{
@@ -83,6 +83,18 @@
             background-color: #222831;
         }
 
+        .nav-link, .nav-link > i{
+            color: #372948 !important;
+            font-size: 1rem !important;
+        }
+
+        .sidebar-heading{
+            color: #372948 !important;
+        }
+        
+        #sidebarToggle{
+            margin-top: 5px;
+        }
         
     </style>
 
@@ -192,6 +204,7 @@
                 "paging": true,
                 fixedHeader: true,
             });
+            $('#sidebarToggle').trigger('click');
         });
     </script>
     

@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'storages',
     'channels',
     'mathfilters',
+    'django_login_history',
     
     'account',
     
@@ -202,4 +203,5 @@ CHANNEL_LAYERS = {
 
 USE_THOUSAND_SEPARATOR = True
 
+IP_PLACEHOLDER = "172.217.23.195"
 #heroku login pwd = 4F@thulMS
