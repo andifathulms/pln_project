@@ -1,3 +1,4 @@
+from email.policy import default
 from django.db import models
 from datetime import datetime
 
@@ -27,7 +28,7 @@ class UsulanPeriod(models.Model):
     def end_date_str(self):
         return self.end_date.strftime("%m/%d/%Y")
 
-class UsulanRekomposisiAKI(models.Model):
+class UsulanRekomposisi(models.Model):
     period          = models.ForeignKey(UsulanPeriod, on_delete=models.CASCADE, blank=True, null=True)
     proposed_by     = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True)
     upload_date     = models.DateTimeField(blank=True, null=True)
@@ -35,14 +36,15 @@ class UsulanRekomposisiAKI(models.Model):
     division        = models.CharField(max_length=10,blank=True, null=True)
     is_draft        = models.BooleanField(default=True)
     is_publish      = models.BooleanField(default=False)
+    revisi          = models.CharField(max_length=3, default="AKI")
 
     is_data_created = models.BooleanField(default=False)
 
     def __str__(self) -> str:
-        return "Rekom AKI " + self.period.__str__() + " - " + self.division
+        return "Rekom " + self.revisi + " " + self.period.__str__() + " - " + self.division
 
-class UsulanRekomposisiAKIData(models.Model):
-    file            = models.ForeignKey('UsulanRekomposisiAKI', on_delete=models.CASCADE)
+class UsulanRekomposisiData(models.Model):
+    file            = models.ForeignKey('UsulanRekomposisi', on_delete=models.CASCADE)
     prk             = models.ForeignKey('document.PRK', on_delete=models.CASCADE, blank=True, null=True)
     jan             = models.IntegerField(blank=True, null=True)
     feb             = models.IntegerField(blank=True, null=True)
@@ -61,7 +63,7 @@ class UsulanRekomposisiAKIData(models.Model):
     edited_by       = models.ForeignKey(Account, on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self) -> str:
-        return str(self.is_changed) + " - " +  self.prk.rekap_user_induk + " - " + self.prk.no_prk
+        return str(self.is_changed) + " - " +  self.prk.rekap_user_induk + " - " + self.prk.no_prk + " Rekom " + self.file.revisi
 
     def get_rencana_bulan(self, month):
         switch = {

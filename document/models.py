@@ -8,7 +8,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 
 from notification.models import Notification
 from monev.models import LRPA_File, FileMouPengalihan
-from recomposition.models import UsulanRekomposisiAKIData
+from recomposition.models import UsulanRekomposisiData
 
 from datetime import datetime
 
@@ -100,62 +100,62 @@ class PRKData(models.Model):
     def get_realisasi_month(self, m):
         month = this_month()
         if m == 1:
-            if self.jan_pengalihan and month == m:
+            if self.jan_pengalihan and month == m and not self.file_mou.is_expired():
                 return self.jan_pengalihan
             else:
                 return self.jan_realisasi
         elif m == 2:
-            if self.feb_pengalihan and month == m:
+            if self.feb_pengalihan and month == m and not self.file_mou.is_expired():
                 return self.feb_pengalihan
             else:
                 return self.feb_realisasi
         elif m == 3:
-            if self.mar_pengalihan and month == m:
+            if self.mar_pengalihan and month == m and not self.file_mou.is_expired():
                 return self.mar_pengalihan
             else:
                 return self.mar_realisasi
         elif m == 4:
-            if self.apr_pengalihan and month == m:
+            if self.apr_pengalihan and month == m and not self.file_mou.is_expired():
                 return self.apr_pengalihan
             else:
                 return self.apr_realisasi
         elif m == 5:
-            if self.mei_pengalihan and month == m:
+            if self.mei_pengalihan and month == m and not self.file_mou.is_expired():
                 return self.mei_pengalihan
             else:
                 return self.mei_realisasi
         elif m == 6:
-            if self.jun_pengalihan and month == m:
+            if self.jun_pengalihan and month == m and not self.file_mou.is_expired():
                 return self.jun_pengalihan
             else:
                 return self.jun_realisasi
         elif m == 7:
-            if self.jul_pengalihan and month == m:
+            if self.jul_pengalihan and month == m and not self.file_mou.is_expired():
                 return self.jul_pengalihan
             else:
                 return self.jul_realisasi
         elif m == 8:
-            if self.aug_pengalihan and month == m:
+            if self.aug_pengalihan and month == m and not self.file_mou.is_expired():
                 return self.aug_pengalihan
             else:
                 return self.aug_realisasi
         elif m == 9:
-            if self.sep_pengalihan and month == m:
+            if self.sep_pengalihan and month == m and not self.file_mou.is_expired():
                 return self.sep_pengalihan
             else:
                 return self.sep_realisasi
         elif m == 10:
-            if self.okt_pengalihan and month == m:
+            if self.okt_pengalihan and month == m and not self.file_mou.is_expired():
                 return self.okt_pengalihan
             else:
                 return self.okt_realisasi
         elif m == 11:
-            if self.nov_pengalihan and month == m:
+            if self.nov_pengalihan and month == m and not self.file_mou.is_expired():
                 return self.nov_pengalihan
             else:
                 return self.nov_realisasi
         elif m == 12:
-            if self.des_pengalihan and month == m:
+            if self.des_pengalihan and month == m and not self.file_mou.is_expired():
                 return self.des_pengalihan
             else:
                 return self.des_realisasi

@@ -312,7 +312,7 @@ class LKAIViewCOPY(LoginRequiredMixin, View):
         #GET USER DIVISION, DETERMINE USER VIEW
         division = request.user.division
 
-        if division == "Super Admin" or division == "ANG":
+        if division == "Super Admin" or division == "ANG" or request.user.is_admin:
             monitoring = get_all_prk_last_lrpa()
             context["for_div"] = "ALL"
         else:

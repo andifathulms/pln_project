@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import date
+from datetime import date, datetime
 
 from account.models import Account
 
@@ -97,6 +97,9 @@ class FileMouPengalihan(models.Model):
     file_export_date        = models.DateField(default=date.today)
     for_month               = models.IntegerField()
     for_year                = models.IntegerField()
+
+    def is_expired(self):
+        return datetime.now().month != self.upload_date.month
 
 class MouPengalihanData(models.Model):
     file                    = models.ForeignKey('FileMouPengalihan', on_delete=models.CASCADE, blank=True, null=True)

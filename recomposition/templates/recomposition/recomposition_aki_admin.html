@@ -787,6 +787,7 @@
                                     <th>PRK Rekom</th>
                                     <th>Total AKI</th>
                                     <th>Total AKI Usulan</th>
+                                    <th>Selisih (+/-)</th>
                                     <th>Last Edit</th>
                                     <th style="max-width: 60px;">Is Publish</th>
                                     <th>Publish By</th>
@@ -799,8 +800,9 @@
                                 <tr>
                                     <td>{{doc.0}}</td>
                                     <td>{{doc.1}}</td>
-                                    <td>{{doc.6}}</td>
                                     <td>{{doc.7}}</td>
+                                    <td>{{doc.6}}</td>
+                                    <td>{{doc.6|sub:doc.7|floatformat}}</td>
                                     {% if doc.2 %}
                                         <td>{{doc.2}}</td>
                                     {% else %}
