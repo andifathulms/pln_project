@@ -4,6 +4,7 @@ from django.shortcuts import render
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import View
+from django.urls import resolve
 
 from django.db.models import Sum, OuterRef, Subquery, F, Value, Count, Case, When
 from django.db.models.functions import Round
@@ -11,7 +12,7 @@ from document.models import DocSKAI, MacroData
 
 from monev.models import LRPA_Monitoring, LRPA_File, MouPengalihanData, FileMouPengalihan
 from document.models import PRK, PRKData
-from monev.utils import get_all_prk_last_lrpa, get_latest_rekom_period
+from monev.utils import get_all_prk_last_lrpa, get_latest_rekom_period, get_last_lrpa
 from monev.views import this_month, is_production
 
 from .models import UsulanPeriod, UsulanRekomposisi, UsulanRekomposisiData
@@ -56,11 +57,36 @@ class RecompositionPeriodCreate(LoginRequiredMixin, View):
                 for bpo in list_bpo:
                     draft = UsulanRekomposisi(division=bpo,period=period)
                     draft.save()
+
+                    try:
+                        lrpa = get_all_prk_last_lrpa(rekap_user_induk=bpo)
+                        if not draft.is_data_created:
+                            for data in lrpa:
+                                usulan_data = UsulanRekomposisiData(file=draft, prk=data.prk)
+                                usulan_data.save()
+                            
+                            draft.is_data_created = True
+                            draft.save()
+                    except Exception as e:
+                        print(e)
+
             # CHECK IF THIS IS PERIOD FOR REKOM AKB
             if period.for_rekom_aki:
                 for bpo in list_bpo:
                     draft = UsulanRekomposisi(division=bpo,period=period,revisi="AKB")
                     draft.save()
+
+                    try:
+                        lrpa = get_all_prk_last_lrpa(rekap_user_induk=bpo)
+                        if not draft.is_data_created:
+                            for data in lrpa:
+                                usulan_data = UsulanRekomposisiData(file=draft, prk=data.prk)
+                                usulan_data.save()
+                            
+                            draft.is_data_created = True
+                            draft.save()
+                    except Exception as e:
+                        print(e)
         else:
             print(form.errors)
 
@@ -134,13 +160,15 @@ class RecompositionAKI(LoginRequiredMixin, View):
         if not period.for_rekom_aki:
             return render(request, '404_not_found_2.html', context)
 
-        last_lrpa = LRPA_File.objects.order_by('-pk').first()
+        last_lrpa = get_last_lrpa()
         last_mou = FileMouPengalihan.objects.order_by('file_export_date').first()
 
         #GET USER DIVISION, DETERMINE USER VIEW
         division = request.user.division
 
-        if division in ["ANG", "KEU", "Super Admin"] or request.user.is_admin:
+        if division in ["ANG", "KEU", "Super Admin", "Admin - Intern"]:
+
+            print(division)
             
             # GET ALL VIEW
             rekap_user = ["REN", "PPK", "OPK 1", "OPK 2", "K3L"]
@@ -151,7 +179,7 @@ class RecompositionAKI(LoginRequiredMixin, View):
             for_div = ""
 
             for user in rekap_user:
-                lrpa = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa, prk__rekap_user_induk=user)
+                lrpa = get_all_prk_last_lrpa(rekap_user_induk=user)
                 total_aki = lrpa.aggregate(Sum('aki_this_year'))['aki_this_year__sum']
 
                 #GET LATEST DRAFT
@@ -315,13 +343,13 @@ class RecompositionAKB(LoginRequiredMixin, View):
         if not period.is_in_period():
             return render(request, '404_not_found_2.html', context)
 
-        last_lrpa = LRPA_File.objects.order_by('-pk').first()
+        last_lrpa = get_last_lrpa()
         last_mou = FileMouPengalihan.objects.order_by('file_export_date').first()
 
         #GET USER DIVISION, DETERMINE USER VIEW
         division = request.user.division
 
-        if division in ["ANG", "KEU", "Super Admin"] or request.user.is_admin:
+        if division in ["ANG", "KEU", "Super Admin", "Admin - Intern"]:
             
             # ADMIN VIEW
             # GET ALL VIEW
@@ -336,7 +364,7 @@ class RecompositionAKB(LoginRequiredMixin, View):
                 lrpa = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa, prk__rekap_user_induk=user)
                 total_aki = lrpa.aggregate(Sum('aki_this_year'))['aki_this_year__sum']
                 #GET LATEST DRAFT
-                draft = UsulanRekomposisi.objects.get(division=user, period=period)
+                draft = UsulanRekomposisi.objects.get(division=user, period=period, revisi="AKB")
                 query_data = UsulanRekomposisiData.objects.filter(file=draft, prk__rekap_user_induk=user)
                 count_chg  = query_data.aggregate(chg=Count(Case(When(is_changed=True, then=1))))
 
@@ -377,9 +405,7 @@ class RecompositionAKB(LoginRequiredMixin, View):
                         missing_notes.append((msg_notes))
 
                 rekap_list.append((user,count_chg["chg"],draft.last_edit_date, draft.is_publish, draft.proposed_by, draft.upload_date, total_usulan, total_aki))
-
-            
-            
+     
             context["for_div"] = for_div
             document = [last_lrpa, last_mou]
             context["document"] = document #OPTIMIZE LATER?
@@ -388,14 +414,14 @@ class RecompositionAKB(LoginRequiredMixin, View):
             context["rekap_list"] = rekap_list
 
 
-            return render(request, 'recomposition/recomposition_aki_admin.html', context)
+            return render(request, 'recomposition/recomposition_akb_admin.html', context)
         else:
            
             lrpa = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa, prk__rekap_user_induk=division)
             context["for_div"] = division
         
             #GET LATEST DRAFT
-            draft = UsulanRekomposisi.objects.get(division=context["for_div"], period=period)
+            draft = UsulanRekomposisi.objects.get(division=context["for_div"], period=period, revisi="AKB")
             context["draft_pk"] = draft.pk
 
             # CHECK IF ALREADY SUBMITTED # CHANGE TEMPLATE LATER
@@ -440,7 +466,8 @@ class RecompositionAKB(LoginRequiredMixin, View):
                 error_count = 0
                 #CHECK DEFISIT USULAN
                 if total_aki != total_usulan:
-                    msg = "Total AKI tidak sama dengan selisih usulan terdapat "
+                    msg = "Total AKB tidak sama. Terdapat "
+                    error_count += 1
                     if total_aki < total_usulan:
                         msg = msg + "surplus sebesar Rp."
                         msg = msg + str(int(float(total_usulan-total_aki)))
@@ -453,7 +480,7 @@ class RecompositionAKB(LoginRequiredMixin, View):
                 
                 #CHECK IF THERE IS MISSING NOTES
                 context["missing_notes"] = missing_notes
-                error_count = error_count + len(missing_notes)
+                error_count += len(missing_notes)
                 context["error_count"] = error_count
                 if error_count > 0:
                     context["error_count_msg"] = "Terdapat total " + str(error_count) + " error"
@@ -483,7 +510,7 @@ class RecompositionAKB(LoginRequiredMixin, View):
 
 class UsulanRekomposisiEdit(LoginRequiredMixin, View):
     
-    def get(self, request, pk, month, *args, **kwargs):
+    def get(self, request, pk, month, revisi, *args, **kwargs):
         context = {}
         months = {1:"Januari", 2:"Februari", 3:"Maret", 4:"April", 5:"Mei", 6:"Juni", 7:"Juli", 8:"Agustus", 9:"September", 10:"Oktober", 11:"November", 12:"Desember", 0:"pass"}
 
@@ -513,7 +540,13 @@ class UsulanRekomposisiEdit(LoginRequiredMixin, View):
             value = None
         
         try:
-            draft = UsulanRekomposisi.objects.get(division=request.user.division, period=period)
+            if revisi == 0:
+                draft = UsulanRekomposisi.objects.get(division=request.user.division, period=period, revisi="AKI")
+                context["revisi"] = 0
+            else:
+                draft = UsulanRekomposisi.objects.get(division=request.user.division, period=period, revisi="AKB")
+                context["revisi"] = 1
+
             prk_draft = UsulanRekomposisiData.objects.get(file=draft, prk=prk)
             value_1 = prk_draft.get_rencana_bulan(month) #MANUAL
             notes = prk_draft.notes
@@ -573,6 +606,9 @@ class InlineAKBEdit(LoginRequiredMixin, View):
         
         context["data"] = prk
         context["this_month"] = data["this_month"]
+        context["revisi"] = data["revisi"]
+
+        print("DATA = " + data["revisi"])
         
         # GET LATEST PERIOD
         period = UsulanPeriod.objects.order_by('-pk').first()
@@ -582,9 +618,13 @@ class InlineAKBEdit(LoginRequiredMixin, View):
         if not period.is_in_period():
             return render(request, '404_not_found_2.html', context)
 
-        # UsulanRekomposisi should be created this time        
+        # UsulanRekomposisi should be created this time    
         division = request.user.division
-        draft = UsulanRekomposisi.objects.get(division=division, period = period)
+
+        if data["revisi"] == "0":
+            draft = UsulanRekomposisi.objects.get(division=division, period = period, revisi="AKI")
+        else:
+            draft = UsulanRekomposisi.objects.get(division=division, period = period, revisi="AKB")
         data_rekom = UsulanRekomposisiData.objects.get(file=draft, prk=prk)
 
         if not "delete" in data:
