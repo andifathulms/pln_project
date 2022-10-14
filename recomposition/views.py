@@ -5,9 +5,10 @@ from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views import View
 from django.urls import resolve
+from django.http import HttpResponse
 
-from django.db.models import Sum, OuterRef, Subquery, F, Value, Count, Case, When
-from django.db.models.functions import Round
+from django.db.models import Sum, OuterRef, Subquery, F, Value, Count, Case, When, FloatField
+from django.db.models.functions import Round, Cast
 from document.models import DocSKAI, MacroData
 
 from monev.models import LRPA_Monitoring, LRPA_File, MouPengalihanData, FileMouPengalihan
@@ -15,13 +16,12 @@ from document.models import PRK, PRKData
 from monev.utils import get_all_prk_last_lrpa, get_latest_rekom_period, get_last_lrpa
 from monev.views import this_month, is_production
 
-from .models import UsulanPeriod, UsulanRekomposisi, UsulanRekomposisiData
+from .models import UsulanPeriod, UsulanRekomposisi, UsulanRekomposisiData, EbudgetFile
 from .forms import UsulanPeriodForm
 
-from functools import reduce
-from operator import add
-
 from num2words import num2words
+from openpyxl import load_workbook
+from openpyxl.writer.excel import save_virtual_workbook
 
 class RecompositionPeriod(LoginRequiredMixin, View):
     def get(self, request):
@@ -105,12 +105,12 @@ class RecompositionOutput(LoginRequiredMixin, View):
         sq_3 = MacroData.objects.filter(macro_file=skai_3.macro.macro_file_1, prk=OuterRef('prk'))
         
         combine_query = all_prk_data.annotate(status=sq_3.values('ang_status'),sumber_dana = sq_3.values('sumber_dana'),
-        aki_n1 = Round(Subquery(sq_3.values('aki_n1_year')[:1])*1000),aki_n2 = Round(Subquery(sq_3.values('aki_n2_year')[:1])*1000),
-        aki_n3 = Round(Subquery(sq_3.values('aki_n1_year')[:1])*1000),aki_n4 = Round(Subquery(sq_3.values('aki_n1_year')[:1])*1000),
-        aki_after_n1 = Round(Subquery(sq_3.values('aki_after_n1_year')[:1])*1000))
+        aki_n1 = Round(Subquery(sq_3.values('aki_n1_year')[:1])),aki_n2 = Round(Subquery(sq_3.values('aki_n2_year')[:1])),
+        aki_n3 = Round(Subquery(sq_3.values('aki_n1_year')[:1])),aki_n4 = Round(Subquery(sq_3.values('aki_n1_year')[:1])),
+        aki_after_n1 = Round(Subquery(sq_3.values('aki_after_n1_year')[:1])))
         for data in combine_query:
             try:
-                usulan_data = UsulanRekomposisiData.objects.get(file__period=get_latest_rekom_period(), prk=data.prk)
+                usulan_data = UsulanRekomposisiData.objects.get(file__period=get_latest_rekom_period(), prk=data.prk, file__revisi="AKI")
                 is_changed = usulan_data.is_changed
                 if is_changed:
                     temp_usulan = data.get_total_realisasi()
@@ -140,6 +140,56 @@ class RecompositionOutput(LoginRequiredMixin, View):
         context["all_data"] = combine_list
         context["month"] = this_month()
         return render(request, 'recomposition/recomposition_aki_output.html', context)
+    
+    def post(self, request):
+        context = {}
+        file = EbudgetFile.objects.last()
+        wb = load_workbook(file.file)
+        ws = wb['Rekomposisi']
+        list_rows = [idx for idx,cell in enumerate(ws["B"]) if cell.value and idx >= 9]
+
+        #TRY ADD ONE LAST ROW #INTENTIONALLY MISSING LAST ROW
+        # last_idx = list_rows[-1]
+        # last_idx = last_idx + 1
+        # list_rows.append(last_idx)
+        start_col = 1 # B Column
+        end_col = 37 # AL Column 
+        for rows in list_rows:
+            row_temp = [cell for cell in ws[rows][start_col:end_col+1]]
+            row = [cell.value for cell in ws[rows][start_col:end_col+1]]
+            cell_temp = row_temp[36]
+            cell_temp.value = 5
+            print(cell_temp.value)
+        
+        wb.save("doc.xlsx")
+        print("DONE")
+
+        return render(request, 'recomposition/snippets/button_download_xls.html', context)
+
+class eBudgetOutput(LoginRequiredMixin, View):
+    def get(self, request):
+        context = {}
+        file = EbudgetFile.objects.last()
+        wb = load_workbook(file.file)
+        ws = wb['Rekomposisi']
+        list_rows = [idx for idx,cell in enumerate(ws["B"]) if cell.value and idx >= 9]
+
+        #TRY ADD ONE LAST ROW #INTENTIONALLY MISSING LAST ROW
+        # last_idx = list_rows[-1]
+        # last_idx = last_idx + 1
+        # list_rows.append(last_idx)
+        start_col = 1 # B Column
+        end_col = 37 # AL Column 
+        for rows in list_rows:
+            row_temp = [cell for cell in ws[rows][start_col:end_col+1]]
+            row = [cell.value for cell in ws[rows][start_col:end_col+1]]
+            cell_temp = row_temp[36]
+            cell_temp.value = 5
+            print(cell_temp.value)
+        
+        response = HttpResponse(save_virtual_workbook(wb), content_type='application/vnd.ms-excel; charset=utf-8')
+        response['Content-Disposition'] = 'attachment; filename=myexport.xlsx'
+        return response
 
 class RecompositionAKI(LoginRequiredMixin, View):
 
@@ -384,6 +434,7 @@ class RecompositionAKB(LoginRequiredMixin, View):
                     draft.save()
                 
                 #GET DATA INFO
+                usulan_by_month = [0,0,0,0,0,0,0,0,0,0,0,0]
                 for data in lrpa:
                     usulan_data = UsulanRekomposisiData.objects.get(file=draft, prk=data.prk)
                     temp_usulan = data.get_total_realisasi()
@@ -404,15 +455,37 @@ class RecompositionAKB(LoginRequiredMixin, View):
                         msg_notes = "PRK : " + str(usulan_data.prk.no_prk) + " terdapat perubahan AKB tetapi tidak mencantumkan notes"
                         missing_notes.append((msg_notes))
 
-                rekap_list.append((user,count_chg["chg"],draft.last_edit_date, draft.is_publish, draft.proposed_by, draft.upload_date, total_usulan, total_aki))
-     
+                #rekap_list.append((user,count_chg["chg"],draft.last_edit_date, draft.is_publish, draft.proposed_by, draft.upload_date, total_usulan, total_aki))
+
+            #GET REKAP TIAP BULAN
+            month_name = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
+            field_name = ["jan_rencana", "feb_rencana", "mar_rencana", "apr_rencana", "mei_rencana", "jun_rencana", "jul_rencana", "aug_rencana", "sep_rencana", "okt_rencana", "nov_rencana", "des_rencana"]
+            lrpa_1 = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa, mekanisme_pembayaran="Unit")
+            lrpa_2 = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa, mekanisme_pembayaran="Pengalihan")
+            lrpa_3 = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa, mekanisme_pembayaran="Pusat")
+            
+            unit_sebelum_total = pengalihan_sebelum_total = pusat_sebelum_total = 0
+            for idx,m in enumerate(month_name):
+                unit_sebelum = lrpa_1.annotate(as_float=Cast(field_name[idx], FloatField())).aggregate(Sum('as_float'))['as_float__sum']
+                pengalihan_sebelum = lrpa_2.annotate(as_float=Cast(field_name[idx], FloatField())).aggregate(Sum('as_float'))['as_float__sum']
+                pusat_sebelum = lrpa_3.annotate(as_float=Cast(field_name[idx], FloatField())).aggregate(Sum('as_float'))['as_float__sum']
+                total_sebelum = unit_sebelum + pengalihan_sebelum + pusat_sebelum
+                
+                unit_sebelum_total += unit_sebelum
+                pengalihan_sebelum_total += pengalihan_sebelum
+                pusat_sebelum_total += pusat_sebelum
+
+                rekap_list.append((m,unit_sebelum, pengalihan_sebelum, pusat_sebelum, total_sebelum))
+
+            grand_total_sebelum = unit_sebelum_total + pengalihan_sebelum_total + pusat_sebelum_total
+            grand_total = [unit_sebelum_total, pengalihan_sebelum_total, pusat_sebelum_total, grand_total_sebelum]
             context["for_div"] = for_div
             document = [last_lrpa, last_mou]
             context["document"] = document #OPTIMIZE LATER?
 
             context["lrpa"] = combine_list
             context["rekap_list"] = rekap_list
-
+            context["grand_total"] = grand_total
 
             return render(request, 'recomposition/recomposition_akb_admin.html', context)
         else:
@@ -451,6 +524,7 @@ class RecompositionAKB(LoginRequiredMixin, View):
                         temp_usulan += int(float(data.get_rencana_month(i) or 0))
                 
                 selisih_usulan = temp_usulan - data.real_aki()
+                print(data.prk.no_prk, selisih_usulan)
 
                 combine_list.append((data,usulan_data,temp_usulan,selisih_usulan))
                 total_usulan = total_usulan + temp_usulan

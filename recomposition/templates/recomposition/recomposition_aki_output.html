@@ -143,7 +143,20 @@
                     <h6 class="m-0 font-weight-bold" style="color: #fff;">Output E-Budget</h6>
                 </div>
                 <div class="col-4 ">
-                    
+                    <!-- <form hx-post="{% url 'recomposition:recomposition-output' %}" hx-swap="innerHTML"> {% csrf_token %}
+                        <button class="btn btn-info btn-icon-split btn-sm float-right" name="xls" value="xls">
+                            <span class="icon text-white-50">
+                                <i class="fa-solid fa-arrow-pointer"></i>
+                            </span>
+                            <span class="text">Download XLS</span>
+                        </button>
+                    </form> -->
+                    <a href="{% url 'recomposition:ebudget-output' %}" class="btn btn-info btn-icon-split btn-sm float-right" target="_blank" rel="noopener noreferrer">
+                        <span class="icon text-white-50">
+                            <i class="fa-solid fa-arrow-pointer"></i>
+                        </span>
+                        <span class="text">Download File</span>
+                    </a>
                 </div>
             </div>
         </div>
@@ -183,11 +196,6 @@
                             <th rowspan="2">Total AKI Rekomposisi</th>
                             <th rowspan="2">AKI Sebelum Rekomposisi</th>
                             <th rowspan="2">Tambah Kurang</th>
-                            <th rowspan="2">AKI nilai minimum bulan berjalan</th>
-                            <th rowspan="2">Cek Realsasi dan AKI</th>
-                            <th rowspan="2">Cek AKI dan AI</th>
-                            <th rowspan="2">Cek AKI 5 Tahun</th>
-                            <th rowspan="2">Cek AKI Minus</th>
                         </tr>
                         <tr>
                             <th>Progress Fisik (%)</th>
@@ -298,51 +306,256 @@
                             <td>{{ data.0.status }}</td>
                             <td>{{ data.0.sumber_dana }}</td>
                             <td></td>
-                            <td>{{ data.0.real_ai }}</td>
-                            <td>{{ data.0.real_aki }}</td>
+                            <td>{{ data.0.real_ai_in_1000 }}</td>
+                            <td>{{ data.0.real_aki_in_1000 }}</td>
                             <td>{{ data.0.aki_n1|floatformat }}</td>
                             <td>{{ data.0.aki_n2|floatformat }}</td>
                             <td>{{ data.0.aki_n3|floatformat }}</td>
                             <td>{{ data.0.aki_n4|floatformat }}</td>
                             <td>{{ data.0.aki_after_n1|floatformat }}</td>
 
-                            {% call_method data.0 'get_realisasi_month' 1 as realisasi_1 %}
-                            {% call_method data.0 'get_realisasi_month' 2 as realisasi_2 %}
-                            {% call_method data.0 'get_realisasi_month' 3 as realisasi_3 %}
-                            {% call_method data.0 'get_realisasi_month' 4 as realisasi_4 %}
-                            {% call_method data.0 'get_realisasi_month' 5 as realisasi_5 %}
-                            {% call_method data.0 'get_realisasi_month' 6 as realisasi_6 %}
-                            {% call_method data.0 'get_realisasi_month' 7 as realisasi_7 %}
-                            {% call_method data.0 'get_realisasi_month' 8 as realisasi_8 %}
-                            {% call_method data.0 'get_realisasi_month' 9 as realisasi_9 %}
-                            {% call_method data.0 'get_realisasi_month' 10 as realisasi_10 %}
-                            {% call_method data.0 'get_realisasi_month' 11 as realisasi_11 %}
-                            {% call_method data.0 'get_realisasi_month' 12 as realisasi_12 %}
+                            {% call_method data.0 'get_rencana_month_in_1000' 1 as rencana_1 %}
+                            {% call_method data.0 'get_rencana_month_in_1000' 2 as rencana_2 %}
+                            {% call_method data.0 'get_rencana_month_in_1000' 3 as rencana_3 %}
+                            {% call_method data.0 'get_rencana_month_in_1000' 4 as rencana_4 %}
+                            {% call_method data.0 'get_rencana_month_in_1000' 5 as rencana_5 %}
+                            {% call_method data.0 'get_rencana_month_in_1000' 6 as rencana_6 %}
+                            {% call_method data.0 'get_rencana_month_in_1000' 7 as rencana_7 %}
+                            {% call_method data.0 'get_rencana_month_in_1000' 8 as rencana_8 %}
+                            {% call_method data.0 'get_rencana_month_in_1000' 9 as rencana_9 %}
+                            {% call_method data.0 'get_rencana_month_in_1000' 10 as rencana_10 %}
+                            {% call_method data.0 'get_rencana_month_in_1000' 11 as rencana_11 %}
+                            {% call_method data.0 'get_rencana_month_in_1000' 12 as rencana_12 %}
+
+                            {% call_method data.0 'get_realisasi_month_in_1000' 1 as realisasi_1 %}
+                            {% call_method data.0 'get_realisasi_month_in_1000' 2 as realisasi_2 %}
+                            {% call_method data.0 'get_realisasi_month_in_1000' 3 as realisasi_3 %}
+                            {% call_method data.0 'get_realisasi_month_in_1000' 4 as realisasi_4 %}
+                            {% call_method data.0 'get_realisasi_month_in_1000' 5 as realisasi_5 %}
+                            {% call_method data.0 'get_realisasi_month_in_1000' 6 as realisasi_6 %}
+                            {% call_method data.0 'get_realisasi_month_in_1000' 7 as realisasi_7 %}
+                            {% call_method data.0 'get_realisasi_month_in_1000' 8 as realisasi_8 %}
+                            {% call_method data.0 'get_realisasi_month_in_1000' 9 as realisasi_9 %}
+                            {% call_method data.0 'get_realisasi_month_in_1000' 10 as realisasi_10 %}
+                            {% call_method data.0 'get_realisasi_month_in_1000' 11 as realisasi_11 %}
+                            {% call_method data.0 'get_realisasi_month_in_1000' 12 as realisasi_12 %}
 
                             <td></td>
-                            <td>{{realisasi_1|floatformat}}</td>
+                            {% if data.1.jan %}
+                                <td>{{data.1.jan}}</td>
+                            {% else %}
+                                {% if month > 1 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_1 == "0" or realisasi_1 == "0.0" %}
+                                        <td class="cell"> 0 </td>
+                                    {% else %}
+                                        <td class="cell">{{realisasi_1|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_1 == "0" or rencana_1 == "0.0" %}
+                                        <td> 0 </td>
+                                    {% else %}
+                                        <td>{{rencana_1|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
                             <td></td>
-                            <td>{{realisasi_2|floatformat}}</td>
+                            {% if data.1.feb %}
+                                <td>{{data.1.feb}}</td>
+                            {% else %}
+                                {% if month > 2 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_2 == "0" or realisasi_2 == "0.0" %}
+                                        <td class="cell"> 0 </td>
+                                    {% else %}
+                                        <td class="cell">{{realisasi_2|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_2 == "0" or rencana_2 == "0.0" %}
+                                        <td> 0 </td>
+                                    {% else %}
+                                        <td>{{rencana_2|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
                             <td></td>
-                            <td>{{realisasi_3|floatformat}}</td>
+                            {% if data.1.mar %}
+                                <td>{{data.1.mar}}</td>
+                            {% else %}
+                                {% if month > 3 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_3 == "0" or realisasi_3 == "0.0" %}
+                                        <td class="cell"> 0 </td>
+                                    {% else %}
+                                        <td class="cell">{{realisasi_3|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_3 == "0" or rencana_3 == "0.0" %}
+                                        <td> 0 </td>
+                                    {% else %}
+                                        <td>{{rencana_3|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
                             <td></td>
-                            <td>{{realisasi_4|floatformat}}</td>
+                            {% if data.1.apr %}
+                                <td>{{data.1.apr}}</td>
+                            {% else %}
+                                {% if month > 4 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_4 == "0" or realisasi_4 == "0.0" %}
+                                        <td class="cell"> 0 </td>
+                                    {% else %}
+                                        <td class="cell">{{realisasi_4|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_4 == "0" or rencana_4 == "0.0" %}
+                                        <td> 0 </td>
+                                    {% else %}
+                                        <td>{{rencana_4|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
                             <td></td>
-                            <td>{{realisasi_5|floatformat}}</td>
+                            {% if data.1.mei %}
+                                <td>{{data.1.mei}}</td>
+                            {% else %}
+                                {% if month > 5 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_5 == "0" or realisasi_5 == "0.0" %}
+                                        <td class="cell"> 0 </td>
+                                    {% else %}
+                                        <td class="cell">{{realisasi_5|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_5 == "0" or rencana_5 == "0.0" %}
+                                        <td> 0 </td>
+                                    {% else %}
+                                        <td>{{rencana_5|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
                             <td></td>
-                            <td>{{realisasi_6|floatformat}}</td>
+                            {% if data.1.jun %}
+                                <td>{{data.1.jun}}</td>
+                            {% else %}
+                                {% if month > 6 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_6 == "0" or realisasi_6 == "0.0" %}
+                                        <td class="cell"> 0 </td>
+                                    {% else %}
+                                        <td class="cell">{{realisasi_6|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_6 == "0" or rencana_6 == "0.0" %}
+                                        <td> 0 </td>
+                                    {% else %}
+                                        <td>{{rencana_6|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
                             <td></td>
-                            <td>{{realisasi_7|floatformat}}</td>
+                            {% if data.1.jul %}
+                                <td>{{data.1.jul}}</td>
+                            {% else %}
+                                {% if month > 7 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_7 == "0" or realisasi_7 == "0.0" %}
+                                        <td class="cell"> 0 </td>
+                                    {% else %}
+                                        <td class="cell">{{realisasi_7|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_7 == "0" or rencana_7 == "0.0" %}
+                                        <td> 0 </td>
+                                    {% else %}
+                                        <td>{{rencana_7|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
                             <td></td>
-                            <td>{{realisasi_8|floatformat}}</td>
+                            {% if data.1.aug %}
+                                <td>{{data.1.aug}}</td>
+                            {% else %}
+                                {% if month > 8 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_8 == "0" or realisasi_8 == "0.0" %}
+                                        <td class="cell"> 0 </td>
+                                    {% else %}
+                                        <td class="cell">{{realisasi_8|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_8 == "0" or rencana_8 == "0.0" %}
+                                        <td> 0 </td>
+                                    {% else %}
+                                        <td>{{rencana_8|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
                             <td></td>
-                            <td>{{realisasi_9|floatformat}}</td>
+                            {% if data.1.sep %}
+                                <td>{{data.1.sep}}</td>
+                            {% else %}
+                                {% if month > 9 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_9 == "0" or realisasi_9 == "0.0" %}
+                                        <td class="cell"> 0 </td>
+                                    {% else %}
+                                        <td class="cell">{{realisasi_9|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_9 == "0" or rencana_9 == "0.0" %}
+                                        <td> 0 </td>
+                                    {% else %}
+                                        <td>{{rencana_9|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
                             <td></td>
-                            <td>{{realisasi_10|floatformat}}</td>
+                            {% if data.1.okt %}
+                                <td>{{data.1.okt}}</td>
+                            {% else %}
+                                {% if month > 10 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_10 == "0" or realisasi_10 == "0.0" %}
+                                        <td class="cell"> 0 </td>
+                                    {% else %}
+                                        <td class="cell">{{realisasi_10|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_10 == "0" or rencana_10 == "0.0" %}
+                                        <td> 0 </td>
+                                    {% else %}
+                                        <td>{{rencana_10|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
                             <td></td>
-                            <td>{{realisasi_11|floatformat}}</td>
+                            {% if data.1.nov %}
+                                <td>{{data.1.nov}}</td>
+                            {% else %}
+                                {% if month > 11 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_11 == "0" or realisasi_11 == "0.0" %}
+                                        <td class="cell"> 0 </td>
+                                    {% else %}
+                                        <td class="cell">{{realisasi_11|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_11 == "0" or rencana_11 == "0.0" %}
+                                        <td> 0 </td>
+                                    {% else %}
+                                        <td>{{rencana_11|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
                             <td></td>
-                            <td>{{realisasi_12|floatformat}}</td>
+                            {% if data.1.des %}
+                                <td>{{data.1.des}}</td>
+                            {% else %}
+                                {% if month > 12 %} <!-- IF PAST THE MONTH THEN ONLY SHOW REALISASI-->
+                                    {% if realisasi_12 == "0" or realisasi_12 == "0.0" %}
+                                        <td class="cell"> 0 </td>
+                                    {% else %}
+                                        <td class="cell">{{realisasi_12|floatformat}}</td>
+                                    {% endif %}
+                                {% else %} <!-- IF NOT SHOW RENCANA -->
+                                    {% if rencana_12 == "0" or rencana_12 == "0.0" %}
+                                        <td> 0 </td>
+                                    {% else %}
+                                        <td>{{rencana_12|floatformat}}</td>
+                                    {% endif %}
+                                {% endif %}
+                            {% endif %}
 
                             <td>{{ data.5 }}</td>
                             <td>{{ data.6 }}</td>
@@ -355,11 +568,6 @@
 
                             <td>{{ data.0.real_aki }}</td>
                             <td>{{ data.3 }}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
                         </tr>
                         {% endfor %}
                     </tbody>

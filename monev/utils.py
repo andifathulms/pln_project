@@ -18,9 +18,9 @@ def get_last_lrpa():
 
 def get_all_prk_last_lrpa(rekap_user_induk=None):
     if rekap_user_induk == None:
-        return PRKData.objects.select_related('prk').filter(file_lrpa=get_last_lrpa())
+        return PRKData.objects.select_related('prk').filter(file_lrpa=get_last_lrpa()).order_by('prk__no_prk')
     
-    return PRKData.objects.select_related('prk').filter(file_lrpa=get_last_lrpa(), prk__rekap_user_induk=rekap_user_induk)
+    return PRKData.objects.select_related('prk').filter(file_lrpa=get_last_lrpa(), prk__rekap_user_induk=rekap_user_induk).order_by('prk__no_prk')
 
 def get_latest_rekom_period():
     return UsulanPeriod.objects.order_by('-pk').first()

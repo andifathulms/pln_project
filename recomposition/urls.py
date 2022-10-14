@@ -10,6 +10,7 @@ from .views import(
     InlineAKBEdit,
     InlineAKBDelete,
     RecompositionPeriod,
+    eBudgetOutput,
 )
 
 app_name = 'recomposition'
@@ -24,4 +25,5 @@ urlpatterns = [
     path('onchgvalue/<int:former_value>/', OnChangeValue.as_view(), name='recomposition-onchgvalue'),
     path('akb-edit/', InlineAKBEdit.as_view(), name='akb-edit'),
     path('akb-delete/', InlineAKBDelete.as_view(), name='akb-delete'),
+    path('ebudget-output', eBudgetOutput.as_view(), name='ebudget-output'),
 ]

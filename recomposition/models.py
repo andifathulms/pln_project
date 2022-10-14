@@ -176,3 +176,7 @@ class UsulanRekomposisiData(models.Model):
 class EbudgetFile(models.Model):
 
     file = models.FileField(upload_to='monev/ebudget')
+
+class EbudgetFileOutput(models.Model):
+
+    file = models.FileField(upload_to='monev/ebudget/output')

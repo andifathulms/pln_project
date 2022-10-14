@@ -11,6 +11,7 @@ from monev.models import LRPA_File, FileMouPengalihan
 from recomposition.models import UsulanRekomposisiData
 
 from datetime import datetime
+import math
 
 def this_month():
     return datetime.now().month
@@ -97,6 +98,12 @@ class PRKData(models.Model):
     def real_aki(self):
         return int(self.aki_this_year or 0)
     
+    def real_ai_in_1000(self):
+        return int(math.floor(self.ai_this_year/1000) or 0)
+    
+    def real_aki_in_1000(self):
+        return int(math.floor(self.aki_this_year/1000) or 0)
+    
     def get_realisasi_month(self, m):
         month = this_month()
         if m == 1:
@@ -159,6 +166,9 @@ class PRKData(models.Model):
                 return self.des_pengalihan
             else:
                 return self.des_realisasi
+    
+    def get_realisasi_month_in_1000(self, m):
+        return math.floor(int(float(self.get_realisasi_month(m)))/1000)
     
     def get_rencana_month(self, m):
         month = this_month()
@@ -247,6 +257,9 @@ class PRKData(models.Model):
             else:
                 return self.des_rencana
 
+    def get_rencana_month_in_1000(self, m):
+        return math.floor(int(float(self.get_rencana_month(m)))/1000)
+    
     def get_current_month_realisasi(self):
         month = this_month()
         return int(float(self.get_realisasi_month(month)))
@@ -258,7 +271,7 @@ class PRKData(models.Model):
         return self.real_aki() - self.get_total_realisasi()
     
     def get_usulan(self):
-        usulan = UsulanRekomposisiAKIData.objects.filter(prk=self.prk).first()
+        usulan = UsulanRekomposisiData.objects.filter(prk=self.prk).first()
         return usulan
     
     def get_sisa_aki_pct(self):

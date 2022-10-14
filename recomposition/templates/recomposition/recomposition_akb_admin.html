@@ -780,54 +780,51 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <table class="table table-bordered" id="dataTableRekap" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>User Induk</th>
-                                    <th>PRK Rekom</th>
-                                    <th>Total AKI</th>
-                                    <th>Total AKI Usulan</th>
-                                    <th>Selisih (+/-)</th>
-                                    <th>Last Edit</th>
-                                    <th style="max-width: 60px;">Is Publish</th>
-                                    <th>Publish By</th>
-                                    <th>Publish Time</th>
+                                    <th rowspan="2">No</th>
+                                    <th rowspan="2">Bulan</th>
+                                    <th colspan="4">Semula</th>
+                                    <th colspan="4">Menjadi</th>
                                 </tr>
-                                
+                                <tr>
+                                    <th>Pembayaran Unit</th>
+                                    <th>Pengalihan</th>
+                                    <th>Pembayaran Pusat</th>
+                                    <th>Total</th>
+                                    <th>Pembayaran Unit</th>
+                                    <th>Pengalihan</th>
+                                    <th>Pembayaran Pusat</th>
+                                    <th>Total</th>
+                                </tr>
                             </thead>
                             <tbody>
-                                {% for doc in rekap_list %}
+                                {% for data in rekap_list %}
                                 <tr>
-                                    <td>{{doc.0}}</td>
-                                    <td>{{doc.1}}</td>
-                                    <td>{{doc.7|floatformat}}</td>
-                                    <td>{{doc.6}}</td>
-                                    <td>{{doc.6|sub:doc.7|floatformat}}</td>
-                                    {% if doc.2 %}
-                                        <td>{{doc.2}}</td>
-                                    {% else %}
-                                        <td> - </td>
-                                    {% endif %}
-                                    
-                                    {% if doc.3 %}
-                                        <td style="color: #377D71;"><i class="fa-solid fa-square-check"></i></td>
-                                    {% else %}
-                                        <td style="color: red;"><i class="fa-solid fa-circle-xmark"></i></td>
-                                    {% endif %}
-                                    
-                                    {% if doc.4 %}
-                                        <td>{{doc.4}}</td>
-                                    {% else %}
-                                        <td> - </td>
-                                    {% endif %}
-
-                                    {% if doc.5 %}
-                                        <td>{{doc.5}}</td>
-                                    {% else %}
-                                        <td> - </td>
-                                    {% endif %}
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{data.0}}</td>
+                                    <td class="currency">{{data.1|floatformat}}</td>
+                                    <td class="currency">{{data.2|floatformat}}</td>
+                                    <td class="currency">{{data.3|floatformat}}</td>
+                                    <td class="currency">{{data.4|floatformat}}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
                                 </tr>
                                 {% endfor %}
+                                <tr>
+                                    <td colspan="2">Total</td>
+                                    <td class="currency">{{grand_total.0|floatformat}}</td>
+                                    <td class="currency">{{grand_total.1|floatformat}}</td>
+                                    <td class="currency">{{grand_total.2|floatformat}}</td>
+                                    <td class="currency">{{grand_total.3|floatformat}}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -892,13 +889,21 @@
 
 <script>
     $(document).ready(function () {
-        
+
+        $('#dataTableRekap').DataTable({
+                "paging": true,
+                fixedHeader: true,
+        });
+
+        $('a[data-bs-toggle="pill"]').on('shown.bs.tab', function (e) {
+            $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+        });
+
         var table = $('#dataTableMonev').DataTable({
             scrollY: 600,
             scrollX: true,
             scrollCollapse: true,
             paging: true,
-            keys: true,
             dom: 'BQlfrtip',
             // dom: "<'row'<'col-sm-6'Bl><'col-sm-6'f>>" +"<'row'<'col-sm-12'tr>>" + "<'row'<'col-sm-5'i><'col-sm-7'p>>",
             buttons: [
