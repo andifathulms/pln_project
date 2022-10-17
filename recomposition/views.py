@@ -434,7 +434,6 @@ class RecompositionAKB(LoginRequiredMixin, View):
                     draft.save()
                 
                 #GET DATA INFO
-                usulan_by_month = [0,0,0,0,0,0,0,0,0,0,0,0]
                 for data in lrpa:
                     usulan_data = UsulanRekomposisiData.objects.get(file=draft, prk=data.prk)
                     temp_usulan = data.get_total_realisasi()
@@ -443,9 +442,9 @@ class RecompositionAKB(LoginRequiredMixin, View):
                             temp_usulan += usulan_data.get_rencana_bulan(i)
                         else:
                             temp_usulan += int(float(data.get_rencana_month(i) or 0))
-                    
+                        
                     temp_usulan -= data.get_current_month_realisasi()
-                    
+
                     selisih_usulan = temp_usulan - data.real_aki()
 
                     combine_list.append((data,usulan_data,temp_usulan,selisih_usulan))
@@ -455,37 +454,11 @@ class RecompositionAKB(LoginRequiredMixin, View):
                         msg_notes = "PRK : " + str(usulan_data.prk.no_prk) + " terdapat perubahan AKB tetapi tidak mencantumkan notes"
                         missing_notes.append((msg_notes))
 
-                #rekap_list.append((user,count_chg["chg"],draft.last_edit_date, draft.is_publish, draft.proposed_by, draft.upload_date, total_usulan, total_aki))
-
-            #GET REKAP TIAP BULAN
-            month_name = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
-            field_name = ["jan_rencana", "feb_rencana", "mar_rencana", "apr_rencana", "mei_rencana", "jun_rencana", "jul_rencana", "aug_rencana", "sep_rencana", "okt_rencana", "nov_rencana", "des_rencana"]
-            lrpa_1 = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa, mekanisme_pembayaran="Unit")
-            lrpa_2 = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa, mekanisme_pembayaran="Pengalihan")
-            lrpa_3 = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa, mekanisme_pembayaran="Pusat")
-            
-            unit_sebelum_total = pengalihan_sebelum_total = pusat_sebelum_total = 0
-            for idx,m in enumerate(month_name):
-                unit_sebelum = lrpa_1.annotate(as_float=Cast(field_name[idx], FloatField())).aggregate(Sum('as_float'))['as_float__sum']
-                pengalihan_sebelum = lrpa_2.annotate(as_float=Cast(field_name[idx], FloatField())).aggregate(Sum('as_float'))['as_float__sum']
-                pusat_sebelum = lrpa_3.annotate(as_float=Cast(field_name[idx], FloatField())).aggregate(Sum('as_float'))['as_float__sum']
-                total_sebelum = unit_sebelum + pengalihan_sebelum + pusat_sebelum
-                
-                unit_sebelum_total += unit_sebelum
-                pengalihan_sebelum_total += pengalihan_sebelum
-                pusat_sebelum_total += pusat_sebelum
-
-                rekap_list.append((m,unit_sebelum, pengalihan_sebelum, pusat_sebelum, total_sebelum))
-
-            grand_total_sebelum = unit_sebelum_total + pengalihan_sebelum_total + pusat_sebelum_total
-            grand_total = [unit_sebelum_total, pengalihan_sebelum_total, pusat_sebelum_total, grand_total_sebelum]
             context["for_div"] = for_div
             document = [last_lrpa, last_mou]
             context["document"] = document #OPTIMIZE LATER?
 
             context["lrpa"] = combine_list
-            context["rekap_list"] = rekap_list
-            context["grand_total"] = grand_total
 
             return render(request, 'recomposition/recomposition_akb_admin.html', context)
         else:
@@ -581,6 +554,49 @@ class RecompositionAKB(LoginRequiredMixin, View):
             return render(request, '404_not_found_2.html', context)
 
         return render(request, 'recomposition/recomposition_akb.html', context)
+
+class RecompositionAKBRekap(LoginRequiredMixin, View):
+
+    def get(self, request):
+        context = {}
+        rekap_list = []
+        last_lrpa = get_last_lrpa()
+         #GET REKAP TIAP BULAN
+        month_name = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"]
+        field_name = ["jan_rencana", "feb_rencana", "mar_rencana", "apr_rencana", "mei_rencana", "jun_rencana", "jul_rencana", "aug_rencana", "sep_rencana", "okt_rencana", "nov_rencana", "des_rencana"]
+        lrpa_1 = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa, mekanisme_pembayaran="Unit")
+        lrpa_2 = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa, mekanisme_pembayaran="Pengalihan")
+        lrpa_3 = PRKData.objects.select_related('prk').filter(file_lrpa=last_lrpa, mekanisme_pembayaran="Pusat")
+        
+        unit_sebelum_total = pengalihan_sebelum_total = pusat_sebelum_total = 0
+
+        for idx,m in enumerate(month_name):
+            # unit_sebelum = lrpa_1.annotate(as_float=Cast(field_name[idx], FloatField())).aggregate(Sum('as_float'))['as_float__sum']
+            # pengalihan_sebelum = lrpa_2.annotate(as_float=Cast(field_name[idx], FloatField())).aggregate(Sum('as_float'))['as_float__sum']
+            # pusat_sebelum = lrpa_3.annotate(as_float=Cast(field_name[idx], FloatField())).aggregate(Sum('as_float'))['as_float__sum']
+
+            unit_sebelum = sum([int(float(d.get_rencana_month(idx + 1) or 0)) for d in lrpa_1])
+            pengalihan_sebelum = sum([int(float(d.get_rencana_month(idx + 1) or 0)) for d in lrpa_2])
+            pusat_sebelum = sum([int(float(d.get_rencana_month(idx + 1) or 0)) for d in lrpa_3])
+
+            unit_sebelum_total += unit_sebelum
+            pengalihan_sebelum_total += pengalihan_sebelum
+            pusat_sebelum_total += pusat_sebelum
+
+            total_sebelum = unit_sebelum + pengalihan_sebelum + pusat_sebelum
+
+            unit_sesudah = sum([int(float(d.get_rencana_month(idx + 1) or 0)) if not UsulanRekomposisiData.objects.get(file__revisi="AKB",prk=d.prk).get_rencana_bulan(idx + 1) else UsulanRekomposisiData.objects.get(file__revisi="AKB",prk=d.prk).get_rencana_bulan(idx + 1) for d in lrpa_1 ])
+            pengalihan_sesudah = sum([int(float(d.get_rencana_month(idx + 1) or 0)) for d in lrpa_2])
+            pusat_sesudah = sum([int(float(d.get_rencana_month(idx + 1) or 0)) for d in lrpa_3])
+
+            rekap_list.append((m,unit_sebelum, pengalihan_sebelum, pusat_sebelum, total_sebelum, unit_sesudah, pengalihan_sesudah, pusat_sesudah))
+
+        grand_total_sebelum = unit_sebelum_total + pengalihan_sebelum_total + pusat_sebelum_total
+        grand_total = [unit_sebelum_total, pengalihan_sebelum_total, pusat_sebelum_total, grand_total_sebelum]
+        context["rekap_list"] = rekap_list
+        context["grand_total"] = grand_total
+
+        return render(request, 'recomposition/recomposition_akb_rekap.html', context)
 
 class UsulanRekomposisiEdit(LoginRequiredMixin, View):
     

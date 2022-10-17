@@ -1,0 +1,310 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load document_tags %}
+{% load mathfilters %}
+
+{% block style %}
+
+<style>
+    td {
+        vertical-align: middle;
+        text-align: center;
+        color: #161616;
+    }
+
+    .cell-disabled{
+        background-color: #CFD2CF;
+        opacity: 0.1;
+    }
+
+    .currency{
+        text-align: right !important;
+        min-width: 160px;
+    }
+
+    .currency::before{
+        content: "Rp.";
+        float: left;
+        padding-right: 4px;
+    }
+
+    .error-li{
+        font-weight: 600;
+        color: firebrick;
+    }
+
+    .info{
+        border-style: dashed;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+    }
+
+    .edited{
+        background-color: #F8F3D4;
+    }
+    .plus{
+        background-color: #11999E;
+    }
+    .minus{
+        background-color: #E84545;
+    }
+    .sum-cell{
+        background-color: #222831;
+        color: #FCFCFC;
+        text-align: center !important;
+    }
+    .cell{
+        min-width: 150px;
+    }
+    .past{
+        background-color: #2B2E4A;
+        color: #FFFFDE;
+    }
+    .current{
+        background-color: #FFFFDE;
+        color: #100720;
+    }
+    .future{
+        background-color: #40514E;
+        color: #FFFFDE;
+    }
+
+    .mou{
+        background-color: blanchedalmond !important;
+    }
+
+    .copy_container{
+        display: flex;
+        justify-content: space-between;
+        top: 0px;
+        left: 0px;
+        /* width: 240px; */
+        padding: 2px 2px;
+        font-size: 18px;
+        color: #161616;
+        border-radius: 8px 8px 0 0;
+        cursor: pointer;
+    }
+
+    .copy{
+        cursor: pointer;
+        position: relative;
+        display: flex;
+        align-items: center;
+        opacity: 0.6;
+        transition: all 0.1s ease;
+    }
+
+    .tooltip{
+        position: absolute;
+        top: 30px;
+        left: -30px;
+        background: #161616;
+        padding: 10px 15px;
+        display: flex;
+        justify-content: center;
+        color: #fff;
+        font-size: 14px;
+        border-radius: 4px;
+        letter-spacing: 1px;
+        opacity: 0;
+    }
+
+    .tooltip.appear {
+        animation: appear 1s ease;
+    }
+
+    @keyframes appear {
+        0% {
+            opacity: 0;
+        }
+        20% {
+            transform: translateY(10px);
+            opacity: 1;
+        }
+        80% {
+            transform: translateY(0px);
+            opacity: 1;
+        }
+        100% {
+            opacity: 0;
+        }
+    }
+</style>
+{% endblock style%}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="mb-4 shadow card">
+        <div class="py-3 card-header">
+            <div class="row">
+                <div class="col-8">
+                    <h6 class="m-0 font-weight-bold" style="color: #fff;">Rekap AKB</h6>
+                </div>
+                <div class="col-4 ">
+                    
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTableMonev" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th rowspan="2">No</th>
+                            <th rowspan="2">Bulan</th>
+                            <th colspan="4">Semula</th>
+                            <th colspan="4">Menjadi</th>
+                        </tr>
+                        <tr>
+                            <th>Pembayaran Unit</th>
+                            <th>Pengalihan</th>
+                            <th>Pembayaran Pusat</th>
+                            <th>Total</th>
+                            <th>Pembayaran Unit</th>
+                            <th>Pengalihan</th>
+                            <th>Pembayaran Pusat</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for data in rekap_list %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{data.0}}</td>
+                            <td class="currency">{{data.1|floatformat}}</td>
+                            <td class="currency">{{data.2|floatformat}}</td>
+                            <td class="currency">{{data.3|floatformat}}</td>
+                            <td class="currency">{{data.4|floatformat}}</td>
+                            <td>{{data.5|floatformat}}</td>
+                            <td>{{data.6|floatformat}}</td>
+                            <td>{{data.7|floatformat}}</td>
+                            <td></td>
+                        </tr>
+                        {% endfor %}
+                        <!-- <tr>
+                            <td colspan="2">Total</td>
+                            <td class="currency">{{grand_total.0|floatformat}}</td>
+                            <td class="currency">{{grand_total.1|floatformat}}</td>
+                            <td class="currency">{{grand_total.2|floatformat}}</td>
+                            <td class="currency">{{grand_total.3|floatformat}}</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr> -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="modals-here"></div>
+
+  
+{% endblock content %}
+
+{% block script %}
+
+<script>
+    $(document).ready(function () {
+        
+        var table = $('#dataTableMonev').DataTable({
+            scrollY: 600,
+            scrollX: true,
+            scrollCollapse: true,
+            paging: true,
+            keys: true,
+            dom: 'BQlfrtip',
+            fixedColumns:{
+                leftColumns: 2
+            },
+        });
+        
+    });
+
+    $(function() {
+        // Check the initial Poistion of the Sticky Header
+        var stickyHeaderTop = $('#dataTableMonev').offset().top;
+        $(window).scroll(function() {
+            if ($(window).scrollTop() > stickyHeaderTop) {
+                $('.dataTables_scrollHead, .DTFC_LeftHeadWrapper').css('transform', 'translateY(0%)');
+                $('.DTFC_LeftHeadWrapper').css({position: 'fixed',top: '0px',zIndex: '1',left: 'auto'});
+                $('.dataTables_scrollHead').css({position: 'fixed',top: '0px', zIndex: '1' });
+                $('.DTFC_ScrollWrapper').css({height: ''});
+            }
+            else {
+                $('.DTFC_LeftHeadWrapper, .DTFC_LeftHeadWrapper').css({position: 'relative',top: '0px'});
+                $('.dataTables_scrollHead').css({position: 'relative', top: '0px'});
+                $('.dataTables_scrollHead').css('transform', 'translateY(0%)');
+            }
+
+        });
+    });
+</script>
+
+<script>
+    function closeModal() {
+        var container = document.getElementById("modals-here")
+        console.log(container)
+        var backdrop = document.getElementById("modal-backdrop")
+        var modal = document.getElementById("modal")
+
+        modal.classList.remove("show")
+        backdrop.classList.remove("show")
+
+        setTimeout(function() {
+            container.removeChild(backdrop)
+            container.removeChild(modal)
+        }, 200)
+    }
+
+    htmx.on("htmx:beforeSwap", (e) => {
+        // Empty response not targeting #onChgArea => hide the modal
+        if (e.detail.target.id != "onChgArea") {
+            closeModal()
+            e.detail.shouldSwap = false
+        }
+    })
+
+    htmx.on("htmx:afterSwap", (e) => {
+        // Empty response not targeting #onChgArea => hide the modal
+        console.log("After Swap")
+        if (e.detail.target.id != "onChgArea") {
+            console.log("not onchanged")
+            console.log(e.detail.requestConfig)
+            console.log(e.detail.requestConfig.triggeringEvent.submitter.name)
+            if (e.detail.requestConfig.triggeringEvent.submitter.name == "delete"){
+                htmx.removeClass(htmx.find('#'+e.detail.target.id), 'edited', 1000);
+            }else{
+                htmx.addClass(htmx.find('#'+e.detail.target.id), 'edited', 1000);
+            }
+            
+        }
+    })
+
+    $("[id^=copy-").on("click", function(e){
+        e.preventDefault();
+
+        //find the number of the parent
+        let num = $(this).parent().attr("id").slice("id-".length);
+        //let elem = $("#id-" + num);
+        let elem = document.getElementById("id-"+num);
+        
+        //copy the text
+        let $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val($(elem).children(":first").text()).select();
+        document.execCommand("copy");
+        
+        $temp.remove();
+
+        $(this).children(".tooltip").addClass("appear").delay(1000).queue(function( next ){
+            $(this).removeClass("appear"); 
+            $(this).dequeue();
+        });
+    });
+</script>
+{% endblock script %}
